@@ -31,6 +31,7 @@ void BinaryTree::ShowElements()
   }
 }
 
+// This will be change to return a Json string
 void BinaryTree::ShowNode(Node* node)
 {
   std::cout << node->n << " ";
@@ -87,10 +88,13 @@ void BinaryTree::Insert(const int n)
     // Increase total number count
     ++mCount;
 
+    // Evaluate if the Tree is balanced
     if ((mCountGreatestNumbers - mCountLowestNumbers) == 2 || (mCountLowestNumbers - mCountGreatestNumbers) == 2)
     {
-      std::cout << "A call to BalanceTree will be trigger,";
+      std::cout << "A call to ProcessVerticalBalance will be trigger,";
       std::cout << "but when be coded :) . \n Still as homework and inProgress . . .\n\n";
+
+      ProcessVerticalBalance(); // Working Progress . . .
     }
     else
     {
@@ -100,7 +104,7 @@ void BinaryTree::Insert(const int n)
   catch(std::runtime_error& e)
   {
     std::cout << "Exception Catched . . . \n";
-    std::cout << "Man, la cagaste guardando un puntero \n";
+    std::cout << "Trying to save a Node \n";
   }
 }
 
@@ -132,6 +136,60 @@ void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
   }
 }
 
-void BinaryTree::ReleaseNodes()
+
+// Starts Vertical Balance Methods
+void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
+{
+  Node* tmpAverageNode = GetAverageNode();
+
+  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
+}
+
+void BinaryTree::MakeVerticalChanges(Node* node) // Working Progress . . .
+{
+}
+
+Node* BinaryTree::GetAverageNode() // Working Progress . . .
+{
+  unsigned int total = 0;
+
+  // This is not working as he should. Must Fix
+  CalculateTotalNodesValues(mHeadNode, total);
+
+  std::cout << "The Total sum of Nodes values is : " << total << "\n";
+
+  // We need to return the average Node to
+  // start evaluate nodes and fix the balance
+  return mHeadNode; // This is momentary
+}
+
+void BinaryTree::CalculateTotalNodesValues(Node* node, unsigned int& total) // Working Progress . . .
+{
+  // Adding node->n values to total
+  total += node->n;
+
+  if (node->mLeftDirectionTaken == false)
+  {
+    if (node->mLower != nullptr)
+    {
+      CalculateTotalNodesValues(node->mLower, total);
+    }
+    node->mLeftDirectionTaken = true;
+  }
+
+  if (node->mRightDirectionTaken == false)
+  {
+    if (node->mGreater != nullptr)
+    {
+      CalculateTotalNodesValues(node->mLower, total);
+    }
+    node->mRightDirectionTaken = true;
+  }
+    node->mLeftDirectionTaken = false;
+    node->mRightDirectionTaken = false;
+}
+// End Vertical Balance Methods
+
+void BinaryTree::ReleaseNodes() // Working Progress . . .
 {
 }

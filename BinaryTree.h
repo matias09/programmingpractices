@@ -33,6 +33,10 @@ class BinaryTree
     void ReleaseNodes();
     void ShowNode(Node* node);
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
+    void ProcessVerticalBalance();
+    void MakeVerticalChanges(Node* node);
+    void CalculateTotalNodesValues(Node* node, unsigned int& total);
+    Node* GetAverageNode();
 
     unsigned int mCountLowestNumbers;
     unsigned int mCountGreatestNumbers;

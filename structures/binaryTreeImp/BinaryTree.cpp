@@ -91,14 +91,15 @@ void BinaryTree::Insert(const int n)
     // Evaluate if the Tree is balanced
     if ((mCountGreatestNumbers - mCountLowestNumbers) == 2 || (mCountLowestNumbers - mCountGreatestNumbers) == 2)
     {
-      std::cout << "A call to ProcessVerticalBalance will be trigger,";
-      std::cout << "but when be coded :) . \n Still as homework and inProgress . . .\n\n";
+    //  std::cout << "A call to ProcessVerticalBalance will be trigger,";
+    //  std::cout << "but when be coded :) . \n Still as homework and inProgress . . .\n\n";
 
-      ProcessVerticalBalance(); // Working Progress . . .
+      // This Doesn't work yet. But Will be fix during the week
+      // ProcessVerticalBalance(); // Working Progress . . .
     }
     else
     {
-      std::cout << "If a don't mistake in the previous check, so the tree is balanced . . .\n\n";
+   //   std::cout << "If a don't mistake in the previous check, so the tree is balanced . . .\n\n";
     }
   }
   catch(std::runtime_error& e)
@@ -107,6 +108,24 @@ void BinaryTree::Insert(const int n)
     std::cout << "Trying to save a Node \n";
   }
 }
+
+Node* BinaryTree::Find(const int n)
+{
+  Node* tmpNodeToSet = FindNode(*(mHeadNode), n);
+
+  if (tmpNodeToSet == nullptr)
+  {
+    std::cout << "null node founded . . .\n";
+  }
+  else
+  {
+    std::cout << "some node founded . . .\n";
+  }
+
+  return tmpNodeToSet;
+}
+
+// --------------------- Private Methods ---------------------- //
 
 void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
 {
@@ -142,28 +161,90 @@ void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
 {
   Node* tmpAverageNode = GetAverageNode();
 
-  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
+//  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
 }
 
 void BinaryTree::MakeVerticalChanges(Node* node) // Working Progress . . .
-{
-}
+{}
 
 Node* BinaryTree::GetAverageNode() // Working Progress . . .
 {
-  unsigned int total = 0;
+  // This Node will become in the new head Node
+  // and from he the Tree will be reconstruct
+  Node* tmpGreatestAverageNode = nullptr;
+  Node* tmpLowestAverageNode = nullptr;
 
-  // This is not working as he should. Must Fix
+  // The numbers could be all negatives. You don't have to put "unsigned"
+  unsigned int total = 0;
+  int average = 0;
+
+  // Distance between the average number and first node from
+  // the greatest side
+  unsigned int disBettAverFromGreatest = 0;
+
+  // Distance between the average number and first node from
+  // the lowest side
+  unsigned int disBettAverFromLowest = 0;
+
+  // Get the sum of all nodes values starting from Head
   CalculateTotalNodesValues(mHeadNode, total);
 
+  average = total / mCount;
+  std::cout << "The Total amount : " << mCount << "\n";
   std::cout << "The Total sum of Nodes values is : " << total << "\n";
+  std::cout << "The Average number is : " << average << "\n";
 
-  // We need to return the average Node to
-  // start evaluate nodes and fix the balance
-  return mHeadNode; // This is momentary
+  unsigned int i = 0;
+  while (i != 7)
+  {
+    average = average + i;
+
+    std::cout << "Node to find is : " << average << "\n";
+
+    tmpGreatestAverageNode = Find(average);
+    if (tmpGreatestAverageNode != nullptr)
+    {
+      break;
+    }
+    else
+    {
+      ++disBettAverFromGreatest;
+      ++i;
+    }
+  }
+
+  // Reset Indx
+  i = 0;
+
+  while (i != 7)
+  {
+    average = average - i;
+  //  tmpLowestAverageNode = Find(average);
+    if (tmpLowestAverageNode != nullptr)
+    {
+      break;
+    }
+    else
+    {
+      ++disBettAverFromLowest;
+      ++i;
+    }
+  }
+
+
+  if (disBettAverFromGreatest > disBettAverFromLowest)
+  {
+    //std::cout << "The Node selected from Greatest side is : " << tmpLowestAverageNode->n << "\n";
+    return tmpGreatestAverageNode;
+  }
+  else
+  {
+    //std::cout << "The Node selected from Lowest side is : " << tmpLowestAverageNode->n << "\n";
+    return tmpLowestAverageNode;
+  }
 }
 
-void BinaryTree::CalculateTotalNodesValues(Node* node, unsigned int& total) // Working Progress . . .
+void BinaryTree::CalculateTotalNodesValues(Node* node, unsigned int& total)
 {
   // Adding node->n values to total
   total += node->n;
@@ -181,12 +262,48 @@ void BinaryTree::CalculateTotalNodesValues(Node* node, unsigned int& total) // W
   {
     if (node->mGreater != nullptr)
     {
-      CalculateTotalNodesValues(node->mLower, total);
+      CalculateTotalNodesValues(node->mGreater, total);
     }
     node->mRightDirectionTaken = true;
   }
     node->mLeftDirectionTaken = false;
     node->mRightDirectionTaken = false;
+}
+
+Node* BinaryTree::FindNode(Node& node, const int& n, unsigned int i)
+{
+  std::cout << "Indx number : " << i << "\n";
+  if (n == node.n)
+  {
+      std::cout << "\t 1 - last Instruction .. .. ..   \n";
+    return &node;
+  }
+  else if (i == mCount)
+  {
+      std::cout << "\t 2 - last Instruction .. .. ..   \n";
+    return nullptr;
+  }
+  else
+  {
+    if (n < node.n)
+    {
+      if (node.mLower != nullptr)
+      {
+        std::cout << "Entering to the Node : " << node.n << "\n";
+        FindNode(*(node.mLower), n, (++i));
+        std::cout << "Get out of Node : " << node.n << "\n";
+      }
+    }
+    else
+    {
+      if (node.mGreater != nullptr)
+      {
+        std::cout << "Entering to the Node : " << node.n << "\n";
+        FindNode(*(node.mGreater), n, (++i));
+        std::cout << "Get out of Node : " << node.n << "\n";
+      }
+    }
+  }
 }
 // End Vertical Balance Methods
 

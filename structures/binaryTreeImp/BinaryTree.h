@@ -28,6 +28,7 @@ class BinaryTree
     const unsigned int GetNumberOfElements() const { return mCount; }
     void Insert(const int n);
     void ShowElements();
+    Node* Find(const int n);
   private:
     void ExecuteBalance();
     void ReleaseNodes();
@@ -36,6 +37,7 @@ class BinaryTree
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, unsigned int& total);
+    Node* FindNode(Node& startNode, const int& n, unsigned int i = 0);
     Node* GetAverageNode();
 
     unsigned int mCountLowestNumbers;

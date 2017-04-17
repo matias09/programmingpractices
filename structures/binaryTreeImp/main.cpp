@@ -19,5 +19,8 @@ int main(int argsc, char** args)
     std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
     binaryTree->ShowElements();
 
+    // I'm leaking memory as a champion, but is
+    // a improvement that i will do soon
+
     return 0;
 }

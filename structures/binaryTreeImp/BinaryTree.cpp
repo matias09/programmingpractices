@@ -95,7 +95,7 @@ void BinaryTree::Insert(const int n)
     //  std::cout << "but when be coded :) . \n Still as homework and inProgress . . .\n\n";
 
       // This Doesn't work yet. But Will be fix during the week
-      // ProcessVerticalBalance(); // Working Progress . . .
+       ProcessVerticalBalance(); // Working Progress . . .
     }
     else
     {
@@ -112,17 +112,12 @@ void BinaryTree::Insert(const int n)
 Node* BinaryTree::Find(const int n)
 {
   Node* tmpNodeToSet = FindNode(*(mHeadNode), n);
-
-  if (tmpNodeToSet == nullptr)
-  {
-    std::cout << "null node founded . . .\n";
-  }
-  else
-  {
-    std::cout << "some node founded . . .\n";
-  }
-
   return tmpNodeToSet;
+}
+
+bool BinaryTree::Remove(const int n)
+{
+  return RemoveNode(mHeadNode, nullptr, n);
 }
 
 // --------------------- Private Methods ---------------------- //
@@ -161,11 +156,19 @@ void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
 {
   Node* tmpAverageNode = GetAverageNode();
 
-//  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
+
+  MakeVerticalChanges(tmpAverageNode);
 }
 
 void BinaryTree::MakeVerticalChanges(Node* node) // Working Progress . . .
-{}
+{
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "\t . . . BinaryTree::MakeVerticalChanges       . . . \n";
+  std::cout << "\t . . . I'm Close to be Coded DON'T HESITATE  . . . \n";
+  std::cout << "/---------------------------------------------/ \n";
+}
 
 Node* BinaryTree::GetAverageNode() // Working Progress . . .
 {
@@ -190,12 +193,13 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   CalculateTotalNodesValues(mHeadNode, total);
 
   average = total / mCount;
-  std::cout << "The Total amount : " << mCount << "\n";
   std::cout << "The Total sum of Nodes values is : " << total << "\n";
   std::cout << "The Average number is : " << average << "\n";
 
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "Finding the average node from Greatest Side: \n\n";
   unsigned int i = 0;
-  while (i != 7)
+  while (true)
   {
     average = average + i;
 
@@ -216,10 +220,12 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   // Reset Indx
   i = 0;
 
-  while (i != 7)
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "Finding the average node from Lowest Side: \n\n";
+  while (true)
   {
     average = average - i;
-  //  tmpLowestAverageNode = Find(average);
+    tmpLowestAverageNode = Find(average);
     if (tmpLowestAverageNode != nullptr)
     {
       break;
@@ -231,15 +237,14 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
     }
   }
 
-
   if (disBettAverFromGreatest > disBettAverFromLowest)
   {
-    //std::cout << "The Node selected from Greatest side is : " << tmpLowestAverageNode->n << "\n";
+    std::cout << "The Node selected from Greatest side is : " << tmpLowestAverageNode->n << "\n";
     return tmpGreatestAverageNode;
   }
   else
   {
-    //std::cout << "The Node selected from Lowest side is : " << tmpLowestAverageNode->n << "\n";
+    std::cout << "The Node selected from Lowest side is : " << tmpLowestAverageNode->n << "\n";
     return tmpLowestAverageNode;
   }
 }
@@ -270,18 +275,11 @@ void BinaryTree::CalculateTotalNodesValues(Node* node, unsigned int& total)
     node->mRightDirectionTaken = false;
 }
 
-Node* BinaryTree::FindNode(Node& node, const int& n, unsigned int i)
+Node* BinaryTree::FindNode(Node& node, const int& n)
 {
-  std::cout << "Indx number : " << i << "\n";
   if (n == node.n)
   {
-      std::cout << "\t 1 - last Instruction .. .. ..   \n";
     return &node;
-  }
-  else if (i == mCount)
-  {
-      std::cout << "\t 2 - last Instruction .. .. ..   \n";
-    return nullptr;
   }
   else
   {
@@ -289,24 +287,71 @@ Node* BinaryTree::FindNode(Node& node, const int& n, unsigned int i)
     {
       if (node.mLower != nullptr)
       {
-        std::cout << "Entering to the Node : " << node.n << "\n";
-        FindNode(*(node.mLower), n, (++i));
-        std::cout << "Get out of Node : " << node.n << "\n";
+        return FindNode(*(node.mLower), n);
       }
     }
     else
     {
       if (node.mGreater != nullptr)
       {
-        std::cout << "Entering to the Node : " << node.n << "\n";
-        FindNode(*(node.mGreater), n, (++i));
-        std::cout << "Get out of Node : " << node.n << "\n";
+        return FindNode(*(node.mGreater), n);
       }
     }
   }
+
+  return nullptr;
 }
 // End Vertical Balance Methods
 
-void BinaryTree::ReleaseNodes() // Working Progress . . .
+bool BinaryTree::RemoveNode(Node* node, Node* previousNode, const int n)
 {
+  // Do the same logic as the FindNode() method
+  // but, you must add a second tmpNodeParameter as your previous node
+  // and when you found the node to delete,
+  // check:
+  //
+  // IF the node have children nodes THEN
+  //    Join the children nodes to the previous node,
+  //    and then delete the node.
+  //
+  //    This step is not so simple :)
+  // ELSE
+  //    Delete the node
+  // ENDIF
+  if (n == node->n)
+  {
+    if (node->mLower != nullptr)
+    {
+    }
+    else
+    {
+      if (node->mGreater != nullptr)
+      {
+      }
+      else
+      {
+        delete node;
+        node = nullptr;
+      }
+    }
+  }
+  else
+  {
+    if (n < node->n)
+    {
+      if (node->mLower != nullptr)
+      {
+        return RemoveNode(node->mLower, node, n);
+      }
+    }
+    else
+    {
+      if (node->mGreater != nullptr)
+      {
+        return RemoveNode(node->mGreater, node, n);
+      }
+    }
+  }
+
+  return false;
 }

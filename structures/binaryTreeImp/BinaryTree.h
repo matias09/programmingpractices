@@ -28,16 +28,17 @@ class BinaryTree
     const unsigned int GetNumberOfElements() const { return mCount; }
     void Insert(const int n);
     void ShowElements();
+    bool Remove(const int n);
     Node* Find(const int n);
   private:
     void ExecuteBalance();
-    void ReleaseNodes();
     void ShowNode(Node* node);
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, unsigned int& total);
-    Node* FindNode(Node& startNode, const int& n, unsigned int i = 0);
+    bool RemoveNode(Node* node, Node* previousNode, const int n);
+    Node* FindNode(Node& startNode, const int& n);
     Node* GetAverageNode();
 
     unsigned int mCountLowestNumbers;

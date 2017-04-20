@@ -37,8 +37,9 @@ class BinaryTree
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, unsigned int& total);
-    bool RemoveNode(Node* node, Node* previousNode, const int n);
+    bool RemoveNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
+    Node* GetLowestNodeFromThisNode(Node* node);
     Node* GetAverageNode();
 
     unsigned int mCountLowestNumbers;

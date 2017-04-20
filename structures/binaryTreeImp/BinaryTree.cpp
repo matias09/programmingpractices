@@ -117,7 +117,7 @@ Node* BinaryTree::Find(const int n)
 
 bool BinaryTree::Remove(const int n)
 {
-  return RemoveNode(mHeadNode, nullptr, n);
+  return RemoveNode(mHeadNode, *(mHeadNode), n);
 }
 
 // --------------------- Private Methods ---------------------- //
@@ -303,55 +303,59 @@ Node* BinaryTree::FindNode(Node& node, const int& n)
 }
 // End Vertical Balance Methods
 
-bool BinaryTree::RemoveNode(Node* node, Node* previousNode, const int n)
+bool BinaryTree::RemoveNode(Node* node, Node& previousNode, const int n)
 {
-  // Do the same logic as the FindNode() method
-  // but, you must add a second tmpNodeParameter as your previous node
-  // and when you found the node to delete,
-  // check:
-  //
-  // IF the node have children nodes THEN
-  //    Join the children nodes to the previous node,
-  //    and then delete the node.
-  //
-  //    This step is not so simple :)
-  // ELSE
-  //    Delete the node
-  // ENDIF
   if (n == node->n)
+  {
+    // Is in a 80% coded, But we must revise the cases when
+    // one of the edges be null in the Node which will going to erase
+    if (node->mLower != nullptr && node->n < previousNode.n)
+    {
+      // Saves the Lower nodes to a TempNode
+      Node* tmpLowerChildNode = node->mLower;
+
+      // Set the Lower Temp Part into the Lowest Node of the Greater Child Node part
+      // of the Node that I will Erase from the face of the Memory.
+      Node* tmpLowestInGreaterChildNode = GetLowestNodeFromThisNode(node->mGreater);
+
+      // Set the Greater Child Node part to the Lower part in the previous Node
+      previousNode.mLower = node->mGreater;
+
+      tmpLowestInGreaterChildNode->mLower = tmpLowerChildNode;
+    }
+    else if (node->mGreater != nullptr && node->n > previousNode.n)
+    {
+    }
+
+    delete node;
+    node = nullptr;
+  }
+  else if (n < node->n)
   {
     if (node->mLower != nullptr)
     {
-    }
-    else
-    {
-      if (node->mGreater != nullptr)
-      {
-      }
-      else
-      {
-        delete node;
-        node = nullptr;
-      }
+      return RemoveNode(node->mLower, *(node), n);
     }
   }
   else
   {
-    if (n < node->n)
+    if (node->mGreater != nullptr)
     {
-      if (node->mLower != nullptr)
-      {
-        return RemoveNode(node->mLower, node, n);
-      }
-    }
-    else
-    {
-      if (node->mGreater != nullptr)
-      {
-        return RemoveNode(node->mGreater, node, n);
-      }
+      return RemoveNode(node->mGreater, *(node), n);
     }
   }
 
   return false;
+}
+
+Node* BinaryTree::GetLowestNodeFromThisNode(Node* node)
+{
+  if (node->mLower == nullptr)
+  {
+    return node;
+  }
+  else
+  {
+    return GetLowestNodeFromThisNode(node->mLower);
+  }
 }

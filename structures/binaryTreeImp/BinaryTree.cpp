@@ -307,24 +307,52 @@ bool BinaryTree::RemoveNode(Node* node, Node& previousNode, const int n)
 {
   if (n == node->n)
   {
-    // Is in a 80% coded, But we must revise the cases when
-    // one of the edges be null in the Node which will going to erase
-    if (node->mLower != nullptr && node->n < previousNode.n)
+    if (node->n < previousNode.n)
     {
-      // Saves the Lower nodes to a TempNode
-      Node* tmpLowerChildNode = node->mLower;
+      if (node->mLower != nullptr && node->mGreater != nullptr)
+      {
+        // Saves the Lower nodes to a TempNode
+        Node* tmpLowerChildNode = node->mLower;
 
-      // Set the Lower Temp Part into the Lowest Node of the Greater Child Node part
+        // Set the Lower Temp Part into the Lowest Node of the Greater Child Node part
+        // of the Node that I will Erase from the face of the Memory.
+        Node* tmpLowestInGreaterChildNode = GetLowestNodeFromThisNode(node->mGreater);
+
+        // Set the Greater Child Node part to the Lower part in the previous Node
+        previousNode.mLower = node->mGreater;
+
+        tmpLowestInGreaterChildNode->mLower = tmpLowerChildNode;
+      }
+      else if (node->mLower != nullptr)
+      {
+        previousNode.mLower = node->mLower;
+      }
+      else if (node->mGreater != nullptr)
+      {
+        previousNode.mLower = node->mGreater;
+      }
+    }
+    else if (node->mLower != nullptr && node->mGreater != nullptr)
+    {
+      // Saves the Greater nodes to a TempNode
+      Node* tmpGreaterChildNode = node->mGreater;
+
+      // Set the Greater Temp Part into the Greatest Node of the Lower Child Node part
       // of the Node that I will Erase from the face of the Memory.
-      Node* tmpLowestInGreaterChildNode = GetLowestNodeFromThisNode(node->mGreater);
+      Node* tmpGreatestInLowestChildNode = GetGreatestNodeFromThisNode(node->mLower);
 
       // Set the Greater Child Node part to the Lower part in the previous Node
-      previousNode.mLower = node->mGreater;
+      previousNode.mGreater = node->mLower;
 
-      tmpLowestInGreaterChildNode->mLower = tmpLowerChildNode;
+      tmpGreatestInLowestChildNode->mGreater = tmpGreaterChildNode;
     }
-    else if (node->mGreater != nullptr && node->n > previousNode.n)
+    else if (node->mLower != nullptr)
     {
+      previousNode.mGreater = node->mLower;
+    }
+    else if (node->mGreater != nullptr)
+    {
+      previousNode.mGreater = node->mGreater;
     }
 
     delete node;
@@ -357,5 +385,17 @@ Node* BinaryTree::GetLowestNodeFromThisNode(Node* node)
   else
   {
     return GetLowestNodeFromThisNode(node->mLower);
+  }
+}
+
+Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node)
+{
+  if (node->mGreater == nullptr)
+  {
+    return node;
+  }
+  else
+  {
+    return GetGreatestNodeFromThisNode(node->mGreater);
   }
 }

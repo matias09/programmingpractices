@@ -95,7 +95,7 @@ void BinaryTree::Insert(const int n)
     //  std::cout << "but when be coded :) . \n Still as homework and inProgress . . .\n\n";
 
       // This Doesn't work yet. But Will be fix during the week
-       ProcessVerticalBalance(); // Working Progress . . .
+      // ProcessVerticalBalance(); // Working Progress . . .
     }
     else
     {
@@ -115,12 +115,14 @@ Node* BinaryTree::Find(const int n)
   return tmpNodeToSet;
 }
 
-bool BinaryTree::Remove(const int n)
+bool BinaryTree::Erase(const int n)
 {
-  return RemoveNode(mHeadNode, *(mHeadNode), n);
+  return EraseNode(mHeadNode, *(mHeadNode), n);
 }
 
+// ------------------------------------------------------------ //
 // --------------------- Private Methods ---------------------- //
+// ------------------------------------------------------------ //
 
 void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
 {
@@ -303,7 +305,7 @@ Node* BinaryTree::FindNode(Node& node, const int& n)
 }
 // End Vertical Balance Methods
 
-bool BinaryTree::RemoveNode(Node* node, Node& previousNode, const int n)
+bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
 {
   if (n == node->n)
   {
@@ -357,19 +359,21 @@ bool BinaryTree::RemoveNode(Node* node, Node& previousNode, const int n)
 
     delete node;
     node = nullptr;
+
+    --mCount;
   }
   else if (n < node->n)
   {
     if (node->mLower != nullptr)
     {
-      return RemoveNode(node->mLower, *(node), n);
+      return EraseNode(node->mLower, *(node), n);
     }
   }
   else
   {
     if (node->mGreater != nullptr)
     {
-      return RemoveNode(node->mGreater, *(node), n);
+      return EraseNode(node->mGreater, *(node), n);
     }
   }
 

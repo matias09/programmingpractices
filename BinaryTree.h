@@ -28,7 +28,7 @@ class BinaryTree
     const unsigned int GetNumberOfElements() const { return mCount; }
     void Insert(const int n);
     void ShowElements();
-    bool Remove(const int n);
+    bool Erase(const int n);
     Node* Find(const int n);
   private:
     void ExecuteBalance();
@@ -37,9 +37,10 @@ class BinaryTree
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, unsigned int& total);
-    bool RemoveNode(Node* node, Node& previousNode, const int n);
+    bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
     Node* GetLowestNodeFromThisNode(Node* node);
+    Node* GetGreatestNodeFromThisNode(Node* node);
     Node* GetAverageNode();
 
     unsigned int mCountLowestNumbers;

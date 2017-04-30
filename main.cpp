@@ -8,8 +8,13 @@
 int main(int argsc, char** args)
 {
   // ---------------------------------------------------------- //
-  // We must test with a lot of cases, the Erase() method.
-  // In some cases we are accessing a Null Ptr
+  // Erase Method seems to work, But I have to be sure if
+  // Visual Studio is not lying to me, so I have to be sure with
+  // Clang compiler.
+  // Another thing, is that I have to separate that nasty If Nodes.
+  // That is very wrong I know, but first has to work.
+  //
+  // Cheers.
   // ---------------------------------------------------------- //
 
   int n;
@@ -22,12 +27,12 @@ int main(int argsc, char** args)
   // for to see if this BLOW UP THROUGH THE AIR
   binaryTree->Insert(100);
   binaryTree->Insert(60);
-  binaryTree->Insert(40);
-  binaryTree->Insert(90);
-  binaryTree->Insert(30);
   binaryTree->Insert(50);
-  binaryTree->Insert(70);
+  binaryTree->Insert(90);
   binaryTree->Insert(95);
+  binaryTree->Insert(30);
+  binaryTree->Insert(40);
+  binaryTree->Insert(70);
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
   binaryTree->ShowElements();
@@ -53,7 +58,7 @@ int main(int argsc, char** args)
 
 
   // I'm leaking memory as a champion, but is
-  // a improvement that i will do soon
+  // an improvement that i will do soon
 
   return 0;
 }

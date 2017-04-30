@@ -152,7 +152,6 @@ void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
   }
 }
 
-
 // Starts Vertical Balance Methods
 void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
 {
@@ -305,9 +304,56 @@ Node* BinaryTree::FindNode(Node& node, const int& n)
 }
 // End Vertical Balance Methods
 
+// ------- S T A R T
+  // ------ Erase Node()  ---------------------------
 bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
 {
-  if (n == node->n)
+
+  // --------------------- R E V I S E ---------------------------
+  // TODO: For some reason in Visual Studio compiler, when we erase the last node.
+  // Set his value as a long negative value.
+  // --------------------- R E V I S E ---------------------------
+
+  if (n == mHeadNode->n)
+  {
+    // The node to Erase is Head
+    if (node->mLower != nullptr && node->mGreater != nullptr)
+    {
+      // Saves the Lower nodes to a TempNode
+      Node* tmpLowerChildNode = node->mLower;
+
+      // Set the Greater Temp Part into the Greatest Node of the Lower Child Node part
+      // of the Node that I will Erase from the face of the Memory.
+      Node* tmpGreatestInLowestChildNode = GetGreatestNodeFromThisNode(node->mLower);
+
+      // Set the Greatest Node from the previous Node to the Greatest Node
+      // from the New Head Node
+      tmpGreatestInLowestChildNode->mGreater = mHeadNode->mGreater;
+
+      // Set new Head Node
+      mHeadNode = tmpLowerChildNode;
+    }
+    else if (node->mLower != nullptr)
+    {
+      // Saves the Lower nodes to a TempNode
+      Node* tmpLowerChildNode = node->mLower;
+
+      // Set new Head Node
+      mHeadNode = tmpLowerChildNode;
+    }
+    else if (node->mGreater != nullptr)
+    {
+      // Saves the Greater nodes to a TempNode
+      Node* tmpGreaterChildNode = node->mGreater;
+ 
+      // Set new Head Node
+      mHeadNode = tmpGreaterChildNode;
+    }
+
+    // Releasing Node from Memory
+    ReleaseNode(node);
+  }
+  else if (n == node->n)
   {
     if (node->n < previousNode.n)
     {
@@ -357,10 +403,8 @@ bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
       previousNode.mGreater = node->mGreater;
     }
 
-    delete node;
-    node = nullptr;
-
-    --mCount;
+    // Releasing Node from Memory
+    ReleaseNode(node);
   }
   else if (n < node->n)
   {
@@ -402,4 +446,17 @@ Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node)
   {
     return GetGreatestNodeFromThisNode(node->mGreater);
   }
+}
+
+  // ------ Erase Node()  ---------------------------
+// -- E N D S
+
+inline void BinaryTree::ReleaseNode(Node* node)
+{
+    delete node;
+    node->mLower = nullptr;
+    node->mGreater = nullptr;
+    node = nullptr;
+
+    --mCount;
 }

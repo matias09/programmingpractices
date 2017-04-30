@@ -14,7 +14,7 @@ typedef struct Node
 
   bool mLeftDirectionTaken;
   bool mRightDirectionTaken;
-  unsigned int n;
+  int n;
   Node* mLower;
   Node* mGreater;
 } Node;
@@ -37,6 +37,7 @@ class BinaryTree
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, unsigned int& total);
+    inline void ReleaseNode(Node* node);
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
     Node* GetLowestNodeFromThisNode(Node* node);

@@ -316,11 +316,13 @@ bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
 
   if (n == mHeadNode->n)
   {
-    // The node to Erase is Head
+    // Declares a tmpNode to save the new Head Node
+    Node* tmpNewHeadNode = nullptr;
+
     if (node->mLower != nullptr && node->mGreater != nullptr)
     {
-      // Saves the Lower nodes to a TempNode
-      Node* tmpLowerChildNode = node->mLower;
+      // Saves the Lower nodes to a TmpNode
+      tmpNewHeadNode = node->mLower;
 
       // Set the Greater Temp Part into the Greatest Node of the Lower Child Node part
       // of the Node that I will Erase from the face of the Memory.
@@ -329,26 +331,20 @@ bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
       // Set the Greatest Node from the previous Node to the Greatest Node
       // from the New Head Node
       tmpGreatestInLowestChildNode->mGreater = mHeadNode->mGreater;
-
-      // Set new Head Node
-      mHeadNode = tmpLowerChildNode;
     }
     else if (node->mLower != nullptr)
     {
-      // Saves the Lower nodes to a TempNode
-      Node* tmpLowerChildNode = node->mLower;
-
-      // Set new Head Node
-      mHeadNode = tmpLowerChildNode;
+      // Saves the Lower nodes to a TmpNode
+      tmpNewHeadNode = node->mLower;
     }
     else if (node->mGreater != nullptr)
     {
       // Saves the Greater nodes to a TempNode
-      Node* tmpGreaterChildNode = node->mGreater;
- 
-      // Set new Head Node
-      mHeadNode = tmpGreaterChildNode;
+      tmpNewHeadNode = node->mGreater;
     }
+
+    // Set new Head Node
+    mHeadNode = tmpNewHeadNode;
 
     // Releasing Node from Memory
     ReleaseNode(node);

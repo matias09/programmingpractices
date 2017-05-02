@@ -8,9 +8,9 @@
 int main(int argsc, char** args)
 {
   // ---------------------------------------------------------- //
-  // Erase Method seems to work, But I have to be sure if
-  // Visual Studio is not lying to me, so I have to be sure with
-  // Clang compiler.
+  // Erase Method seems to work, but for some unknown reason
+  // when I delete the last node is leaving the node in some
+  // unconsistance
   // Another thing, is that I have to separate that nasty If Nodes.
   // That is very wrong I know, but first has to work.
   //
@@ -20,14 +20,9 @@ int main(int argsc, char** args)
   int n;
   std::unique_ptr<BinaryTree> binaryTree = std::unique_ptr<BinaryTree>(new BinaryTree());
 
-  // For the moment the half of the
-  // balance algorithm is working
-  // with natural numbers in the tree.
-  // I have to test it with negatives numbers
-  // for to see if this BLOW UP THROUGH THE AIR
-  binaryTree->Insert(100);
-  binaryTree->Insert(60);
-  binaryTree->Insert(40);
+  binaryTree->Insert(-100);
+  binaryTree->Insert(-60);
+//  binaryTree->Insert(-40);
 //  binaryTree->Insert(90);
 //  binaryTree->Insert(30);
 //  binaryTree->Insert(50);

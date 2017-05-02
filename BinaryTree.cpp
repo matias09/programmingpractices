@@ -96,6 +96,9 @@ void BinaryTree::Insert(const int n)
 
         // This Doesn't work yet. But Will be fix during the week
         ProcessVerticalBalance(); // Working Progress . . .
+
+        mCountGreatestNumbers = 0;
+        mCountLowestNumbers = 0;
       }
       else
       {
@@ -201,8 +204,8 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   // Get the sum of all nodes values starting from Head
   CalculateTotalNodesValues(mHeadNode, total);
 
-  average = total / mCount;
-  std::cout << "The Total sum of Nodes values is : " << total << "\n";
+  average = total / static_cast<int>(mCount); // Search a better way. Not use cast
+  std::cout << "\n\n The Total sum of Nodes values is : " << total << "\n";
   std::cout << "The Average number is : " << average << "\n";
 
   std::cout << "\n\n/---------------------------------------------/ \n";
@@ -223,7 +226,7 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   }
 
   // Reset Average
-  average = total / mCount;
+  average = total / static_cast<int>(mCount); // Search a better way. Not use cast
 
   std::cout << "\n\n/---------------------------------------------/ \n";
   std::cout << "Finding the average node counting from the average to Lowest Node: \n\n";

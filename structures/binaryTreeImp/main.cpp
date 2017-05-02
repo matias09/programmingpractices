@@ -27,12 +27,12 @@ int main(int argsc, char** args)
   // for to see if this BLOW UP THROUGH THE AIR
   binaryTree->Insert(100);
   binaryTree->Insert(60);
-  binaryTree->Insert(50);
-  binaryTree->Insert(90);
-  binaryTree->Insert(95);
-  binaryTree->Insert(30);
   binaryTree->Insert(40);
-  binaryTree->Insert(70);
+//  binaryTree->Insert(90);
+//  binaryTree->Insert(30);
+//  binaryTree->Insert(50);
+//  binaryTree->Insert(95);
+//  binaryTree->Insert(70);
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
   binaryTree->ShowElements();
@@ -51,7 +51,7 @@ int main(int argsc, char** args)
     binaryTree->ShowElements();
 
     std::cout << "\n \n";
-    std::cout << "Next number to erase : ";
+    std::cout << "Number to Erase (-1) to exit : ";
     std::cin >> n;
     std::cout << "\n \n";
   }

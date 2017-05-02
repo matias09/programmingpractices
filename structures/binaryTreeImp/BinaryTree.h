@@ -36,8 +36,9 @@ class BinaryTree
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
     void ProcessVerticalBalance();
     void MakeVerticalChanges(Node* node);
-    void CalculateTotalNodesValues(Node* node, unsigned int& total);
-    inline void ReleaseNode(Node* node);
+    void CalculateTotalNodesValues(Node* node, int& total);
+    void ReleaseNode(Node* node);
+    void UpdateHighestLowestNode(const int n);
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
     Node* GetLowestNodeFromThisNode(Node* node);
@@ -47,6 +48,8 @@ class BinaryTree
     unsigned int mCountLowestNumbers;
     unsigned int mCountGreatestNumbers;
     unsigned int mCount;
+    int mHighestNodeValue;
+    int mLowestNodeValue;
     Node* mHeadNode;
 };
 

@@ -92,10 +92,10 @@ void BinaryTree::Insert(const int n)
       // Evaluate if the Tree is balanced
       if ((mCountGreatestNumbers - mCountLowestNumbers) == 2 || (mCountLowestNumbers - mCountGreatestNumbers) == 2)
       {
-        std::cout << " --- Calling to ProcessVerticalBalance() --- ";
+        std::cout << " --- Calling to ProcessVerticalBalance() --- \n";
 
         // This Doesn't work yet. But Will be fix during the week
-        ProcessVerticalBalance(); // Working Progress . . .
+        //ProcessVerticalBalance(); // Working Progress . . .
 
         mCountGreatestNumbers = 0;
         mCountLowestNumbers = 0;
@@ -385,6 +385,10 @@ bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
       {
         previousNode.mLower = node->mGreater;
       }
+      else
+      {
+        previousNode.mLower = nullptr;
+      }
     }
     else if (node->mLower != nullptr && node->mGreater != nullptr)
     {
@@ -407,6 +411,10 @@ bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
     else if (node->mGreater != nullptr)
     {
       previousNode.mGreater = node->mGreater;
+    }
+    else
+    {
+      previousNode.mGreater = nullptr;
     }
 
     // Set that we could delete the node

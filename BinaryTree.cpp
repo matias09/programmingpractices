@@ -130,6 +130,11 @@ bool BinaryTree::Erase(const int n)
   return EraseNode(mHeadNode, *(mHeadNode), n);
 }
 
+void BinaryTree::ReleaseTree()
+{
+  ReleaseNodesRecursively(mHeadNode);
+}
+
 // ------------------------------------------------------------ //
 // --------------------- Private Methods ---------------------- //
 // ------------------------------------------------------------ //
@@ -464,7 +469,6 @@ Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node)
     return GetGreatestNodeFromThisNode(node->mGreater);
   }
 }
-
   // ------ Erase Node()  ---------------------------
 // -- E N D S
 
@@ -478,6 +482,29 @@ void BinaryTree::UpdateHighestLowestNode(const int n)
   {
     mLowestNodeValue = n;
   }
+}
+
+void BinaryTree::ReleaseNodesRecursively(Node* node)
+{
+  if (node->mLeftDirectionTaken == false)
+  {
+    if (node->mLower != nullptr)
+    {
+      ReleaseNodesRecursively(node->mLower);
+    }
+    node->mLeftDirectionTaken = true;
+  }
+
+  if (node->mRightDirectionTaken == false)
+  {
+    if (node->mGreater != nullptr)
+    {
+      ReleaseNodesRecursively(node->mGreater);
+    }
+    node->mRightDirectionTaken = true;
+  }
+
+  ReleaseNode(node);
 }
 
 inline void BinaryTree::ReleaseNode(Node* node)

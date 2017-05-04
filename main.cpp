@@ -16,10 +16,12 @@ int main(int argsc, char** args)
   int n;
   std::unique_ptr<BinaryTree> binaryTree = std::unique_ptr<BinaryTree>(new BinaryTree());
 
-  binaryTree->Insert(100);
-  binaryTree->Insert(60);
-  binaryTree->Insert(40);
-  binaryTree->Insert(90);
+  binaryTree->Insert(10);
+  binaryTree->Insert(5);
+  binaryTree->Insert(15);
+  binaryTree->Insert(20);
+  binaryTree->Insert(13);
+  binaryTree->Insert(14);
 //  binaryTree->Insert(30);
 //  binaryTree->Insert(50);
 //  binaryTree->Insert(95);
@@ -47,8 +49,12 @@ int main(int argsc, char** args)
     std::cout << "\n \n";
   }
 
-  // I'm leaking memory as a champion, but is
-  // an improvement that i will do soon
+  // Technically with this Method Call I would Leak Memory.
+  // I have to improve this using iteration in the
+  // Destructor Method to release memory.
+  binaryTree->ReleaseTree();
+
+  std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
 
   return 0;
 }

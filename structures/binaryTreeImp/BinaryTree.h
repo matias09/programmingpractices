@@ -28,6 +28,7 @@ class BinaryTree
     const unsigned int GetNumberOfElements() const { return mCount; }
     void Insert(const int n);
     void ShowElements();
+    void ReleaseTree();
     bool Erase(const int n);
     Node* Find(const int n);
   private:
@@ -38,6 +39,7 @@ class BinaryTree
     void MakeVerticalChanges(Node* node);
     void CalculateTotalNodesValues(Node* node, int& total);
     void ReleaseNode(Node* node);
+    void ReleaseNodesRecursively(Node* node);
     void UpdateHighestLowestNode(const int n);
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);

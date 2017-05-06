@@ -32,7 +32,6 @@ class BinaryTree
     bool Erase(const int n);
     Node* Find(const int n);
   private:
-    void ExecuteBalance();
     void ShowNode(Node* node);
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
     void ProcessVerticalBalance();
@@ -43,6 +42,7 @@ class BinaryTree
     void UpdateHighestLowestNode(const int n);
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
+    Node* FindPrevNode(Node& startNode, const int& n);
     Node* GetLowestNodeFromThisNode(Node* node);
     Node* GetGreatestNodeFromThisNode(Node* node);
     Node* GetAverageNode();

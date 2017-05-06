@@ -92,9 +92,6 @@ void BinaryTree::Insert(const int n)
       // Evaluate if the Tree is balanced
       if ((mCountGreatestNumbers - mCountLowestNumbers) == 2 || (mCountLowestNumbers - mCountGreatestNumbers) == 2)
       {
-        std::cout << " --- Calling to ProcessVerticalBalance() --- \n";
-
-        // This Doesn't work yet. But Will be fix during the week
         //ProcessVerticalBalance(); // Working Progress . . .
 
         mCountGreatestNumbers = 0;
@@ -102,7 +99,7 @@ void BinaryTree::Insert(const int n)
       }
       else
       {
-        std::cout << "If a don't mistake in the previous check, so the tree is balanced . . .\n\n";
+        std::cout << "The tree remains balanced . . .\n\n";
       }
     }
 
@@ -168,6 +165,7 @@ void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
 }
 
 // Starts Vertical Balance Methods
+
 void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
 {
   Node* tmpAverageNode = GetAverageNode();
@@ -180,11 +178,6 @@ void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
 
 void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
 {
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "\t . . . BinaryTree::MakeVerticalChanges       . . . \n";
-  std::cout << "\t . . . I'm Close to be Coded DON'T HESITATE  . . . \n";
-  std::cout << "/---------------------------------------------/ \n";
-
   // Save Head Node in a TmpNode
   Node* tmpPrevHeadNode = mHeadNode;
 
@@ -234,29 +227,76 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
     mHeadNode->mLower = prevNodeToAvg;
   }
 
-  // Thinks better, how to modify the PrevNodeToAvg
-  // There are cases which you are not having in mind
   if (hasAvgNodeAnyChild)
   {
-    if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+    if (avgNode->n < prevNodeToAvg->n)
     {
+      // Cases when the AvgNode be Lower than PrevNodeToAvg
+      if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+      {
+        // Get the Greater Child Node From Average Node to connect to the
+        // Previous Node connected to the Average Node
+        Node* tmpGreaterChildAvgNode = GetGreatestNodeFromThisNode(avgNode->mGreater);
+
+        // Set the Greatest Child Node from Average Node
+        // to the Lowest Node of the Previous Node
+        // from the Average Node
+        prevNodeToAvg->mLower = tmpGreaterChildAvgNode;
+
+        // Set the Lowest Child Node from Average Node
+        // to the last Node of the Greatest Node
+        // from the Average Node
+        tmpGreaterChildAvgNode->mLower = tmpLowestFromAvgNode;
+      }
+      else if (tmpLowestFromAvgNode != nullptr)
+      {
+        prevNodeToAvg->mLower = tmpLowestFromAvgNode;
+      }
+      else if (tmpGreatestFromAvgNode != nullptr)
+      {
+        prevNodeToAvg->mLower = tmpGreatestFromAvgNode;
+      }
     }
-    else if (tmpLowestFromAvgNode != nullptr)
+    else
     {
-    }
-    else if (tmpGreatestFromAvgNode != nullptr)
-    {
+      // Cases when the AvgNode be Greater than PrevNodeToAvg
+      if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+      {
+        // Get the Lower Child Node From Average Node to connect to the
+        // Previous Node connected to the Average Node
+        Node* tmpLowerChildAvgNode = GetLowestNodeFromThisNode(avgNode->mLower);
+
+        // Set the Lower Child Node from Average Node
+        // to the Greatest Node of the Previous Node
+        // from the Average Node
+        prevNodeToAvg->mGreater = tmpLowerChildAvgNode;
+
+        // Set the Greatest Child Node from Average Node
+        // to the last Node of the Lowest Node
+        // from the Average Node
+        tmpLowerChildAvgNode->mGreater = tmpGreatestFromAvgNode;
+      }
+      else if (tmpLowestFromAvgNode != nullptr)
+      {
+        prevNodeToAvg->mGreater = tmpLowestFromAvgNode;
+      }
+      else if (tmpGreatestFromAvgNode != nullptr)
+      {
+        prevNodeToAvg->mGreater = tmpGreatestFromAvgNode;
+      }
     }
   }
   else
   {
-    if (mHeadNode->n > prevNodeToAvg->n)
+    // Reset the PrevNodeToAvg Node who had the
+    // new HeadNode
+    if (avgNode->n < prevNodeToAvg->n)
     {
-      prevNodeToAvg->mGreater = nullptr;
+      prevNodeToAvg->mLower = nullptr;
     }
     else
     {
-      prevNodeToAvg->mLower = nullptr;
+      prevNodeToAvg->mGreater = nullptr;
     }
   }
 }
@@ -411,11 +451,10 @@ Node* BinaryTree::FindPrevNode(Node& node, const int& n)
     }
     else
     {
-      return FindPrevNode(*(node.Greater), n);
+      return FindPrevNode(*(node.mGreater), n);
     }
   }
 }
-
 
 // End Vertical Balance Methods
 

@@ -178,12 +178,87 @@ void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
   MakeVerticalChanges(tmpAverageNode);
 }
 
-void BinaryTree::MakeVerticalChanges(Node* node) // Working Progress . . .
+void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
 {
   std::cout << "\n\n/---------------------------------------------/ \n";
   std::cout << "\t . . . BinaryTree::MakeVerticalChanges       . . . \n";
   std::cout << "\t . . . I'm Close to be Coded DON'T HESITATE  . . . \n";
   std::cout << "/---------------------------------------------/ \n";
+
+  // Save Head Node in a TmpNode
+  Node* tmpPrevHeadNode = mHeadNode;
+
+  // This will be use to save the Child nodes
+  // AvgNode in the case that have one
+  Node* tmpLowestFromAvgNode = nullptr;
+  Node* tmpGreatestFromAvgNode = nullptr;
+
+  // Set if the AvgNode has some child node
+  bool hasAvgNodeAnyChild = false;
+
+  // Checking if the Average Node has child nodes created to save then.
+  if (avgNode->mLower != nullptr)
+  {
+    tmpLowestFromAvgNode = avgNode->mLower;
+    hasAvgNodeAnyChild = true;
+  }
+
+  if (avgNode->mGreater != nullptr)
+  {
+    // Save the Greatest Node from the Average Node
+    tmpGreatestFromAvgNode = avgNode->mGreater;
+    hasAvgNodeAnyChild = true;
+  }
+
+  // Get the parent Node from the avgNode
+  Node* prevNodeToAvg = FindPrevNode(*(mHeadNode), avgNode->n);
+
+  // Technically I have already in this point all the neccesary to play with pointers.
+  // As Duke Nuken will say:
+  // L E T 'S    R O C K
+
+  // Changing HeadNode for AvgNode
+  mHeadNode = avgNode;
+
+  // Set Previous HeadNode to the Lower or Higher side of the New HeadNode
+  if (mHeadNode->n > tmpPrevHeadNode->n)
+  {
+    tmpPrevHeadNode->mGreater = nullptr;
+    mHeadNode->mLower = tmpPrevHeadNode;
+    mHeadNode->mGreater = prevNodeToAvg;
+  }
+  else
+  {
+    tmpPrevHeadNode->mLower = nullptr;
+    mHeadNode->mGreater = tmpPrevHeadNode;
+    mHeadNode->mLower = prevNodeToAvg;
+  }
+
+  // Thinks better, how to modify the PrevNodeToAvg
+  // There are cases which you are not having in mind
+  if (hasAvgNodeAnyChild)
+  {
+    if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+    {
+    }
+    else if (tmpLowestFromAvgNode != nullptr)
+    {
+    }
+    else if (tmpGreatestFromAvgNode != nullptr)
+    {
+    }
+  }
+  else
+  {
+    if (mHeadNode->n > prevNodeToAvg->n)
+    {
+      prevNodeToAvg->mGreater = nullptr;
+    }
+    else
+    {
+      prevNodeToAvg->mLower = nullptr;
+    }
+  }
 }
 
 Node* BinaryTree::GetAverageNode() // Working Progress . . .
@@ -206,10 +281,11 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   // the lowest side
   unsigned int disBettAverFromLowest = 0;
 
+  // THIS HAS TO BE A TREE PROPERTY mTotal = NODE_1 + NODE_2 + NODE_N
   // Get the sum of all nodes values starting from Head
   CalculateTotalNodesValues(mHeadNode, total);
 
-  average = total / static_cast<int>(mCount); // Search a better way. Not use cast
+  average = total / static_cast<int>(mCount); // TODO: Search a better way. Not use cast
   std::cout << "\n\n The Total sum of Nodes values is : " << total << "\n";
   std::cout << "The Average number is : " << average << "\n";
 
@@ -231,7 +307,7 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   }
 
   // Reset Average
-  average = total / static_cast<int>(mCount); // Search a better way. Not use cast
+  average = total / static_cast<int>(mCount); // TODO: Search a better way. Not use cast
 
   std::cout << "\n\n/---------------------------------------------/ \n";
   std::cout << "Finding the average node counting from the average to Lowest Node: \n\n";
@@ -313,6 +389,34 @@ Node* BinaryTree::FindNode(Node& node, const int& n)
 
   return nullptr;
 }
+
+Node* BinaryTree::FindPrevNode(Node& node, const int& n)
+{
+  if (n < node.n)
+  {
+    if (node.mLower->n == n)
+    {
+      return &node;
+    }
+    else
+    {
+      return FindPrevNode(*(node.mLower), n);
+    }
+  }
+  else
+  {
+    if (node.mGreater->n == n)
+    {
+      return &node;
+    }
+    else
+    {
+      return FindPrevNode(*(node.Greater), n);
+    }
+  }
+}
+
+
 // End Vertical Balance Methods
 
 // ------- S T A R T

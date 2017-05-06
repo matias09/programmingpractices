@@ -36,7 +36,7 @@ class BinaryTree
     void ShowNode(Node* node);
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
     void ProcessVerticalBalance();
-    void MakeVerticalChanges(Node* node);
+    void MakeVerticalChanges(Node* avgNode);
     void CalculateTotalNodesValues(Node* node, int& total);
     void ReleaseNode(Node* node);
     void ReleaseNodesRecursively(Node* node);

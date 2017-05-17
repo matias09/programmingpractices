@@ -32,6 +32,10 @@ class BinaryTree
     bool Erase(const int n);
     Node* Find(const int n);
   private:
+    static const int VERTICAL_CONDITION = 2;
+    static const unsigned int START_POINT_VERTICAL_LEVEL = 1;
+    static const unsigned int NODE_AMOUNT_TO_CHECK_BALANCE = 3;
+
     void ShowNode(Node* node);
     void SaveNode(Node* node, const int n, unsigned int& levelCounter);
     void ProcessVerticalBalance();
@@ -40,6 +44,7 @@ class BinaryTree
     void ReleaseNode(Node* node);
     void ReleaseNodesRecursively(Node* node);
     void UpdateHighestLowestNode(const int n);
+    bool WasBalanceProcessMade();
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);
     Node* FindPrevNode(Node& startNode, const int& n);
@@ -47,8 +52,8 @@ class BinaryTree
     Node* GetGreatestNodeFromThisNode(Node* node);
     Node* GetAverageNode();
 
-    unsigned int mCountLowestNumbers;
-    unsigned int mCountGreatestNumbers;
+    int mCountLowestNumbers;
+    int mCountGreatestNumbers;
     unsigned int mCount;
     int mHighestNodeValue;
     int mLowestNodeValue;

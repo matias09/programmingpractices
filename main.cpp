@@ -1,19 +1,49 @@
 // ------------------------- T O D O  T H I N G S --------------------------------------------------------------- //
+// TODO : Implement Balance Process when the Average Node is the Head Node.
+// TODO : Fix Balance Process when there are less nodes from the Lowest side.
 // TODO : Improve EraseNode() Method because there are to many IF statements. Try to separate in more functions
-// TODO : Finish the ProcessVerticalBalance() Method to finish the AVL Tree
-// TODO : Create the ReleaseNodesFromMemory() Method to clean the Heap from Node Garbage and not Leak Memory
+// TODO : Use Precompiler Functions to choose when send Debug Output.
 // TODO : Create test files
 // ------------------------- T O D O  T H I N G S --------------------------------------------------------------- //
 #include <string.h>
 #include <iostream>
 #include <memory>
 
+// Code to clear screen on Linux
+
+void ClearScreen()
+{
+  std::cout << "\033[2J\033[1;1H";
+}
+// End
+
 // Own Classes
 #include "BinaryTree.h"
 
+// Options
+enum MENU_OPTIONS
+{
+  OPT_ADD = 'a',
+  OPT_SHOW = 's',
+  OPT_ERASE = 'e',
+  OPT_CLEAN_SCREEN = 'c',
+  OPT_QUIT = 'q',
+};
+
+void ShowMenu()
+{
+  std::cout << "Choose an Option from the Menu: \n";
+  std::cout << "\t- (a) Add a Node .\n";
+  std::cout << "\t- (s) Show Nodes .\n";
+  std::cout << "\t- (e) Erase a Node .\n";
+  std::cout << "\t- (a) Add a Node .\n";
+  std::cout << "\t- (c) Clear Screen .\n";
+  std::cout << "\t- (q) Exit .\n\n";
+  std::cout << " - Option : ";
+}
 int main(int argsc, char** args)
 {
-  int n;
+  char o;
   std::unique_ptr<BinaryTree> binaryTree = std::unique_ptr<BinaryTree>(new BinaryTree());
 
   binaryTree->Insert(10);
@@ -21,33 +51,67 @@ int main(int argsc, char** args)
   binaryTree->Insert(15);
   binaryTree->Insert(20);
   binaryTree->Insert(13);
-  binaryTree->Insert(14);
+//  binaryTree->Insert(14);
 //  binaryTree->Insert(30);
 //  binaryTree->Insert(50);
 //  binaryTree->Insert(95);
 //  binaryTree->Insert(70);
 
+
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
   binaryTree->ShowElements();
-
-  std::cout << "\n \n";
-  std::cout << "Number to Erase (-1) to exit : ";
-  std::cin >> n;
   std::cout << "\n \n";
 
-  while (n != -1)
+  do
   {
-    binaryTree->Erase(n);
+    ShowMenu();
+    std::cin >> o;
 
     std::cout << "\n \n";
-    std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
-    binaryTree->ShowElements();
+    switch (o)
+    {
+      case MENU_OPTIONS::OPT_SHOW:
+      {
+        std::cout << " - Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
+        binaryTree->ShowElements();
+        break;
+      }
+      case MENU_OPTIONS::OPT_ADD:
+      {
+        int n;
+        std::cout << " - Insert a Number to Add : ";
+        std::cin >> n;
 
+        binaryTree->Insert(n);
+        break;
+      }
+      case MENU_OPTIONS::OPT_ERASE:
+      {
+        int n;
+        std::cout << " - Insert a Number to Erase : ";
+        std::cin >> n;
+
+        binaryTree->Erase(n);
+        break;
+      }
+      case MENU_OPTIONS::OPT_CLEAN_SCREEN:
+      {
+        ClearScreen();
+        break;
+      }
+      case MENU_OPTIONS::OPT_QUIT:
+      {
+        break;
+      }
+      default:
+      {
+        std::cout << "\n/--------------/ \n";
+        std::cout << " - Wrong Option -";
+        std::cout << "\n/--------------/ \n";
+      }
+    }
     std::cout << "\n \n";
-    std::cout << "Number to Erase (-1) to exit : ";
-    std::cin >> n;
-    std::cout << "\n \n";
-  }
+  } while (o != MENU_OPTIONS::OPT_QUIT);
 
   // Technically with this Method Call I would Leak Memory.
   // I have to improve this using iteration in the

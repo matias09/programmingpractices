@@ -60,60 +60,52 @@ void BinaryTree::ShowNode(Node* node)
 
 void BinaryTree::Insert(const int n)
 {
-  try
-  {
-    // Increase total number count
-    ++mCount;
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "[ Insert() ] \n";
 
-    if (mHeadNode == nullptr)
+  // Increase total number count
+  ++mCount;
+
+  std::cout << "mCount = " << mCount << "\n";
+
+  if (mHeadNode == nullptr)
+  {
+    mHeadNode = new Node(n);
+  }
+  else
+  {
+    unsigned int levelCounter = START_POINT_VERTICAL_LEVEL;
+    SaveNode(mHeadNode, n, levelCounter);
+
+    if (n > mHeadNode->n)
     {
-      mHeadNode = new Node(n);
+      if (levelCounter > mCountGreatestNumbers)
+      {
+        mCountGreatestNumbers = levelCounter;
+      }
     }
     else
     {
-      unsigned int levelCounter = 1;
-      SaveNode(mHeadNode, n, levelCounter);
-
-      if (n > mHeadNode->n)
+      if (levelCounter > mCountLowestNumbers)
       {
-        if (levelCounter > mCountGreatestNumbers)
-        {
-          mCountGreatestNumbers = levelCounter;
-        }
-      }
-      else
-      {
-        if (levelCounter > mCountLowestNumbers)
-        {
-          mCountLowestNumbers = levelCounter;
-        }
-      }
-
-      // Evaluate if the Tree is balanced
-      if ((mCountGreatestNumbers - mCountLowestNumbers) == 2 || (mCountLowestNumbers - mCountGreatestNumbers) == 2)
-      {
-        //ProcessVerticalBalance(); // Working Progress . . .
-
-        mCountGreatestNumbers = 0;
-        mCountLowestNumbers = 0;
-      }
-      else
-      {
-        std::cout << "The tree remains balanced . . .\n\n";
+        mCountLowestNumbers = levelCounter;
       }
     }
 
-    UpdateHighestLowestNode(n);
-  }
-  catch(std::runtime_error& e)
-  {
-    // Decrease total number count because an error was triggered
-    --mCount;
+    if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
+    {
+      WasBalanceProcessMade();
+    }
 
-    std::cout << "Exception Catched . . . \n";
-    std::cout << "Exception message  \n \t --- " << e.what() << " ---";
-    std::cout << "Trying to save a Node \n";
   }
+
+  UpdateHighestLowestNode(n);
+
+  std::cout << "n = " << n << "\n";
+  std::cout << "mCountLowestNumbers = " << mCountLowestNumbers << "\n";
+  std::cout << "mCountGreatestNumbers = " << mCountGreatestNumbers << "\n";
+
+  std::cout << "\n [ End ] \n";
 }
 
 Node* BinaryTree::Find(const int n)
@@ -124,7 +116,34 @@ Node* BinaryTree::Find(const int n)
 
 bool BinaryTree::Erase(const int n)
 {
-  return EraseNode(mHeadNode, *(mHeadNode), n);
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "[ Erase() ] \n";
+
+  bool wasNodeErased = false;
+  wasNodeErased = EraseNode(mHeadNode, *(mHeadNode), n);
+
+  if (wasNodeErased)
+  {
+    if (n < mHeadNode->n)
+    {
+      --mCountLowestNumbers;
+    }
+    else
+    {
+      --mCountGreatestNumbers;
+    }
+
+    if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
+    {
+      WasBalanceProcessMade();
+    }
+  }
+
+  std::cout << "mCountLowestNumbers = " << mCountLowestNumbers << "\n";
+  std::cout << "mCountGreatestNumbers = " << mCountGreatestNumbers << "\n";
+
+  std::cout << "\n [ End ] \n";
+  return wasNodeErased;
 }
 
 void BinaryTree::ReleaseTree()
@@ -166,7 +185,7 @@ void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
 
 // Starts Vertical Balance Methods
 
-void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
+void BinaryTree::ProcessVerticalBalance()
 {
   Node* tmpAverageNode = GetAverageNode();
 
@@ -176,7 +195,7 @@ void BinaryTree::ProcessVerticalBalance() // Working Progress . . .
   MakeVerticalChanges(tmpAverageNode);
 }
 
-void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
+void BinaryTree::MakeVerticalChanges(Node* avgNode)
 {
   // Save Head Node in a TmpNode
   Node* tmpPrevHeadNode = mHeadNode;
@@ -259,7 +278,7 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
     }
     else
     {
-      // Cases when the AvgNode be Greater than PrevNodeToAvg
+      // Cases when the AvgNode is Greater than PrevNodeToAvg
       if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
       {
         // Get the Lower Child Node From Average Node to connect to the
@@ -301,7 +320,7 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode) // Working Progress . . .
   }
 }
 
-Node* BinaryTree::GetAverageNode() // Working Progress . . .
+Node* BinaryTree::GetAverageNode()
 {
   // Getting the average between this two nodes
   // we will get the new head Node and from he
@@ -329,15 +348,14 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   std::cout << "\n\n The Total sum of Nodes values is : " << total << "\n";
   std::cout << "The Average number is : " << average << "\n";
 
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "Finding the average node counting from the average to Highest Node: \n\n";
+  //std::cout << "\n\n/---------------------------------------------/ \n";
+  //std::cout << "Finding the average node counting from the average to Highest Node: \n\n";
   while (average < mHighestNodeValue)
   {
     ++average;
     tmpGreatestAverageNode = FindNode(*mHeadNode, average);
     if (tmpGreatestAverageNode != nullptr)
     {
-      std::cout << "Node finded.  Is : " << average << "\n \n";
       break;
     }
     else
@@ -349,8 +367,6 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
   // Reset Average
   average = total / static_cast<int>(mCount); // TODO: Search a better way. Not use cast
 
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "Finding the average node counting from the average to Lowest Node: \n\n";
   while (average > mLowestNodeValue)
   {
     --average;
@@ -367,12 +383,10 @@ Node* BinaryTree::GetAverageNode() // Working Progress . . .
 
   if (disBettAverFromGreatest > disBettAverFromLowest)
   {
-    std::cout << "The Node selected from counting through the average to Lowest Node is : " << tmpLowestAverageNode->n << "\n";
     return tmpLowestAverageNode;
   }
   else
   {
-    std::cout << "The Node selected from counting through the average to Highest Node is : " << tmpGreatestAverageNode->n << "\n";
     return tmpGreatestAverageNode;
   }
 }
@@ -456,18 +470,14 @@ Node* BinaryTree::FindPrevNode(Node& node, const int& n)
   }
 }
 
-// End Vertical Balance Methods
+// Vertical Balance Methods
+// -- E N D S
 
 // ------- S T A R T
   // ------ Erase Node()  ---------------------------
 bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
 {
   static bool theNodeWasDeleted = false;
-
-  // --------------------- R E V I S E ---------------------------
-  // TODO: For some reason in Visual Studio compiler, when we erase the last node.
-  // Set his value as a long negative value.
-  // --------------------- R E V I S E ---------------------------
 
   if (n == mHeadNode->n)
   {
@@ -658,4 +668,33 @@ inline void BinaryTree::ReleaseNode(Node* node)
     node = nullptr;
 
     --mCount;
+}
+
+bool BinaryTree::WasBalanceProcessMade()
+{
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "[ WasBalanceProcessMade() ] \n";
+
+  bool wasBalanceProcessMade = false;
+
+
+  std::cout << "(mCountGreatestNumbers - mCountLowestNumbers) = " << (mCountGreatestNumbers - mCountLowestNumbers) << "\n";
+
+  std::cout << "(mCountLowestNumbers - mCountGreatestNumbers) = " << (mCountLowestNumbers - mCountGreatestNumbers) << "\n";
+
+  // Evaluate if the tree got more than two vertical levels
+  // of difference
+  if ((mCountGreatestNumbers - mCountLowestNumbers) >= VERTICAL_CONDITION || (mCountLowestNumbers - mCountGreatestNumbers) >= VERTICAL_CONDITION)
+  {
+    std::cout << "Running Balance Process . . .\n";
+    ProcessVerticalBalance();
+    wasBalanceProcessMade = true;
+  }
+  else
+  {
+    std::cout << "The tree remains balanced . . .\n";
+  }
+
+  std::cout << "\n [ End ] \n";
+  return wasBalanceProcessMade;
 }

@@ -82,6 +82,12 @@ void BinaryTree::Insert(const int n)
       if (levelCounter > mCountGreatestNumbers)
       {
         mCountGreatestNumbers = levelCounter;
+
+        if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
+        {
+          WasBalanceProcessMade();
+          --mCountGreatestNumbers;
+        }
       }
     }
     else
@@ -89,14 +95,14 @@ void BinaryTree::Insert(const int n)
       if (levelCounter > mCountLowestNumbers)
       {
         mCountLowestNumbers = levelCounter;
+
+        if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
+        {
+          WasBalanceProcessMade();
+          --mCountLowestNumbers;
+        }
       }
     }
-
-    if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
-    {
-      WasBalanceProcessMade();
-    }
-
   }
 
   UpdateHighestLowestNode(n);
@@ -220,6 +226,13 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode)
     // Save the Greatest Node from the Average Node
     tmpGreatestFromAvgNode = avgNode->mGreater;
     hasAvgNodeAnyChild = true;
+  }
+
+  // Check if the Avr Node is the Head Node
+  if (avgNode->n == mHeadNode->n)
+  {
+    FollowHeadNodeIsTheAverageNodeFlow();
+    return; // this here sucks I know, I have to separate this code.
   }
 
   // Get the parent Node from the avgNode
@@ -677,17 +690,15 @@ bool BinaryTree::WasBalanceProcessMade()
 
   bool wasBalanceProcessMade = false;
 
-
   std::cout << "(mCountGreatestNumbers - mCountLowestNumbers) = " << (mCountGreatestNumbers - mCountLowestNumbers) << "\n";
 
   std::cout << "(mCountLowestNumbers - mCountGreatestNumbers) = " << (mCountLowestNumbers - mCountGreatestNumbers) << "\n";
 
-  // Evaluate if the tree got more than two vertical levels
-  // of difference
+  // Evaluate if the tree got more than two vertical levels of difference
   if ((mCountGreatestNumbers - mCountLowestNumbers) >= VERTICAL_CONDITION || (mCountLowestNumbers - mCountGreatestNumbers) >= VERTICAL_CONDITION)
   {
     std::cout << "Running Balance Process . . .\n";
-    ProcessVerticalBalance();
+    //ProcessVerticalBalance();
     wasBalanceProcessMade = true;
   }
   else
@@ -697,4 +708,39 @@ bool BinaryTree::WasBalanceProcessMade()
 
   std::cout << "\n [ End ] \n";
   return wasBalanceProcessMade;
+}
+
+void BinaryTree::FollowHeadNodeIsTheAverageNodeFlow()
+{
+  // Save actual Head Node
+  Node* prevHeadNode = mHeadNode;
+
+  if (mCountGreatestNumbers > mCountLowestNumbers)
+  {
+    mHeadNode = prevHeadNode->mGreater;
+
+    if (mHeadNode->mLower != nullptr)
+    {
+      Node* lowestNodeFromHeadNode = GetLowestNodeFromThisNode(mHeadNode);
+      lowestNodeFromHeadNode->mLower = prevHeadNode;
+    }
+    else
+    {
+      mHeadNode->mLower = prevHeadNode;
+    }
+  }
+  else
+  {
+    mHeadNode = prevHeadNode->mLower;
+
+    if (mHeadNode->mGreater != nullptr)
+    {
+      Node* greatestNodeFromHeadNode = GetGreatestNodeFromThisNode(mHeadNode);
+      greatestNodeFromHeadNode->mGreater = prevHeadNode;
+    }
+    else
+    {
+      mHeadNode->mGreater = prevHeadNode;
+    }
+  }
 }

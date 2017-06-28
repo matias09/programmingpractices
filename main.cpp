@@ -113,9 +113,7 @@ int main(int argsc, char** args)
     std::cout << "\n \n";
   } while (o != MENU_OPTIONS::OPT_QUIT);
 
-  // Technically with this Method Call I would Leak Memory.
-  // I have to improve this using iteration in the
-  // Destructor Method to release memory.
+  // Technically with this Method Call I will not Leak Memory.
   binaryTree->ReleaseTree();
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";

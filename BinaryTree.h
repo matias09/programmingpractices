@@ -44,6 +44,7 @@ class BinaryTree
     void ReleaseNode(Node* node);
     void ReleaseNodesRecursively(Node* node);
     void UpdateHighestLowestNode(const int n);
+    void FollowHeadNodeIsTheAverageNodeFlow();
     bool WasBalanceProcessMade();
     bool EraseNode(Node* node, Node& previousNode, const int n);
     Node* FindNode(Node& startNode, const int& n);

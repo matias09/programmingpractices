@@ -1,5 +1,4 @@
 #include <iostream>
-#include <stdexcept>
 
 // Own Classes
 #include "BinaryTree.h"
@@ -7,10 +6,6 @@
 BinaryTree::BinaryTree()
 {
   std::cout << " \n Building BinaryTree . . . \n";
-  mCountGreatestNumbers = 0;
-  mCountLowestNumbers = 0;
-  mHighestNodeValue = 0;
-  mLowestNodeValue = 0;
   mCount = 0;
   mHeadNode = nullptr;
 }
@@ -24,7 +19,7 @@ void BinaryTree::ShowElements()
 {
   if (mHeadNode != nullptr)
   {
-    std::cout << "Nodes Values : ";
+    std::cout << " -- Nodes Values --\n\t";
     ShowNode(mHeadNode);
   }
   else
@@ -74,36 +69,12 @@ void BinaryTree::Insert(const int n)
   }
   else
   {
-    unsigned int levelCounter = START_POINT_VERTICAL_LEVEL;
-    SaveNode(mHeadNode, n, levelCounter);
-
-    if (n > mHeadNode->n)
-    {
-      if (levelCounter > mCountGreatestNumbers)
-      {
-        mCountGreatestNumbers = levelCounter;
-      }
-    }
-    else
-    {
-      if (levelCounter > mCountLowestNumbers)
-      {
-        mCountLowestNumbers = levelCounter;
-      }
-    }
-
-    if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
-    {
-      WasBalanceProcessMade();
-    }
-
+    SaveNode(mHeadNode, n);
   }
 
-  UpdateHighestLowestNode(n);
-
   std::cout << "n = " << n << "\n";
-  std::cout << "mCountLowestNumbers = " << mCountLowestNumbers << "\n";
-  std::cout << "mCountGreatestNumbers = " << mCountGreatestNumbers << "\n";
+  std::cout << "mLevelInLowestSide = " << mHeadNode->mLevelInLowestSide << "\n";
+  std::cout << "mLevelInGreatestSide = " << mHeadNode->mLevelInGreatestSide << "\n";
 
   std::cout << "\n [ End ] \n";
 }
@@ -122,25 +93,8 @@ bool BinaryTree::Erase(const int n)
   bool wasNodeErased = false;
   wasNodeErased = EraseNode(mHeadNode, *(mHeadNode), n);
 
-  if (wasNodeErased)
-  {
-    if (n < mHeadNode->n)
-    {
-      --mCountLowestNumbers;
-    }
-    else
-    {
-      --mCountGreatestNumbers;
-    }
-
-    if (mCount > NODE_AMOUNT_TO_CHECK_BALANCE)
-    {
-      WasBalanceProcessMade();
-    }
-  }
-
-  std::cout << "mCountLowestNumbers = " << mCountLowestNumbers << "\n";
-  std::cout << "mCountGreatestNumbers = " << mCountGreatestNumbers << "\n";
+//  std::cout << "mLevelInLowestSide = " << mLevelInLowestSide << "\n";
+//  std::cout << "mLevelInGreatestSide = " << mLevelInGreatestSide << "\n";
 
   std::cout << "\n [ End ] \n";
   return wasNodeErased;
@@ -155,18 +109,36 @@ void BinaryTree::ReleaseTree()
 // --------------------- Private Methods ---------------------- //
 // ------------------------------------------------------------ //
 
-void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
+void BinaryTree::SaveNode(Node* node, const int n)
 {
+  std::cout << "\n\n/---------------------------------------------/ \n";
+  std::cout << "[ SaveNode() ] \n";
+
   if (n > node->n)
   {
     if (node->mGreater == nullptr)
     {
       node->mGreater = new Node(n);
+      ++node->mLevelInGreatestSide;
     }
     else
     {
-      ++level;
-      SaveNode(node->mGreater, n, level);
+      SaveNode(node->mGreater, n);
+
+      std::cout << "Actual Node : " << node->n << "\n";
+      std::cout << "mLevelInGreatestSide = " << node->mLevelInGreatestSide << "\n";
+
+      // Compares both levels in ChildNode to determine which of both
+      // we must to use to update the Level counter of the actual Node
+      // in the Greatest side
+      if (node->mGreater->mLevelInGreatestSide > node->mGreater->mLevelInLowestSide)
+      {
+        node->mLevelInGreatestSide = node->mGreater->mLevelInGreatestSide + 1;
+      }
+      else
+      {
+        node->mLevelInGreatestSide = node->mGreater->mLevelInLowestSide + 1;
+      }
     }
   }
   else
@@ -174,88 +146,97 @@ void BinaryTree::SaveNode(Node* node, const int n, unsigned int& level)
     if (node->mLower == nullptr)
     {
       node->mLower = new Node(n);
+      ++node->mLevelInLowestSide;
     }
     else
     {
-      ++level;
-      SaveNode(node->mLower, n, level);
+      SaveNode(node->mLower, n);
+
+      // Compares both levels in ChildNode to determine which of both
+      // we must to use to update the Level counter of the actual Node
+      // in the Lowest side
+      if (node->mLower->mLevelInGreatestSide > node->mLower->mLevelInLowestSide)
+      {
+        node->mLevelInLowestSide = node->mLower->mLevelInGreatestSide + 1;
+      }
+      else
+      {
+        node->mLevelInLowestSide = node->mLower->mLevelInLowestSide + 1;
+      }
     }
   }
+
+  std::cout << "\n [ End ] \n";
 }
 
 // Starts Vertical Balance Methods
 
-void BinaryTree::ProcessVerticalBalance()
+void BinaryTree::ProcessBalance(Node* newHeadNode)
 {
-  Node* tmpAverageNode = GetAverageNode();
+  if (newHeadNode->n == mHeadNode->n)
+  {
+    if (newHeadNode->mLevelInGreatestSide > newHeadNode->mLevelInLowestSide)
+    {
+      newHeadNode = mHeadNode->mGreater;
+    }
+    else
+    {
+      newHeadNode = mHeadNode->mLower;
+    }
+  }
 
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "The Average selected Node is : " << tmpAverageNode->n << "\n";
-
-  MakeVerticalChanges(tmpAverageNode);
-}
-
-void BinaryTree::MakeVerticalChanges(Node* avgNode)
-{
   // Save Head Node in a TmpNode
   Node* tmpPrevHeadNode = mHeadNode;
 
-  // This will be use to save the Child nodes
-  // AvgNode in the case that have one
-  Node* tmpLowestFromAvgNode = nullptr;
-  Node* tmpGreatestFromAvgNode = nullptr;
+  // This will be use to save the AvgNode Child nodes
+  // in the case that have one
+  Node* tmpLowerFromAvgNode = nullptr;
+  Node* tmpGreaterFromAvgNode = nullptr;
 
   // Set if the AvgNode has some child node
   bool hasAvgNodeAnyChild = false;
 
   // Checking if the Average Node has child nodes created to save then.
-  if (avgNode->mLower != nullptr)
+  if (newHeadNode->mLower != nullptr)
   {
-    tmpLowestFromAvgNode = avgNode->mLower;
+    tmpLowerFromAvgNode = newHeadNode->mLower;
     hasAvgNodeAnyChild = true;
   }
 
-  if (avgNode->mGreater != nullptr)
+  if (newHeadNode->mGreater != nullptr)
   {
-    // Save the Greatest Node from the Average Node
-    tmpGreatestFromAvgNode = avgNode->mGreater;
+    tmpGreaterFromAvgNode = newHeadNode->mGreater;
     hasAvgNodeAnyChild = true;
   }
 
-  // Get the parent Node from the avgNode
-  Node* prevNodeToAvg = FindPrevNode(*(mHeadNode), avgNode->n);
+  // Get the parent Node from the newHeadNode
+  Node* prevNodeToAvg = FindPrevNode(*(mHeadNode), newHeadNode->n);
 
   // Technically I have already in this point all the neccesary to play with pointers.
   // As Duke Nuken will say:
   // L E T 'S    R O C K
 
-  // Changing HeadNode for AvgNode
-  mHeadNode = avgNode;
 
   // Set Previous HeadNode to the Lower or Higher side of the New HeadNode
-  if (mHeadNode->n > tmpPrevHeadNode->n)
+  if (newHeadNode->n > tmpPrevHeadNode->n)
   {
     tmpPrevHeadNode->mGreater = nullptr;
-    mHeadNode->mLower = tmpPrevHeadNode;
-    mHeadNode->mGreater = prevNodeToAvg;
   }
   else
   {
     tmpPrevHeadNode->mLower = nullptr;
-    mHeadNode->mGreater = tmpPrevHeadNode;
-    mHeadNode->mLower = prevNodeToAvg;
   }
 
   if (hasAvgNodeAnyChild)
   {
-    if (avgNode->n < prevNodeToAvg->n)
+    if (newHeadNode->n < prevNodeToAvg->n)
     {
       // Cases when the AvgNode be Lower than PrevNodeToAvg
-      if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+      if (tmpLowerFromAvgNode != nullptr && tmpGreaterFromAvgNode != nullptr)
       {
         // Get the Greater Child Node From Average Node to connect to the
         // Previous Node connected to the Average Node
-        Node* tmpGreaterChildAvgNode = GetGreatestNodeFromThisNode(avgNode->mGreater);
+        Node* tmpGreaterChildAvgNode = GetGreatestNodeFromThisNode(newHeadNode->mGreater);
 
         // Set the Greatest Child Node from Average Node
         // to the Lowest Node of the Previous Node
@@ -265,25 +246,25 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode)
         // Set the Lowest Child Node from Average Node
         // to the last Node of the Greatest Node
         // from the Average Node
-        tmpGreaterChildAvgNode->mLower = tmpLowestFromAvgNode;
+        tmpGreaterChildAvgNode->mLower = tmpLowerFromAvgNode;
       }
-      else if (tmpLowestFromAvgNode != nullptr)
+      else if (tmpLowerFromAvgNode != nullptr)
       {
-        prevNodeToAvg->mLower = tmpLowestFromAvgNode;
+        prevNodeToAvg->mLower = tmpLowerFromAvgNode;
       }
-      else if (tmpGreatestFromAvgNode != nullptr)
+      else if (tmpGreaterFromAvgNode != nullptr)
       {
-        prevNodeToAvg->mLower = tmpGreatestFromAvgNode;
+        prevNodeToAvg->mLower = tmpGreaterFromAvgNode;
       }
     }
     else
     {
       // Cases when the AvgNode is Greater than PrevNodeToAvg
-      if (tmpLowestFromAvgNode != nullptr && tmpGreatestFromAvgNode != nullptr)
+      if (tmpLowerFromAvgNode != nullptr && tmpGreaterFromAvgNode != nullptr)
       {
         // Get the Lower Child Node From Average Node to connect to the
         // Previous Node connected to the Average Node
-        Node* tmpLowerChildAvgNode = GetLowestNodeFromThisNode(avgNode->mLower);
+        Node* tmpLowerChildAvgNode = GetLowestNodeFromThisNode(newHeadNode->mLower);
 
         // Set the Lower Child Node from Average Node
         // to the Greatest Node of the Previous Node
@@ -293,15 +274,15 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode)
         // Set the Greatest Child Node from Average Node
         // to the last Node of the Lowest Node
         // from the Average Node
-        tmpLowerChildAvgNode->mGreater = tmpGreatestFromAvgNode;
+        tmpLowerChildAvgNode->mGreater = tmpGreaterFromAvgNode;
       }
-      else if (tmpLowestFromAvgNode != nullptr)
+      else if (tmpLowerFromAvgNode != nullptr)
       {
-        prevNodeToAvg->mGreater = tmpLowestFromAvgNode;
+        prevNodeToAvg->mGreater = tmpLowerFromAvgNode;
       }
-      else if (tmpGreatestFromAvgNode != nullptr)
+      else if (tmpGreaterFromAvgNode != nullptr)
       {
-        prevNodeToAvg->mGreater = tmpGreatestFromAvgNode;
+        prevNodeToAvg->mGreater = tmpGreaterFromAvgNode;
       }
     }
   }
@@ -309,7 +290,7 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode)
   {
     // Reset the PrevNodeToAvg Node who had the
     // new HeadNode
-    if (avgNode->n < prevNodeToAvg->n)
+    if (newHeadNode->n < prevNodeToAvg->n)
     {
       prevNodeToAvg->mLower = nullptr;
     }
@@ -318,104 +299,11 @@ void BinaryTree::MakeVerticalChanges(Node* avgNode)
       prevNodeToAvg->mGreater = nullptr;
     }
   }
+
+  // Changing HeadNode for newHeadNode
+  mHeadNode = newHeadNode;
 }
 
-Node* BinaryTree::GetAverageNode()
-{
-  // Getting the average between this two nodes
-  // we will get the new head Node and from he
-  // the Tree will be reconstruct
-  Node* tmpGreatestAverageNode = nullptr;
-  Node* tmpLowestAverageNode = nullptr;
-
-  // The numbers could be all negatives. You don't have to put "unsigned"
-  int total = 0;
-  int average = 0;
-
-  // Distance between the average number and first node from
-  // the greatest side
-  unsigned int disBettAverFromGreatest = 0;
-
-  // Distance between the average number and first node from
-  // the lowest side
-  unsigned int disBettAverFromLowest = 0;
-
-  // THIS HAS TO BE A TREE PROPERTY mTotal = NODE_1 + NODE_2 + NODE_N
-  // Get the sum of all nodes values starting from Head
-  CalculateTotalNodesValues(mHeadNode, total);
-
-  average = total / static_cast<int>(mCount); // TODO: Search a better way. Not use cast
-  std::cout << "\n\n The Total sum of Nodes values is : " << total << "\n";
-  std::cout << "The Average number is : " << average << "\n";
-
-  //std::cout << "\n\n/---------------------------------------------/ \n";
-  //std::cout << "Finding the average node counting from the average to Highest Node: \n\n";
-  while (average < mHighestNodeValue)
-  {
-    ++average;
-    tmpGreatestAverageNode = FindNode(*mHeadNode, average);
-    if (tmpGreatestAverageNode != nullptr)
-    {
-      break;
-    }
-    else
-    {
-      ++disBettAverFromGreatest;
-    }
-  }
-
-  // Reset Average
-  average = total / static_cast<int>(mCount); // TODO: Search a better way. Not use cast
-
-  while (average > mLowestNodeValue)
-  {
-    --average;
-    tmpLowestAverageNode = FindNode(*mHeadNode, average);
-    if (tmpLowestAverageNode != nullptr)
-    {
-      break;
-    }
-    else
-    {
-      ++disBettAverFromLowest;
-    }
-  }
-
-  if (disBettAverFromGreatest > disBettAverFromLowest)
-  {
-    return tmpLowestAverageNode;
-  }
-  else
-  {
-    return tmpGreatestAverageNode;
-  }
-}
-
-void BinaryTree::CalculateTotalNodesValues(Node* node, int& total)
-{
-  // Adding node->n values to total
-  total += node->n;
-
-  if (node->mLeftDirectionTaken == false)
-  {
-    if (node->mLower != nullptr)
-    {
-      CalculateTotalNodesValues(node->mLower, total);
-    }
-    node->mLeftDirectionTaken = true;
-  }
-
-  if (node->mRightDirectionTaken == false)
-  {
-    if (node->mGreater != nullptr)
-    {
-      CalculateTotalNodesValues(node->mGreater, total);
-    }
-    node->mRightDirectionTaken = true;
-  }
-    node->mLeftDirectionTaken = false;
-    node->mRightDirectionTaken = false;
-}
 
 Node* BinaryTree::FindNode(Node& node, const int& n)
 {
@@ -625,18 +513,6 @@ Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node)
   // ------ Erase Node()  ---------------------------
 // -- E N D S
 
-void BinaryTree::UpdateHighestLowestNode(const int n)
-{
-  if (n > mHighestNodeValue)
-  {
-    mHighestNodeValue = n;
-  }
-  else if (n < mLowestNodeValue)
-  {
-    mLowestNodeValue = n;
-  }
-}
-
 void BinaryTree::ReleaseNodesRecursively(Node* node)
 {
   if (node->mLeftDirectionTaken == false)
@@ -668,33 +544,4 @@ inline void BinaryTree::ReleaseNode(Node* node)
     node = nullptr;
 
     --mCount;
-}
-
-bool BinaryTree::WasBalanceProcessMade()
-{
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "[ WasBalanceProcessMade() ] \n";
-
-  bool wasBalanceProcessMade = false;
-
-
-  std::cout << "(mCountGreatestNumbers - mCountLowestNumbers) = " << (mCountGreatestNumbers - mCountLowestNumbers) << "\n";
-
-  std::cout << "(mCountLowestNumbers - mCountGreatestNumbers) = " << (mCountLowestNumbers - mCountGreatestNumbers) << "\n";
-
-  // Evaluate if the tree got more than two vertical levels
-  // of difference
-  if ((mCountGreatestNumbers - mCountLowestNumbers) >= VERTICAL_CONDITION || (mCountLowestNumbers - mCountGreatestNumbers) >= VERTICAL_CONDITION)
-  {
-    std::cout << "Running Balance Process . . .\n";
-    ProcessVerticalBalance();
-    wasBalanceProcessMade = true;
-  }
-  else
-  {
-    std::cout << "The tree remains balanced . . .\n";
-  }
-
-  std::cout << "\n [ End ] \n";
-  return wasBalanceProcessMade;
 }

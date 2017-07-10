@@ -13,7 +13,10 @@
 
 void ClearScreen()
 {
+#if _WIN32
+#else
   std::cout << "\033[2J\033[1;1H";
+#endif
 }
 // End
 
@@ -36,7 +39,6 @@ void ShowMenu()
   std::cout << "\t- (a) Add a Node .\n";
   std::cout << "\t- (s) Show Nodes .\n";
   std::cout << "\t- (e) Erase a Node .\n";
-  std::cout << "\t- (a) Add a Node .\n";
   std::cout << "\t- (c) Clear Screen .\n";
   std::cout << "\t- (q) Exit .\n\n";
   std::cout << " - Option : ";
@@ -46,17 +48,7 @@ int main(int argsc, char** args)
   char o;
   std::unique_ptr<BinaryTree> binaryTree = std::unique_ptr<BinaryTree>(new BinaryTree());
 
-  binaryTree->Insert(10);
-  binaryTree->Insert(5);
-  binaryTree->Insert(15);
-  binaryTree->Insert(20);
-  binaryTree->Insert(13);
-//  binaryTree->Insert(14);
-//  binaryTree->Insert(30);
-//  binaryTree->Insert(50);
-//  binaryTree->Insert(95);
-//  binaryTree->Insert(70);
-
+  binaryTree->Insert(500);
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
   binaryTree->ShowElements();
@@ -87,11 +79,12 @@ int main(int argsc, char** args)
       }
       case MENU_OPTIONS::OPT_ERASE:
       {
-        int n;
-        std::cout << " - Insert a Number to Erase : ";
-        std::cin >> n;
-
-        binaryTree->Erase(n);
+//        int n;
+//        std::cout << " - Insert a Number to Erase : ";
+//        std::cin >> n;
+//
+//        binaryTree->Erase(n);
+        std::cout << " - Option Not Available. ";
         break;
       }
       case MENU_OPTIONS::OPT_CLEAN_SCREEN:

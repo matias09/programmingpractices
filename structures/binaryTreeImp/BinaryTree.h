@@ -1,3 +1,18 @@
+#ifdef DEBUGGING
+
+#define DEBUG_LOG(m1, m2) \
+  std::cout << m1 << m2 << "\n";
+
+#define DEBUG_MSG(msj) \
+  std::cout << msj;
+
+#else
+
+#define DEBUG_LOG(m1, m2)
+#define DEBUG_MSG(msj)
+
+#endif // DEBUGGING
+
 #ifndef BINARY_TREE
 #define BINARY_TREE
 
@@ -14,6 +29,62 @@ typedef struct Node
   }
   ~Node(){}
 
+  Node(const Node& cpyNode)
+  {
+    if (cpyNode.mLower != nullptr)
+    {
+      this->mLower = new Node(cpyNode.mLower->n);
+    }
+    else
+    {
+      this->mLower = nullptr;
+    }
+
+    if (cpyNode.mGreater != nullptr)
+    {
+      this->mGreater = new Node(cpyNode.mGreater->n);
+    }
+    else
+    {
+      this->mGreater = nullptr;
+    }
+
+    this->n = cpyNode.n;
+    this->mLeftDirectionTaken = cpyNode.mLeftDirectionTaken;
+    this->mRightDirectionTaken = cpyNode.mRightDirectionTaken;
+    this->mLevelInGreatestSide = cpyNode.mLevelInGreatestSide;
+    this->mLevelInLowestSide = cpyNode.mLevelInLowestSide;
+  }
+
+  Node& operator=(const Node& cpyNode)
+  {
+    if (cpyNode.mLower != nullptr)
+    {
+      this->mLower = new Node(cpyNode.mLower->n);
+    }
+    else
+    {
+      this->mLower = nullptr;
+    }
+
+    if (cpyNode.mGreater != nullptr)
+    {
+      this->mGreater = new Node(cpyNode.mGreater->n);
+    }
+    else
+    {
+      this->mGreater = nullptr;
+    }
+
+    this->n = cpyNode.n;
+    this->mLeftDirectionTaken = cpyNode.mLeftDirectionTaken;
+    this->mRightDirectionTaken = cpyNode.mRightDirectionTaken;
+    this->mLevelInGreatestSide = cpyNode.mLevelInGreatestSide;
+    this->mLevelInLowestSide = cpyNode.mLevelInLowestSide;
+
+    return *this;
+  }
+
   bool mLeftDirectionTaken;
   bool mRightDirectionTaken;
   unsigned int mLevelInGreatestSide;
@@ -25,7 +96,7 @@ typedef struct Node
 
 class BinaryTree
 {
-  public:
+public:
     BinaryTree();
     ~BinaryTree();
 
@@ -35,21 +106,21 @@ class BinaryTree
     void ReleaseTree();
     bool Erase(const int n);
     Node* Find(const int n);
-  private:
+private:
     static const int VERTICAL_CONDITION = 2;
-    static const unsigned int START_POINT_VERTICAL_LEVEL = 1;
-    static const unsigned int NODE_AMOUNT_TO_CHECK_BALANCE = 3;
 
     void ShowNode(Node* node);
-    void SaveNode(Node* node, const int n);
-    void ProcessBalance(Node* newHeadNode);
+    void SaveNode(Node* node, Node& parentNode, const int n);
+    void ProcessBalance(Node& newHeadNode, Node& parentNode);
     void ReleaseNode(Node* node);
-    void ReleaseNodesRecursively(Node* node);
-    bool EraseNode(Node* node, Node& previousNode, const int n);
+    void ReleaseNodes(Node* node);
+    void CheckUnbalanced(Node& node, Node& parentNode);
+    bool EraseNode(Node* node, Node& parentNode, const int n);
+    bool EraseNodeFlow(Node* nodeToErase, Node& parentNode, const bool& isTheLowestChild);
+    unsigned int GetHigherLevel(const Node& node) const;
     Node* FindNode(Node& startNode, const int& n);
-    Node* FindPrevNode(Node& startNode, const int& n);
-    Node* GetLowestNodeFromThisNode(Node* node);
-    Node* GetGreatestNodeFromThisNode(Node* node);
+    Node* GetLowestNodeFromThisNode(Node* node, Node* parentNode, const bool& returnParentNode = false);
+    Node* GetGreatestNodeFromThisNode(Node* node, Node* parentNode, const bool& returnParentNode = false);
 
     unsigned int mCount;
     Node* mHeadNode;

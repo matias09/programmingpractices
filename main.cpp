@@ -1,10 +1,7 @@
-// ------------------------- T O D O  T H I N G S --------------------------------------------------------------- //
-// TODO : Implement Balance Process when the Average Node is the Head Node.
-// TODO : Fix Balance Process when there are less nodes from the Lowest side.
-// TODO : Improve EraseNode() Method because there are to many IF statements. Try to separate in more functions
-// TODO : Use Precompiler Functions to choose when send Debug Output.
-// TODO : Create test files
-// ------------------------- T O D O  T H I N G S --------------------------------------------------------------- //
+// ------------------------- T O D O  T H I N G S -------------------------- //
+// TODO : Fix Balance Process
+// TODO : Create test files and save results in .txt files
+// ------------------------- T O D O  T H I N G S -------------------------- //
 #include <string.h>
 #include <iostream>
 #include <memory>
@@ -39,16 +36,46 @@ void ShowMenu()
   std::cout << "\t- (a) Add a Node .\n";
   std::cout << "\t- (s) Show Nodes .\n";
   std::cout << "\t- (e) Erase a Node .\n";
+#if not define (_WIN64) || not define (_WIN32)
   std::cout << "\t- (c) Clear Screen .\n";
+#endif // _WIN32 || _WIN64
   std::cout << "\t- (q) Exit .\n\n";
   std::cout << " - Option : ";
 }
+
 int main(int argsc, char** args)
 {
   char o;
   std::unique_ptr<BinaryTree> binaryTree = std::unique_ptr<BinaryTree>(new BinaryTree());
 
+  // level 0
   binaryTree->Insert(500);
+
+  // level 1
+  binaryTree->Insert(225);
+  binaryTree->Insert(725);
+//
+//  // level 2
+  binaryTree->Insert(122);
+//  binaryTree->Insert(370);
+//  binaryTree->Insert(600);
+//  binaryTree->Insert(900);
+//
+//  // level 3
+  binaryTree->Insert(90);
+//  binaryTree->Insert(190);
+//  binaryTree->Insert(280);
+//  binaryTree->Insert(425);
+//  binaryTree->Insert(550);
+//  binaryTree->Insert(650);
+//  binaryTree->Insert(800);
+//  binaryTree->Insert(2000);
+//
+//  // level 4
+//  binaryTree->Insert(45);
+//  binaryTree->Insert(108);
+//  binaryTree->Insert(130);
+//  binaryTree->Insert(210);
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";
   binaryTree->ShowElements();
@@ -79,19 +106,20 @@ int main(int argsc, char** args)
       }
       case MENU_OPTIONS::OPT_ERASE:
       {
-//        int n;
-//        std::cout << " - Insert a Number to Erase : ";
-//        std::cin >> n;
-//
-//        binaryTree->Erase(n);
-        std::cout << " - Option Not Available. ";
+        int n;
+        std::cout << " - Insert a Number to Erase : ";
+        std::cin >> n;
+
+        binaryTree->Erase(n);
         break;
       }
+#if not define (_WIN64) || not define (_WIN32)
       case MENU_OPTIONS::OPT_CLEAN_SCREEN:
       {
         ClearScreen();
         break;
       }
+#endif // _WIN32 || _WIN64
       case MENU_OPTIONS::OPT_QUIT:
       {
         break;
@@ -106,7 +134,9 @@ int main(int argsc, char** args)
     std::cout << "\n \n";
   } while (o != MENU_OPTIONS::OPT_QUIT);
 
-  // Technically with this Method Call I will not Leak Memory.
+  // Technically with this Method Call I would Leak Memory.
+  // I have to improve this using iteration in the
+  // Destructor Method to release memory.
   binaryTree->ReleaseTree();
 
   std::cout << "Number of Nodes : " << binaryTree->GetNumberOfElements() << "\n";

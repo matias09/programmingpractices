@@ -5,26 +5,26 @@
 
 BinaryTree::BinaryTree()
 {
-  std::cout << " \n Building BinaryTree . . . \n";
+  DEBUG_MSG(" \n Building BinaryTree . . . \n");
   mCount = 0;
   mHeadNode = nullptr;
 }
 
 BinaryTree::~BinaryTree()
 {
-  std::cout << " \n Releasing BinaryTree . . . \n";
+  DEBUG_MSG(" \n Releasing BinaryTree . . . \n");
 }
 
 void BinaryTree::ShowElements()
 {
   if (mHeadNode != nullptr)
   {
-    std::cout << " -- Nodes Values --\n\t";
+    DEBUG_MSG(" -- Nodes Values --\n\t");
     ShowNode(mHeadNode);
   }
   else
   {
-    std::cout << "Empty Container";
+    DEBUG_MSG("Empty Container");
   }
 }
 
@@ -55,13 +55,13 @@ void BinaryTree::ShowNode(Node* node)
 
 void BinaryTree::Insert(const int n)
 {
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "[ Insert() ] \n";
+  DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+  DEBUG_MSG("[ Insert() ] \n");
 
   // Increase total number count
   ++mCount;
 
-  std::cout << "mCount = " << mCount << "\n";
+  DEBUG_LOG("mCount = ", mCount);
 
   if (mHeadNode == nullptr)
   {
@@ -69,14 +69,14 @@ void BinaryTree::Insert(const int n)
   }
   else
   {
-    SaveNode(mHeadNode, n);
+    SaveNode(mHeadNode, *mHeadNode, n);
   }
 
-  std::cout << "n = " << n << "\n";
-  std::cout << "mLevelInLowestSide = " << mHeadNode->mLevelInLowestSide << "\n";
-  std::cout << "mLevelInGreatestSide = " << mHeadNode->mLevelInGreatestSide << "\n";
-
-  std::cout << "\n [ End ] \n";
+  DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+  DEBUG_LOG("- New Node n = ", n);
+  DEBUG_LOG("- Head Node mLevelInLowestSide = ", mHeadNode->mLevelInLowestSide);
+  DEBUG_LOG("- Head Node mLevelInGreatestSide: ", mHeadNode->mLevelInGreatestSide);
+  DEBUG_MSG("\n [ End ] \n");
 }
 
 Node* BinaryTree::Find(const int n)
@@ -87,32 +87,35 @@ Node* BinaryTree::Find(const int n)
 
 bool BinaryTree::Erase(const int n)
 {
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "[ Erase() ] \n";
+  DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+  DEBUG_MSG("[ Erase() ] \n");
+  DEBUG_LOG("Erasing node : ", n);
 
   bool wasNodeErased = false;
-  wasNodeErased = EraseNode(mHeadNode, *(mHeadNode), n);
+  wasNodeErased = EraseNode(mHeadNode, *mHeadNode, n);
 
-//  std::cout << "mLevelInLowestSide = " << mLevelInLowestSide << "\n";
-//  std::cout << "mLevelInGreatestSide = " << mLevelInGreatestSide << "\n";
+  if (wasNodeErased)
+  {
+    --mCount;
+  }
 
-  std::cout << "\n [ End ] \n";
+  DEBUG_MSG("\n [ End ] \n");
   return wasNodeErased;
 }
 
 void BinaryTree::ReleaseTree()
 {
-  ReleaseNodesRecursively(mHeadNode);
+  ReleaseNodes(mHeadNode);
 }
 
 // ------------------------------------------------------------ //
 // --------------------- Private Methods ---------------------- //
 // ------------------------------------------------------------ //
 
-void BinaryTree::SaveNode(Node* node, const int n)
+void BinaryTree::SaveNode(Node* node, Node& parentNode, const int n)
 {
-  std::cout << "\n\n/---------------------------------------------/ \n";
-  std::cout << "[ SaveNode() ] \n";
+  DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+  DEBUG_MSG("[ SaveNode() ] \n");
 
   if (n > node->n)
   {
@@ -123,14 +126,14 @@ void BinaryTree::SaveNode(Node* node, const int n)
     }
     else
     {
-      SaveNode(node->mGreater, n);
+      SaveNode(node->mGreater, *node, n);
 
-      std::cout << "Actual Node : " << node->n << "\n";
-      std::cout << "mLevelInGreatestSide = " << node->mLevelInGreatestSide << "\n";
+      DEBUG_LOG("actual node : ", node->n);
+      DEBUG_LOG("mLevelInGreatestSide = ", node->mLevelInGreatestSide);
 
-      // Compares both levels in ChildNode to determine which of both
-      // we must to use to update the Level counter of the actual Node
-      // in the Greatest side
+      // compares both levels in childnode to determine which of both
+      // we must to use to update the level counter of the actual node
+      // in the greatest side
       if (node->mGreater->mLevelInGreatestSide > node->mGreater->mLevelInLowestSide)
       {
         node->mLevelInGreatestSide = node->mGreater->mLevelInGreatestSide + 1;
@@ -139,6 +142,12 @@ void BinaryTree::SaveNode(Node* node, const int n)
       {
         node->mLevelInGreatestSide = node->mGreater->mLevelInLowestSide + 1;
       }
+
+      DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+      DEBUG_LOG("- node = ", node->n);
+      DEBUG_LOG("- node->mGreater : ", node->mGreater->n);
+      DEBUG_LOG("- node->mGreater mLevelInLowestSide = ", node->mGreater->mLevelInLowestSide);
+      DEBUG_LOG("- node->mGreater mLevelInGreatestSide: ", node->mGreater->mLevelInGreatestSide);
     }
   }
   else
@@ -150,11 +159,11 @@ void BinaryTree::SaveNode(Node* node, const int n)
     }
     else
     {
-      SaveNode(node->mLower, n);
+      SaveNode(node->mLower, *node, n);
 
-      // Compares both levels in ChildNode to determine which of both
-      // we must to use to update the Level counter of the actual Node
-      // in the Lowest side
+      // compares both levels in childnode to determine which of both
+      // we must to use to update the level counter of the actual node
+      // in the lowest side
       if (node->mLower->mLevelInGreatestSide > node->mLower->mLevelInLowestSide)
       {
         node->mLevelInLowestSide = node->mLower->mLevelInGreatestSide + 1;
@@ -163,147 +172,24 @@ void BinaryTree::SaveNode(Node* node, const int n)
       {
         node->mLevelInLowestSide = node->mLower->mLevelInLowestSide + 1;
       }
+
+      DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+      DEBUG_LOG("- node : ", node->n);
+      DEBUG_LOG("- node->mLower : ", node->mLower->n);
+      DEBUG_LOG("- node->mLower->mLevelInLowestSide : ", node->mLower->mLevelInLowestSide);
+      DEBUG_LOG("- node->mLower->mLevelInGreatestSide : ", node->mLower->mLevelInGreatestSide);
     }
   }
 
-  std::cout << "\n [ End ] \n";
+  if ((node->mLevelInGreatestSide - node->mLevelInLowestSide == VERTICAL_CONDITION) || (node->mLevelInLowestSide - node->mLevelInGreatestSide == VERTICAL_CONDITION))
+  {
+    DEBUG_LOG("Process Balance in Node: ", node->n);
+    DEBUG_LOG("Process Balance parent Node: ", parentNode.n);
+    ProcessBalance(*node, parentNode);
+  }
+
+  DEBUG_MSG("\n [ end ] \n");
 }
-
-// Starts Vertical Balance Methods
-
-void BinaryTree::ProcessBalance(Node* newHeadNode)
-{
-  if (newHeadNode->n == mHeadNode->n)
-  {
-    if (newHeadNode->mLevelInGreatestSide > newHeadNode->mLevelInLowestSide)
-    {
-      newHeadNode = mHeadNode->mGreater;
-    }
-    else
-    {
-      newHeadNode = mHeadNode->mLower;
-    }
-  }
-
-  // Save Head Node in a TmpNode
-  Node* tmpPrevHeadNode = mHeadNode;
-
-  // This will be use to save the AvgNode Child nodes
-  // in the case that have one
-  Node* tmpLowerFromAvgNode = nullptr;
-  Node* tmpGreaterFromAvgNode = nullptr;
-
-  // Set if the AvgNode has some child node
-  bool hasAvgNodeAnyChild = false;
-
-  // Checking if the Average Node has child nodes created to save then.
-  if (newHeadNode->mLower != nullptr)
-  {
-    tmpLowerFromAvgNode = newHeadNode->mLower;
-    hasAvgNodeAnyChild = true;
-  }
-
-  if (newHeadNode->mGreater != nullptr)
-  {
-    tmpGreaterFromAvgNode = newHeadNode->mGreater;
-    hasAvgNodeAnyChild = true;
-  }
-
-  // Get the parent Node from the newHeadNode
-  Node* prevNodeToAvg = FindPrevNode(*(mHeadNode), newHeadNode->n);
-
-  // Technically I have already in this point all the neccesary to play with pointers.
-  // As Duke Nuken will say:
-  // L E T 'S    R O C K
-
-
-  // Set Previous HeadNode to the Lower or Higher side of the New HeadNode
-  if (newHeadNode->n > tmpPrevHeadNode->n)
-  {
-    tmpPrevHeadNode->mGreater = nullptr;
-  }
-  else
-  {
-    tmpPrevHeadNode->mLower = nullptr;
-  }
-
-  if (hasAvgNodeAnyChild)
-  {
-    if (newHeadNode->n < prevNodeToAvg->n)
-    {
-      // Cases when the AvgNode be Lower than PrevNodeToAvg
-      if (tmpLowerFromAvgNode != nullptr && tmpGreaterFromAvgNode != nullptr)
-      {
-        // Get the Greater Child Node From Average Node to connect to the
-        // Previous Node connected to the Average Node
-        Node* tmpGreaterChildAvgNode = GetGreatestNodeFromThisNode(newHeadNode->mGreater);
-
-        // Set the Greatest Child Node from Average Node
-        // to the Lowest Node of the Previous Node
-        // from the Average Node
-        prevNodeToAvg->mLower = tmpGreaterChildAvgNode;
-
-        // Set the Lowest Child Node from Average Node
-        // to the last Node of the Greatest Node
-        // from the Average Node
-        tmpGreaterChildAvgNode->mLower = tmpLowerFromAvgNode;
-      }
-      else if (tmpLowerFromAvgNode != nullptr)
-      {
-        prevNodeToAvg->mLower = tmpLowerFromAvgNode;
-      }
-      else if (tmpGreaterFromAvgNode != nullptr)
-      {
-        prevNodeToAvg->mLower = tmpGreaterFromAvgNode;
-      }
-    }
-    else
-    {
-      // Cases when the AvgNode is Greater than PrevNodeToAvg
-      if (tmpLowerFromAvgNode != nullptr && tmpGreaterFromAvgNode != nullptr)
-      {
-        // Get the Lower Child Node From Average Node to connect to the
-        // Previous Node connected to the Average Node
-        Node* tmpLowerChildAvgNode = GetLowestNodeFromThisNode(newHeadNode->mLower);
-
-        // Set the Lower Child Node from Average Node
-        // to the Greatest Node of the Previous Node
-        // from the Average Node
-        prevNodeToAvg->mGreater = tmpLowerChildAvgNode;
-
-        // Set the Greatest Child Node from Average Node
-        // to the last Node of the Lowest Node
-        // from the Average Node
-        tmpLowerChildAvgNode->mGreater = tmpGreaterFromAvgNode;
-      }
-      else if (tmpLowerFromAvgNode != nullptr)
-      {
-        prevNodeToAvg->mGreater = tmpLowerFromAvgNode;
-      }
-      else if (tmpGreaterFromAvgNode != nullptr)
-      {
-        prevNodeToAvg->mGreater = tmpGreaterFromAvgNode;
-      }
-    }
-  }
-  else
-  {
-    // Reset the PrevNodeToAvg Node who had the
-    // new HeadNode
-    if (newHeadNode->n < prevNodeToAvg->n)
-    {
-      prevNodeToAvg->mLower = nullptr;
-    }
-    else
-    {
-      prevNodeToAvg->mGreater = nullptr;
-    }
-  }
-
-  // Changing HeadNode for newHeadNode
-  mHeadNode = newHeadNode;
-}
-
 
 Node* BinaryTree::FindNode(Node& node, const int& n)
 {
@@ -332,194 +218,454 @@ Node* BinaryTree::FindNode(Node& node, const int& n)
   return nullptr;
 }
 
-Node* BinaryTree::FindPrevNode(Node& node, const int& n)
+bool BinaryTree::EraseNode(Node* node, Node& parentNode, const int n)
 {
-  if (n < node.n)
+  bool wasNodeDeleted = false;
+
+  if (node->n == n)
   {
-    if (node.mLower->n == n)
-    {
-      return &node;
-    }
-    else
-    {
-      return FindPrevNode(*(node.mLower), n);
-    }
+    bool eraseFromTheLowetSide = (node->mLevelInLowestSide > node->mLevelInGreatestSide) ? true : false;
+    wasNodeDeleted = EraseNodeFlow(node, *node, eraseFromTheLowetSide);
+
+    DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+    DEBUG_LOG("- Head Node : ", mHeadNode->n);
+    DEBUG_LOG("- Head Node mLevelInLowestSide : ", mHeadNode->mLevelInLowestSide);
+    DEBUG_LOG("- Head Node mLevelInGreatestSide: ", mHeadNode->mLevelInGreatestSide);
   }
   else
   {
-    if (node.mGreater->n == n)
+    if (n > node->n)
     {
-      return &node;
-    }
-    else
-    {
-      return FindPrevNode(*(node.mGreater), n);
-    }
-  }
-}
-
-// Vertical Balance Methods
-// -- E N D S
-
-// ------- S T A R T
-  // ------ Erase Node()  ---------------------------
-bool BinaryTree::EraseNode(Node* node, Node& previousNode, const int n)
-{
-  static bool theNodeWasDeleted = false;
-
-  if (n == mHeadNode->n)
-  {
-    // Declares a tmpNode to save the new Head Node
-    Node* tmpNewHeadNode = nullptr;
-
-    if (node->mLower != nullptr && node->mGreater != nullptr)
-    {
-      // Saves the Lower nodes to a TmpNode
-      tmpNewHeadNode = node->mLower;
-
-      // Set the Greater Temp Part into the Greatest Node of the Lower Child Node part
-      // of the Node that I will Erase from the face of the Memory.
-      Node* tmpGreatestInLowestChildNode = GetGreatestNodeFromThisNode(node->mLower);
-
-      // Set the Greatest Node from the previous Node to the Greatest Node
-      // from the New Head Node
-      tmpGreatestInLowestChildNode->mGreater = mHeadNode->mGreater;
-    }
-    else if (node->mLower != nullptr)
-    {
-      // Saves the Lower nodes to a TmpNode
-      tmpNewHeadNode = node->mLower;
-    }
-    else if (node->mGreater != nullptr)
-    {
-      // Saves the Greater nodes to a TempNode
-      tmpNewHeadNode = node->mGreater;
-    }
-
-    // Set new Head Node
-    mHeadNode = tmpNewHeadNode;
-
-    // Set that we could delete the node
-    theNodeWasDeleted = true;
-
-    // Releasing Node from Memory
-    ReleaseNode(node);
-  }
-  else if (n == node->n)
-  {
-    if (node->n < previousNode.n)
-    {
-      if (node->mLower != nullptr && node->mGreater != nullptr)
+      if (node->mGreater->n == n)
       {
-        // Saves the Lower nodes to a TempNode
-        Node* tmpLowerChildNode = node->mLower;
-
-        // Set the Lower Temp Part into the Lowest Node of the Greater Child Node part
-        // of the Node that I will Erase from the face of the Memory.
-        Node* tmpLowestInGreaterChildNode = GetLowestNodeFromThisNode(node->mGreater);
-
-        // Set the Greater Child Node part to the Lower part in the previous Node
-        previousNode.mLower = node->mGreater;
-
-        tmpLowestInGreaterChildNode->mLower = tmpLowerChildNode;
-      }
-      else if (node->mLower != nullptr)
-      {
-        previousNode.mLower = node->mLower;
-      }
-      else if (node->mGreater != nullptr)
-      {
-        previousNode.mLower = node->mGreater;
+        wasNodeDeleted = EraseNodeFlow(node->mGreater, *node, false);
       }
       else
       {
-        previousNode.mLower = nullptr;
+        wasNodeDeleted = EraseNode(node->mGreater, *node, n);
       }
-    }
-    else if (node->mLower != nullptr && node->mGreater != nullptr)
-    {
-      // Saves the Greater nodes to a TempNode
-      Node* tmpGreaterChildNode = node->mGreater;
 
-      // Set the Greater Temp Part into the Greatest Node of the Lower Child Node part
-      // of the Node that I will Erase from the face of the Memory.
-      Node* tmpGreatestInLowestChildNode = GetGreatestNodeFromThisNode(node->mLower);
+      if (wasNodeDeleted)
+      {
+        // Update node level counter
+        node->mLevelInGreatestSide = (node->mGreater != nullptr) ? GetHigherLevel(*node->mGreater) + 1 : --node->mLevelInGreatestSide;
+      }
 
-      // Set the Greater Child Node part to the Lower part in the previous Node
-      previousNode.mGreater = node->mLower;
-
-      tmpGreatestInLowestChildNode->mGreater = tmpGreaterChildNode;
-    }
-    else if (node->mLower != nullptr)
-    {
-      previousNode.mGreater = node->mLower;
-    }
-    else if (node->mGreater != nullptr)
-    {
-      previousNode.mGreater = node->mGreater;
+      DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+      DEBUG_LOG("- Head Node : ", node->n);
+      DEBUG_LOG("- Head Node mLevelInLowestSide : ", mHeadNode->mLevelInLowestSide);
+      DEBUG_LOG("- Head Node mLevelInGreatestSide: ", mHeadNode->mLevelInGreatestSide);
     }
     else
     {
-      previousNode.mGreater = nullptr;
+      if (n == node->mLower->n)
+      {
+        wasNodeDeleted = EraseNodeFlow(node->mLower, *node, true);
+      }
+      else
+      {
+        wasNodeDeleted = EraseNode(node->mLower, *node, n);
+      }
+
+      if (wasNodeDeleted)
+      {
+        // Update node level counter
+        node->mLevelInLowestSide = (node->mLower != nullptr) ? GetHigherLevel(*node->mLower) + 1 : --node->mLevelInLowestSide;
+      }
+
+      DEBUG_MSG("\n\n/---------------------------------------------/ \n");
+      DEBUG_LOG("- Head Node : ", node->n);
+      DEBUG_LOG("- Head Node mLevelInLowestSide : ", mHeadNode->mLevelInLowestSide);
+      DEBUG_LOG("- Head Node mLevelInGreatestSide: ", mHeadNode->mLevelInGreatestSide);
+    }
+  }
+
+  if ((node->mLevelInGreatestSide - node->mLevelInLowestSide == VERTICAL_CONDITION) || (node->mLevelInLowestSide - node->mLevelInGreatestSide == VERTICAL_CONDITION))
+  {
+    DEBUG_LOG("Process Balance in Node: ", node->n);
+    DEBUG_LOG("Process Balance Parent Node: ", parentNode.n);
+    ProcessBalance(*node, parentNode);
+  }
+
+  return wasNodeDeleted;
+}
+
+bool BinaryTree::EraseNodeFlow(Node* nodeToErase, Node& parentNode, const bool& isTheLowestChild)
+{
+  // Checks if has childrens
+  if (nodeToErase->mLower != nullptr && nodeToErase->mGreater != nullptr)
+  {
+    Node* selectedSuccessorNode = nullptr;
+
+    const bool getNodeFromLowerSide = (nodeToErase->mLevelInLowestSide > nodeToErase->mLevelInGreatestSide) ? true : false;
+    if (getNodeFromLowerSide)
+    {
+      if (nodeToErase->mLower->mGreater != nullptr)
+      {
+        // Get the parent of SSN
+        // SSN = Selected Successor Node
+        Node* parentNodeOfSSN = GetGreatestNodeFromThisNode(nodeToErase->mLower, nodeToErase, true);
+        selectedSuccessorNode = new Node(*parentNodeOfSSN->mGreater);
+
+        // Releasing node to avoid Leak Memory
+        ReleaseNode(parentNodeOfSSN->mGreater);
+
+        if (selectedSuccessorNode->mLower != nullptr)
+        {
+          // We are going to join the
+          // lower child of SSN to his
+          // parent.
+          // SSN = selectedSuccessorNode
+          parentNodeOfSSN->mGreater = selectedSuccessorNode->mLower;
+          parentNodeOfSSN->mLevelInGreatestSide = selectedSuccessorNode->mLevelInLowestSide;
+        }
+        else
+        {
+          parentNodeOfSSN->mGreater = nullptr;
+          parentNodeOfSSN->mLevelInGreatestSide = 0;
+        }
+
+        selectedSuccessorNode->mLower = nodeToErase->mLower;
+        selectedSuccessorNode->mLevelInLowestSide = GetHigherLevel(*nodeToErase->mLower) + 1;
+      }
+      else
+      {
+        selectedSuccessorNode = new Node(*nodeToErase->mLower);
+      }
+
+      selectedSuccessorNode->mGreater = nodeToErase->mGreater;
+      selectedSuccessorNode->mLevelInGreatestSide = nodeToErase->mLevelInGreatestSide + 1;
+    }
+    else
+    {
+      if (nodeToErase->mGreater->mLower != nullptr)
+      {
+        // Get the parent of SSN
+        // SSN = selectedSuccessorNode
+        Node* parentNodeOfSSN = GetLowestNodeFromThisNode(nodeToErase->mGreater, nodeToErase, true);
+        selectedSuccessorNode = new Node(*parentNodeOfSSN->mLower);
+
+        // Releasing Node to avoid Leak Memory
+        ReleaseNode(parentNodeOfSSN->mLower);
+
+        if (selectedSuccessorNode->mGreater != nullptr)
+        {
+          // We are going to join the
+          // lower child of SSN to his
+          // parent.
+          // SSN = selectedSuccessorNode
+          parentNodeOfSSN->mLower = selectedSuccessorNode->mGreater;
+          parentNodeOfSSN->mLevelInLowestSide = selectedSuccessorNode->mLevelInGreatestSide;
+        }
+        else
+        {
+          parentNodeOfSSN->mLower = nullptr;
+          parentNodeOfSSN->mLevelInLowestSide = 0;
+        }
+
+        selectedSuccessorNode->mGreater = nodeToErase->mGreater;
+        selectedSuccessorNode->mLevelInGreatestSide = GetHigherLevel(*nodeToErase->mGreater) + 1;
+      }
+      else
+      {
+        selectedSuccessorNode = new Node(*nodeToErase->mGreater);
+      }
+
+      selectedSuccessorNode->mLower = nodeToErase->mLower;
+      selectedSuccessorNode->mLevelInLowestSide = nodeToErase->mLevelInLowestSide + 1;
     }
 
-    // Set that we could delete the node
-    theNodeWasDeleted = true;
-
-    // Releasing Node from Memory
-    ReleaseNode(node);
-  }
-  else if (n < node->n)
-  {
-    if (node->mLower != nullptr)
+    // Assign the successor node to his new parent
+    // or as a head node
+    if (mHeadNode->n != nodeToErase->n)
     {
-      return EraseNode(node->mLower, *(node), n);
+      if (isTheLowestChild)
+      {
+        parentNode.mLower = selectedSuccessorNode;
+      }
+      else
+      {
+        parentNode.mGreater = selectedSuccessorNode;
+      }
+    }
+    else
+    {
+      // Set as a head node
+      mHeadNode = selectedSuccessorNode;
+    }
+  }
+  else if (nodeToErase->mLower != nullptr)
+  {
+    // Assign the successor node to his new parent
+    // or as a head node
+    if (mHeadNode->n != nodeToErase->n)
+    {
+      if (isTheLowestChild)
+      {
+        parentNode.mLower = nodeToErase->mLower;
+      }
+      else
+      {
+        parentNode.mGreater = nodeToErase->mLower;
+      }
+    }
+    else
+    {
+      mHeadNode = nodeToErase->mLower;
+    }
+  }
+  else if (nodeToErase->mGreater != nullptr)
+  {
+    // Assign the successor node to his new parent
+    // or as a head node
+    if (mHeadNode->n != nodeToErase->n)
+    {
+      if (isTheLowestChild)
+      {
+        parentNode.mLower = nodeToErase->mGreater;
+      }
+      else
+      {
+        parentNode.mGreater = nodeToErase->mGreater;
+      }
+    }
+    else
+    {
+      mHeadNode = nodeToErase->mGreater;
     }
   }
   else
   {
-    if (node->mGreater != nullptr)
+    if (isTheLowestChild)
     {
-      return EraseNode(node->mGreater, *(node), n);
+      parentNode.mLower = nullptr;
+    }
+    else
+    {
+      parentNode.mGreater = nullptr;
     }
   }
 
-  return theNodeWasDeleted;
+  // Erasing Node from the Tree
+  ReleaseNode(nodeToErase);
+
+  return true;
 }
 
-Node* BinaryTree::GetLowestNodeFromThisNode(Node* node)
+void BinaryTree::ProcessBalance(Node& node, Node& parentNode)
+{
+    Node* selectedSuccessorNode = nullptr;
+    bool nodeGrabbedFromAnInternalTree = false;
+
+    const bool getNodeFromLowerSide = (node.mLevelInLowestSide > node.mLevelInGreatestSide) ? true : false;
+    if (getNodeFromLowerSide)
+    {
+      if (node.mLower->mGreater != nullptr)
+      {
+        nodeGrabbedFromAnInternalTree = true;
+
+        // Get the parent of SSN
+        // SSN = Selected Successor Node
+        Node* parentNodeOfSSN = GetGreatestNodeFromThisNode(node.mLower, &node, true);
+        selectedSuccessorNode = new Node(*parentNodeOfSSN->mGreater);
+
+        // Releasing node to avoid Leak Memory
+        ReleaseNode(parentNodeOfSSN->mGreater);
+
+        if (selectedSuccessorNode->mLower != nullptr)
+        {
+          // We are going to join the
+          // lower child of SSN to his
+          // parent.
+          // SSN = selectedSuccessorNode
+          parentNodeOfSSN->mGreater = selectedSuccessorNode->mLower;
+          parentNodeOfSSN->mLevelInGreatestSide = selectedSuccessorNode->mLevelInLowestSide;
+        }
+        else
+        {
+          parentNodeOfSSN->mGreater = nullptr;
+          parentNodeOfSSN->mLevelInGreatestSide = 0;
+        }
+
+        // Assigns the reference to not lose
+        // the inner tree
+        selectedSuccessorNode->mLower = node.mLower;
+        selectedSuccessorNode->mLevelInLowestSide = GetHigherLevel(*node.mLower) + 1;
+      }
+      else
+      {
+        selectedSuccessorNode = new Node(*node.mLower);
+        if (node.mLower->mLower != nullptr)
+        {
+          selectedSuccessorNode->mLower = node.mLower->mLower;
+          selectedSuccessorNode->mLevelInLowestSide = selectedSuccessorNode->mLower->mLevelInLowestSide + 1;
+        }
+      }
+
+      // This avoid to have two reference
+      // to the same node
+      node.mLower = nullptr;
+      node.mLevelInLowestSide = 0;
+
+      // Set the unbalance head node as a child
+      // of the new head node of this tree
+      selectedSuccessorNode->mGreater = &node;
+
+      // Set the greater level amount of the previous head node
+      // plus one level for the previous head node
+      selectedSuccessorNode->mLevelInGreatestSide = node.mLevelInGreatestSide + 1;
+    }
+    else
+    {
+      if (node.mGreater->mLower != nullptr)
+      {
+        nodeGrabbedFromAnInternalTree = true;
+
+        // Get the parent of SSN
+        // SSN = selectedSuccessorNode
+        Node* parentNodeOfSSN = GetLowestNodeFromThisNode(node.mGreater, &node, true);
+        selectedSuccessorNode = new Node(*parentNodeOfSSN->mLower);
+
+        // Releasing Node to avoid Leak Memory
+        ReleaseNode(parentNodeOfSSN->mLower);
+
+        if (selectedSuccessorNode->mGreater != nullptr)
+        {
+          // We are going to join the
+          // lower child of SSN to his
+          // parent.
+          // SSN = selectedSuccessorNode
+          parentNodeOfSSN->mLower = selectedSuccessorNode->mGreater;
+          parentNodeOfSSN->mLevelInLowestSide = selectedSuccessorNode->mLevelInGreatestSide;
+        }
+        else
+        {
+          parentNodeOfSSN->mLower = nullptr;
+          parentNodeOfSSN->mLevelInLowestSide = 0;
+        }
+
+        // Assigns the reference to not lose
+        // the inner tree
+        selectedSuccessorNode->mGreater = node.mGreater;
+        selectedSuccessorNode->mLevelInGreatestSide = GetHigherLevel(*node.mGreater) + 1;
+      }
+      else
+      {
+        selectedSuccessorNode = new Node(*node.mGreater);
+        if (node.mGreater->mGreater != nullptr)
+        {
+          selectedSuccessorNode->mGreater = node.mGreater->mGreater;
+          selectedSuccessorNode->mLevelInGreatestSide = selectedSuccessorNode->mGreater->mLevelInGreatestSide + 1;
+        }
+      }
+
+      // This avoid to have two reference
+      // to the same node
+      node.mGreater = nullptr;
+      node.mLevelInGreatestSide = 0;
+
+      // Set the unbalance head node as a child
+      // of the new head node of this tree
+      selectedSuccessorNode->mLower = &node;
+
+      // Set the lower level amount of the previous head node
+      // plus one level for the previous head node
+      selectedSuccessorNode->mLevelInLowestSide = node.mLevelInLowestSide + 1;
+    }
+
+    // Assign the successor node to his new parent
+    // or as a head node
+    if (mHeadNode->n != node.n)
+    {
+      if (parentNode.n > node.n)
+      {
+        parentNode.mLower = selectedSuccessorNode;
+        parentNode.mLevelInLowestSide = GetHigherLevel(*parentNode.mLower) + 1;
+      }
+      else
+      {
+        parentNode.mGreater = selectedSuccessorNode;
+        parentNode.mLevelInGreatestSide = GetHigherLevel(*parentNode.mGreater) + 1;
+      }
+
+      if (nodeGrabbedFromAnInternalTree)
+      {
+        if (getNodeFromLowerSide)
+        {
+          CheckUnbalanced(*selectedSuccessorNode->mLower, parentNode);
+        }
+        else
+        {
+          CheckUnbalanced(*selectedSuccessorNode->mGreater, parentNode);
+        }
+      }
+    }
+    else
+    {
+      // Set as a head node
+      mHeadNode = selectedSuccessorNode;
+
+      if (nodeGrabbedFromAnInternalTree)
+      {
+        if (getNodeFromLowerSide)
+        {
+          CheckUnbalanced(*mHeadNode->mLower, *mHeadNode);
+          mHeadNode->mLevelInLowestSide = GetHigherLevel(*mHeadNode->mLower) + 1;
+        }
+        else
+        {
+          CheckUnbalanced(*mHeadNode->mGreater, *mHeadNode);
+          mHeadNode->mLevelInGreatestSide = GetHigherLevel(*mHeadNode->mGreater) + 1;
+        }
+      }
+    }
+}
+
+Node* BinaryTree::GetLowestNodeFromThisNode(Node* node, Node* parentNode, const bool& returnParentNode)
 {
   if (node->mLower == nullptr)
   {
-    return node;
+    if (returnParentNode)
+    {
+      return parentNode;
+    }
+    else
+    {
+      return node;
+    }
   }
   else
   {
-    return GetLowestNodeFromThisNode(node->mLower);
+    return GetLowestNodeFromThisNode(node->mLower, node, returnParentNode);
   }
 }
 
-Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node)
+Node* BinaryTree::GetGreatestNodeFromThisNode(Node* node, Node* parentNode, const bool& returnParentNode)
 {
   if (node->mGreater == nullptr)
   {
-    return node;
+    if (returnParentNode)
+    {
+      return parentNode;
+    }
+    else
+    {
+      return node;
+    }
   }
   else
   {
-    return GetGreatestNodeFromThisNode(node->mGreater);
+    return GetGreatestNodeFromThisNode(node->mGreater, node, returnParentNode);
   }
 }
-  // ------ Erase Node()  ---------------------------
-// -- E N D S
 
-void BinaryTree::ReleaseNodesRecursively(Node* node)
+void BinaryTree::ReleaseNodes(Node* node)
 {
   if (node->mLeftDirectionTaken == false)
   {
     if (node->mLower != nullptr)
     {
-      ReleaseNodesRecursively(node->mLower);
+      ReleaseNodes(node->mLower);
     }
     node->mLeftDirectionTaken = true;
   }
@@ -528,7 +674,7 @@ void BinaryTree::ReleaseNodesRecursively(Node* node)
   {
     if (node->mGreater != nullptr)
     {
-      ReleaseNodesRecursively(node->mGreater);
+      ReleaseNodes(node->mGreater);
     }
     node->mRightDirectionTaken = true;
   }
@@ -536,12 +682,57 @@ void BinaryTree::ReleaseNodesRecursively(Node* node)
   ReleaseNode(node);
 }
 
-inline void BinaryTree::ReleaseNode(Node* node)
+void BinaryTree::CheckUnbalanced(Node& node, Node& parentNode)
+{
+  if (node.mLower != nullptr)
+  {
+    if (node.mLower->mLevelInLowestSide > 1 || node.mLower->mLevelInGreatestSide > 1)
+    {
+      CheckUnbalanced(*node.mLower, node);
+    }
+  }
+
+  if (node.mGreater != nullptr)
+  {
+    if (node.mGreater->mLevelInLowestSide > 1 || node.mGreater->mLevelInGreatestSide > 1)
+    {
+      CheckUnbalanced(*node.mGreater, node);
+    }
+  }
+
+  if ((node.mLevelInGreatestSide - node.mLevelInLowestSide == VERTICAL_CONDITION) || (node.mLevelInLowestSide - node.mLevelInGreatestSide == VERTICAL_CONDITION))
+  {
+    DEBUG_LOG("Process Balance in Node: ", node.n);
+    DEBUG_LOG("Process Balance parent Node: ", parentNode.n);
+    ProcessBalance(node, parentNode);
+  }
+}
+
+unsigned int BinaryTree::GetHigherLevel(const Node& node) const
+{
+  unsigned int higherLevelValue = 0;
+
+  if (node.mLevelInLowestSide > node.mLevelInGreatestSide)
+  {
+    higherLevelValue = node.mLevelInLowestSide;
+  }
+  else
+  {
+    higherLevelValue = node.mLevelInGreatestSide;
+  }
+
+  return higherLevelValue;
+}
+
+void BinaryTree::ReleaseNode(Node* node)
 {
     delete node;
+    node->n = 0;
+    node->mLeftDirectionTaken = false;
+    node->mRightDirectionTaken = false;
+    node->mLevelInLowestSide = 0;
+    node->mLevelInGreatestSide = 0;
     node->mLower = nullptr;
     node->mGreater = nullptr;
     node = nullptr;
-
-    --mCount;
 }

@@ -1,3 +1,6 @@
+#ifndef BINARY_TREE
+#define BINARY_TREE
+
 #ifdef DEBUGGING
 
 #define DEBUG_LOG(m1, m2) \
@@ -12,9 +15,6 @@
 #define DEBUG_MSG(msj)
 
 #endif // DEBUGGING
-
-#ifndef BINARY_TREE
-#define BINARY_TREE
 
 typedef struct Node
 {

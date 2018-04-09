@@ -1,2 +1,2 @@
-*[^ *.cpp | *.h | *.c | *.py | *.md | .gitignore]
-*[^ src | headers ]
+*[^ *.cpp | *.h | *.c | *.py | *.md | CMakeLists.txt | .gitignore ]
+*[^ src/ | headers/ | test/]

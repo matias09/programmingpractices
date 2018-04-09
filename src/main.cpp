@@ -18,7 +18,7 @@ void ClearScreen()
 // End
 
 // Own Classes
-#include "BinaryTree.h"
+#include "../headers/BinaryTree.h"
 
 // Options
 enum MENU_OPTIONS

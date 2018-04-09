@@ -1,7 +1,7 @@
 #include <iostream>
 
 // Own Classes
-#include "BinaryTree.h"
+#include "../headers/BinaryTree.h"
 
 BinaryTree::BinaryTree()
 {

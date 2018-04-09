@@ -1,0 +1,2 @@
+*[^ *.cpp | *.h | *.c | *.py | *.md | .gitignore]
+*[^ src | headers ]

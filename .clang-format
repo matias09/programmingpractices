@@ -1,0 +1,1 @@
+clang-format -i -style="{BasedOnStyle: llvm,AlignConsecutiveAssignments: true, IndentWidth: 2}"   main.cpp

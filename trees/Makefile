@@ -1,6 +1,8 @@
 
+SRC=pre_order_traversal.cpp
+
 all:
-	clang++ -std=c++11 -Wall -pedantic in_order_traversal.cpp 
+	clang++ -std=c++11 -Wall -pedantic $(SRC) 
 
 valgrind:
 	valgrind --leak-check=full ./a.out 

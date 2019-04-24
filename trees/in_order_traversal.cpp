@@ -39,13 +39,30 @@ void ReleaseValues(Tree *head) {
   }
 }
 
+void PrintInPreOrderTraversal(const Tree &current) {
+  if (current.lower != nullptr)
+    PrintInPreOrderTraversal(*current.lower);
+
+  std::cout << current.n << ", ";
+
+  if (current.greater != nullptr)
+    PrintInPreOrderTraversal(*current.greater);
+}
+
 int main() {
   Tree *tree = new Tree(100);
 
-  std::forward_list<int> values = {30, 4, 5, 6, 47, 7, 22, 11, 50, 54, 3};
+  std::forward_list<int> values = {
+//  100
+    50, 150,
+    40, 60, 140, 160,
+    30, 45,55,70,130, 145, 155,170
+  };
 
   for (auto &e : values)
     Insert(tree, e);
+
+  PrintInPreOrderTraversal(*tree);
 
   ReleaseValues(tree);
   return 0;

@@ -40,10 +40,10 @@ void ReleaseValues(Tree *head) {
 }
 
 void PrintInPreOrderTraversal(const Tree &current) {
+  std::cout << current.n << ", ";
+
   if (current.lower != nullptr)
     PrintInPreOrderTraversal(*current.lower);
-
-  std::cout << current.n << ", ";
 
   if (current.greater != nullptr)
     PrintInPreOrderTraversal(*current.greater);
@@ -53,11 +53,12 @@ int main() {
   Tree *tree = new Tree(100);
 
   std::forward_list<int> values = {
-//  100
+    // 100,
     50, 150,
     40, 60, 140, 160,
     30, 45,55,70,130, 145, 155,170
   };
+
 
   for (auto &e : values)
     Insert(tree, e);

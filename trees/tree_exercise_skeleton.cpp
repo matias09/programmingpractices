@@ -43,10 +43,11 @@ int main() {
   Tree *tree = new Tree(100);
 
   std::forward_list<int> values = {
-    100,
+    // 100,
     50, 150,
     40, 60, 140, 160,
-    30, 45,55,70,130, 145, 155,170};
+    // 30, 45,55,70,130, 145, 155,170
+  };
 
 
   for (auto &e : values)

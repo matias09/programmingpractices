@@ -1,13 +1,27 @@
 #include <iostream>
 #include <limits>
-#include <vector>
 #include <map>
+#include <queue>
+#include <stack>
 
-const int MAX_VALUE = std::numeric_limits<unsigned int>::max();
+//const unsigned int MAX_VALUE = -1;
 
 class Node {
 public:
-  Node(char param_v) : v(param_v) = default;
+  Node() = default;
+  Node(char param_v) : v(param_v) {}
+
+  Node(const Node &rh) {
+    if (rh.up != nullptr) this->up = new Node(rh.up->v);
+    if (rh.down != nullptr) this->down = new Node(rh.down->v);
+    if (rh.right != nullptr) this->right = new Node(rh.right->v);
+    if (rh.left != nullptr) this->left = new Node(rh.left->v);
+
+    this->v = rh.v;
+    this->distance = rh.distance;
+  }
+
+/*
   Node operator=(const Node &rh) {
     if (rh.up != nullptr) this.up = new Node(rh.up.v);
     if (rh.down != nullptr) this.down = new Node(rh.down.v);
@@ -16,37 +30,81 @@ public:
 
     return this;
   }
+  */
 
-private:
-  Node(const Node&){}
-  char v                = '';
-  unsigned int distance = MAX_VALUE;
+  ~Node() {
+    if (up != nullptr) delete up;
+    if (down != nullptr) delete down;
+    if (right != nullptr) delete right;
+    if (left != nullptr) delete left;
+  }
+
+
+  int v                 = 0;
+  unsigned int distance = 0;
+  //unsigned int distance = MAX_VALUE;
   Node *up              = nullptr;
   Node *down            = nullptr;
   Node *left            = nullptr;
   Node *right           = nullptr;
 };
 
-//void FindShortestPath(std::vector<Node> *nodes, std::vector<>) { }
+void FindShortestPath(const Node &src, const Node &dst, std::queue<const Node*> &steps) {
+  if (src.v == dst.v) steps.push(&src);
+
+  std::stack<Node*> node_history;
+  Node current = new Node(src);
+
+  // 1  2  3  4  5
+  // 6  7  8  9  10
+  // 11 12 13 14 15
+
+  for (;;) {
+    // Checks if we get where we want
+    if (current->v == dst.v) {
+      steps.push(current);
+      break;
+    }
+
+    // check upper node
+    if (current->up != nullptr) {
+      current->up->distance = current->distance + 1;
+      current = current->up;
+
+      steps.push(current);
+      node_history.push_back(current);
+    }
+
+    // all nodes related to current
+    // were visited. Turn back to
+    // previous Node.
+    current = node_history.pop_back();
+
+    // if node_history is empty.
+    // Technically We Found our
+    // Target Node, so we get out.
+    if (node_history.size() == 0) break;
+  }
+}
 
 int main() {
-  Node *n1  = new Node('1');
-  Node *n2  = new Node('2');
-  Node *n3  = new Node('3');
-  Node *n4  = new Node('4');
-  Node *n5  = new Node('5');
+  Node *n1  = new Node(1);
+  Node *n2  = new Node(2);
+  Node *n3  = new Node(3);
+  Node *n4  = new Node(4);
+  Node *n5  = new Node(5);
 
-  Node *n6  = new Node('6');
-  Node *n7  = new Node('7');
-  Node *n8  = new Node('8');
-  Node *n9  = new Node('9');
-  Node *n10 = new Node('10');
+  Node *n6  = new Node(6);
+  Node *n7  = new Node(7);
+  Node *n8  = new Node(8);
+  Node *n9  = new Node(9);
+  Node *n10 = new Node(10);
 
-  Node *n11 = new Node('11');
-  Node *n12 = new Node('12');
-  Node *n13 = new Node('13');
-  Node *n14 = new Node('14');
-  Node *n15 = new Node('15');
+  Node *n11 = new Node(11);
+  Node *n12 = new Node(12);
+  Node *n13 = new Node(13);
+  Node *n14 = new Node(14);
+  Node *n15 = new Node(15);
 
 /*
       // First Row      // Second Row      // Third Row
@@ -98,10 +156,8 @@ int main() {
   n5->left  = n4;   n10->down  = n15;   n15->left  = n14;
   n5->down  = n10;  n10->up    = n5;    n15->up    = n10;
 
-  // Posibles Values 'U' 'D' 'L' 'R'
-  std::vector<char> direction_to_take;
-  std::vector<Node> nodes = { n1, n2, n3, n4, n5, n6, n7, n8, n9, n10, n11, n12, n13, n14, n15 };
-  //FindShortestPath(nodes, map_positions_weight, direction_to_take);
+  std::queue<const Node*> steps;
+  FindShortestPath(*n1, *n7, steps);
 
   // Show shortest path node sequence
 

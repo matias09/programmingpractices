@@ -1,5 +1,5 @@
 
-SRC=pre_order_traversal.cpp
+SRC=pre_order_traversal_iterative.cpp
 
 all:
 	clang++ -std=c++11 -Wall -pedantic $(SRC) 

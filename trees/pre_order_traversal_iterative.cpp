@@ -1,4 +1,3 @@
-#include <forward_list>
 #include <iostream>
 #include <vector>
 #include <stack>
@@ -41,14 +40,14 @@ void ReleaseValues(Tree *head) {
   }
 }
 
-std::vector<int> PreOrderTraversalIter(Tree *head) {
+std::vector<int> PreOrderTraversalIte(Tree *head) {
   if (head == nullptr) return std::vector<int>({});
 
   // Safe Guard
   int i = -1;
 
   Tree *tmp_node = nullptr;
-  std::vector<int> res = {};
+  std::vector<int> res;
   std::stack<Tree *> stack_tree_ptrs;
 
   stack_tree_ptrs.push(head);
@@ -61,38 +60,40 @@ std::vector<int> PreOrderTraversalIter(Tree *head) {
 
       ++i;
       continue;
+    } else if (tmp_node->greater != nullptr) {
+      stack_tree_ptrs.push(tmp_node->greater);
+
+      ++i;
+      continue;
     } else {
-      if (tmp_node->greater != nullptr) {
-        stack_tree_ptrs.push(tmp_node->greater);
+      // erasing current node from stack
+      // to get the Head
+      stack_tree_ptrs.pop();
+      tmp_node = stack_tree_ptrs.top();
 
-        ++i;
-        continue;
-      } else {
-        // Adds a leaf to the result
-        // Array to be showed
-        res.push_back(tmp_node->n);
+      res.push_back(tmp_node->n);
 
-        // Removing node from the Stack
-        stack_tree_ptrs.pop();
+      if (tmp_node->lower != nullptr)
+        res.push_back(tmp_node->lower->n);
 
-        if (!stack_tree_ptrs.empty()) {
-          tmp_node = stack_tree_ptrs.top();
-
-          res.push_back(tmp_node->n);
-
-          stack_tree_ptrs.pop();
-
-          if (tmp_node->greater != nullptr) {
-            stack_tree_ptrs.push(tmp_node->greater);
-
-            continue;
-            ++i;
-          }
-        }
-      }
+      // removing Head
+      // stack_tree_ptrs.pop();
     }
 
-   if (stack_tree_ptrs.empty()) break;
+    if (tmp_node->greater != nullptr) {
+      stack_tree_ptrs.push(tmp_node->greater);
+
+      ++i;
+      continue;
+    } else {
+      // Get head node of current leaf
+      stack_tree_ptrs.pop();
+      tmp_node = stack_tree_ptrs.top();
+
+      res.push_back(tmp_node->n);
+    }
+
+    if (stack_tree_ptrs.empty()) break;
 
     ++i;
   }
@@ -107,17 +108,17 @@ std::vector<int> PreOrderTraversalIter(Tree *head) {
 int main() {
   Tree *tree = new Tree(100);
 
-  std::forward_list<int> values = {
+  std::vector<int> values = {
     // 100,
     50, 150,
-    40, 60, 140, 160,
-    30, 45,55,70,130, 145, 155,170
+    // 40, 60, 140, 160,
+    // 30, 45,55,70,130, 145, 155,170
   };
 
   for (auto &e : values)
     Insert(tree, e);
 
-  std::vector<int> tree_values = PreOrderTraversalIter(tree);
+  std::vector<int> tree_values = PreOrderTraversalIte(tree);
 
   for (auto &e : tree_values)
     std::cout << e << ", ";

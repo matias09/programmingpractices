@@ -1,5 +1,7 @@
 #include <forward_list>
 #include <iostream>
+#include <vector>
+#include <stack>
 
 class Tree {
 public:
@@ -39,13 +41,86 @@ void ReleaseValues(Tree *head) {
   }
 }
 
+std::vector<int> InOrderTraversalIter(Tree *head) {
+  if (head == nullptr) return std::vector<int>({});
+
+  // Safe Guard
+  int i = -1;
+
+  Tree *tmp_node = nullptr;
+  std::vector<int> res = {};
+  std::stack<Tree *> stack_tree_ptrs;
+
+  stack_tree_ptrs.push(head);
+
+  while (i < 500) {
+    tmp_node = stack_tree_ptrs.top();
+
+    if (tmp_node->lower != nullptr) {
+      stack_tree_ptrs.push(tmp_node->lower);
+
+      ++i;
+      continue;
+    } else {
+      if (tmp_node->greater != nullptr) {
+        stack_tree_ptrs.push(tmp_node->greater);
+
+        ++i;
+        continue;
+      } else {
+        // Adds a leaf to the result
+        // Array to be showed
+        res.push_back(tmp_node->n);
+
+        // Removing node from the Stack
+        stack_tree_ptrs.pop();
+
+        if (!stack_tree_ptrs.empty()) {
+          tmp_node = stack_tree_ptrs.top();
+
+          res.push_back(tmp_node->n);
+
+          stack_tree_ptrs.pop();
+
+          if (tmp_node->greater != nullptr) {
+            stack_tree_ptrs.push(tmp_node->greater);
+
+            continue;
+            ++i;
+          }
+        }
+      }
+    }
+
+   if (stack_tree_ptrs.empty()) break;
+
+    ++i;
+  }
+
+  // Safe Guard to prevent Inf Loop
+  if (i == 500)
+    std::cout << "I go out thanks to \"i\" local variable . . . \n";
+
+  return res;
+}
+
 int main() {
   Tree *tree = new Tree(100);
 
-  std::forward_list<int> values = {30, 4, 5, 6, 47, 7, 22, 11, 50, 54, 3};
+  std::forward_list<int> values = {
+    // 100,
+    50, 150,
+    40, 60, 140, 160,
+    30, 45,55,70,130, 145, 155,170
+  };
 
   for (auto &e : values)
     Insert(tree, e);
+
+  std::vector<int> tree_values = InOrderTraversalIter(tree);
+
+  for (auto &e : tree_values)
+    std::cout << e << ", ";
 
   ReleaseValues(tree);
   return 0;

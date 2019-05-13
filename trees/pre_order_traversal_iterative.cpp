@@ -68,16 +68,18 @@ std::vector<int> PreOrderTraversalIte(Tree *head) {
     } else {
       // erasing current node from stack
       // to get the Head
-      stack_tree_ptrs.pop();
+      if (stack_tree_ptrs.size() !=  1)
+        stack_tree_ptrs.pop();
+
       tmp_node = stack_tree_ptrs.top();
 
       res.push_back(tmp_node->n);
 
-      if (tmp_node->lower != nullptr)
+      if (tmp_node->lower != nullptr) {
         res.push_back(tmp_node->lower->n);
+      }
 
-      // removing Head
-      // stack_tree_ptrs.pop();
+      stack_tree_ptrs.pop();
     }
 
     if (tmp_node->greater != nullptr) {
@@ -85,12 +87,6 @@ std::vector<int> PreOrderTraversalIte(Tree *head) {
 
       ++i;
       continue;
-    } else {
-      // Get head node of current leaf
-      stack_tree_ptrs.pop();
-      tmp_node = stack_tree_ptrs.top();
-
-      res.push_back(tmp_node->n);
     }
 
     if (stack_tree_ptrs.empty()) break;
@@ -111,7 +107,7 @@ int main() {
   std::vector<int> values = {
     // 100,
     50, 150,
-    // 40, 60, 140, 160,
+    40, 60, 140, 160,
     // 30, 45,55,70,130, 145, 155,170
   };
 

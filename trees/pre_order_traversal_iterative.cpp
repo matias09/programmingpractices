@@ -46,47 +46,38 @@ std::vector<int> PreOrderTraversalIte(Tree *head) {
   // Safe Guard
   int i = -1;
 
-  Tree *tmp_node = nullptr;
+  Tree *tmp_node = head;
   std::vector<int> res;
   std::stack<Tree *> stack_tree_ptrs;
 
-  stack_tree_ptrs.push(head);
+  res.push_back(head->n);
 
   while (i < 500) {
-    tmp_node = stack_tree_ptrs.top();
-
     if (tmp_node->lower != nullptr) {
-      stack_tree_ptrs.push(tmp_node->lower);
+      stack_tree_ptrs.push(tmp_node);
+      tmp_node = tmp_node->lower;
+      res.push_back(tmp_node->n);
 
       ++i;
       continue;
     } else if (tmp_node->greater != nullptr) {
-      stack_tree_ptrs.push(tmp_node->greater);
-
-      ++i;
-      continue;
-    } else {
-      // erasing current node from stack
-      // to get the Head
-      if (stack_tree_ptrs.size() !=  1)
-        stack_tree_ptrs.pop();
-
-      tmp_node = stack_tree_ptrs.top();
-
+      stack_tree_ptrs.push(tmp_node);
+      tmp_node = tmp_node->greater;
       res.push_back(tmp_node->n);
 
-      if (tmp_node->lower != nullptr) {
-        res.push_back(tmp_node->lower->n);
-      }
-
-      stack_tree_ptrs.pop();
-    }
-
-    if (tmp_node->greater != nullptr) {
-      stack_tree_ptrs.push(tmp_node->greater);
-
       ++i;
       continue;
+    } else if (stack_tree_ptrs.size() > 0) {
+      tmp_node = stack_tree_ptrs.top();
+      stack_tree_ptrs.pop();
+
+      if (tmp_node->greater != nullptr) {
+        tmp_node = tmp_node->greater;
+        res.push_back(tmp_node->n);
+
+        ++i;
+        continue;
+      }
     }
 
     if (stack_tree_ptrs.empty()) break;
@@ -108,7 +99,7 @@ int main() {
     // 100,
     50, 150,
     40, 60, 140, 160,
-    // 30, 45,55,70,130, 145, 155,170
+    30, 45,55,70,130, 145, 155,170
   };
 
   for (auto &e : values)

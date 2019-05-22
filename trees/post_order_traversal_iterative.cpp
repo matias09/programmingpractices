@@ -1,5 +1,6 @@
-#include <forward_list>
 #include <iostream>
+#include <vector>
+#include <stack>
 
 class Tree {
 public:
@@ -39,13 +40,74 @@ void ReleaseValues(Tree *head) {
   }
 }
 
+std::vector<int> PostOrderTraversalIte(Tree *head) {
+  if (head == nullptr) return std::vector<int>({});
+
+  // Safe Guard
+  int i = -1;
+
+  Tree *tmp_node = head;
+  std::vector<int> res;
+  std::stack<Tree *> stack_tree_ptrs;
+
+  while (i < 500) {
+    if (tmp_node->lower != nullptr) {
+      stack_tree_ptrs.push(tmp_node);
+      tmp_node = tmp_node->lower;
+
+      ++i;
+      continue;
+    } else if (tmp_node->greater != nullptr) {
+      stack_tree_ptrs.push(tmp_node);
+      tmp_node = tmp_node->greater;
+
+      ++i;
+      continue;
+    } else if (stack_tree_ptrs.size() > 0) {
+        res.push_back(tmp_node->n);
+        tmp_node = stack_tree_ptrs.top();
+        stack_tree_ptrs.pop();
+
+        if (tmp_node->greater != nullptr) {
+          tmp_node = tmp_node->greater;
+        }
+
+        ++i;
+        continue;
+      } else {
+        res.push_back(tmp_node->n);
+      }
+    }
+
+    if (stack_tree_ptrs.empty()) break;
+
+    ++i;
+  }
+
+  // Safe Guard to prevent Inf Loop
+  if (i == 500)
+    std::cout << "I go out thanks to \"i\" local variable . . . \n";
+
+  return res;
+}
+
 int main() {
   Tree *tree = new Tree(100);
 
-  std::forward_list<int> values = {30, 4, 5, 6, 47, 7, 22, 11, 50, 54, 3};
+  std::vector<int> values = {
+    // 100,
+    50, 150,
+    // 40, 60, 140, 160,
+    // 30, 45,55,70,130, 145, 155,170
+  };
 
   for (auto &e : values)
     Insert(tree, e);
+
+  std::vector<int> tree_values = PostOrderTraversalIte(tree);
+
+  for (auto &e : tree_values)
+    std::cout << e << ", ";
 
   ReleaseValues(tree);
   return 0;

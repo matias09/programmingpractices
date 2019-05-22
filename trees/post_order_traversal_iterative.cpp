@@ -64,19 +64,20 @@ std::vector<int> PostOrderTraversalIte(Tree *head) {
       ++i;
       continue;
     } else if (stack_tree_ptrs.size() > 0) {
-        res.push_back(tmp_node->n);
-        tmp_node = stack_tree_ptrs.top();
-        stack_tree_ptrs.pop();
+      res.push_back(tmp_node->n);
+      tmp_node = stack_tree_ptrs.top();
 
-        if (tmp_node->greater != nullptr) {
-          tmp_node = tmp_node->greater;
-        }
+      if (tmp_node->greater != nullptr) {
+        tmp_node = tmp_node->greater;
 
         ++i;
         continue;
       } else {
+        stack_tree_ptrs.pop();
         res.push_back(tmp_node->n);
       }
+    } else {
+      res.push_back(tmp_node->n);
     }
 
     if (stack_tree_ptrs.empty()) break;

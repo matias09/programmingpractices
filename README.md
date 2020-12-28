@@ -1,18 +1,21 @@
 # Programming Practices
 
-The idea of this repository is to public different practices about programming, including:
+The idea of this repository is to public different practices about 
+programming, including:
 
 * Algorithms
 * Structures implementations
 * Small Programs
-* STL
-* SDL
-* OpenGL
+* STL (11 / 14 / 17)
+* SDL / SFML
+* Vulkan 
 
 ## Hacker Rank Challenges
+1. [Easy](https://github.com/matias09/programmingpractices/tree/master/hackerrank/easy)
+2. [Medium](https://github.com/matias09/programmingpractices/tree/master/hackerrank/medium)
+3. Hard
 
-This excercises will be separate each one in his level.
-
-1. [Easy](https://github.com/matias09/ProgrammingPractices/tree/master/hackerRank-Challenges/easy-level)
-2. [Medium](https://github.com/matias09/ProgrammingPractices/tree/master/hackerRank-Challenges/medium-level)
+## LeetCode Challenges
+1. [Easy](https://github.com/matias09/programmingpractices/tree/master/leetcode/easy)
+2. [Medium](https://github.com/matias09/programmingpractices/tree/master/leetcode/medium)
 3. Hard

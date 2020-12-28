@@ -1,9 +1,0 @@
-8
-add abcdef
-add abcd
-add
-add abcaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-add zab
-find ab
-find abc
-find abcdef

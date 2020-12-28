@@ -3,8 +3,8 @@
 The idea of this repository is to public different practices about 
 programming, including:
 
+* [Structures](https://github.com/matias09/programmingpractices/tree/master/structures)
 * Algorithms
-* Structures implementations
 * Small Programs
 * STL (11 / 14 / 17)
 * SDL / SFML

@@ -86,6 +86,20 @@ public:
     return true;
   }
 
+  bool Reverse()
+  {
+    if (length_ == 0) {
+      return false;
+    }
+
+    constexpr uint8_t INDX_PREV_POS = 1;
+    for (std::size_t i = 0, j = length_ - INDX_PREV_POS; i != j; ++i, --j) {
+      swap(i, j);
+    }
+
+    return true;
+  }
+
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
 
@@ -111,6 +125,13 @@ private:
     return true;
   }
 
+  void swap(std::size_t const i, std::size_t const j)
+  {
+    T tmp = container[i];
+    container[i] = container[j];
+    container[j] = tmp;
+  }
+
   T* container;
   std::size_t size_;
   std::size_t length_;
@@ -125,8 +146,6 @@ void ShowContainer(T const & c)
   std::size_t al = c.length();
   for (std::size_t i = 0; i < al; ++i)
     std::cout << c[i] << ' ';
-
-  std::cout << '\n';
 }
 
 template <typename T>
@@ -346,5 +365,26 @@ bool EraseAtLastIndexOnFullContainer(T&& c)
   const uint8_t indx = c.length() - 1;
   c.Erase(indx);
 
-  return (c[indx - 1] == (c.length() - 1) && c.length() == (c.size() - 1));
+  return (c[indx - 1] == (c.length() - 1) && c.length() == c.size() - 1);
+}
+
+template <typename T>
+bool ReverseEmptyContainer(T&& c)
+{
+  return (c.Reverse() == false);
+}
+
+template <typename T>
+bool ReverseContainerFrom_1_to_3(T&& c)
+{
+  constexpr uint8_t limit = 4;
+  for (std::size_t i = 1; i < limit; ++i) {
+    c.PushBack(i);
+  }
+
+  c.Reverse();
+
+  return (c[0] == 3
+      &&  c[1] == 2
+      &&  c[2] == 1);
 }

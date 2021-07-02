@@ -83,6 +83,16 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not ReverseEmptyContainer( Array<int>() )) {
+      std::cout << "-- ReverseEmptyContainer \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not ReverseContainerFrom_1_to_3( Array<int>() )) {
+      std::cout << "-- ReverseContainerFrom_1_to_3 \t FAIL" << '\n';
+      return -1;
+  }
+
   std::cout << "\t ALL TEST SUCCEDED "<< '\n';
   return 0;
 }

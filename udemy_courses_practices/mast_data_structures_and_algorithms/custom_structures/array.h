@@ -75,12 +75,14 @@ public:
       return false;
     }
 
+    container[indx] = 0;
+    --length_;
+
     constexpr uint8_t INDEX_ON_NEXT_POSITION = 1;
     for (std::size_t i = indx; i < length_; ++i) {
       container[i] = container[i + INDEX_ON_NEXT_POSITION];
     }
 
-    --length_;
     return true;
   }
 
@@ -123,6 +125,8 @@ void ShowContainer(T const & c)
   std::size_t al = c.length();
   for (std::size_t i = 0; i < al; ++i)
     std::cout << c[i] << ' ';
+
+  std::cout << '\n';
 }
 
 template <typename T>
@@ -342,5 +346,5 @@ bool EraseAtLastIndexOnFullContainer(T&& c)
   const uint8_t indx = c.length() - 1;
   c.Erase(indx);
 
-  return (c[indx - 1] == (c.length() - 1) && c.length() == c.size() - 1);
+  return (c[indx - 1] == (c.length() - 1) && c.length() == (c.size() - 1));
 }

@@ -63,6 +63,26 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not EraseAtIndex_0_OnEmptyContainer( Array<int>() )) {
+      std::cout << "-- EraseAtIndex_0_OnEmptyContainer \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_0_OnContainerWithOneElement( Array<int>() )) {
+      std::cout << "-- EraseAtIndex_0_OnContainerWithOneElement \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_0_OnContainerWithTwoElement( Array<int>() )) {
+      std::cout << "-- EraseAtIndex_0_OnContainerWithTwoElement \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtLastIndexOnFullContainer( Array<int>() )) {
+      std::cout << "-- EraseAtLastIndexOnFullContainer \t FAIL" << '\n';
+      return -1;
+  }
+
   std::cout << "\t ALL TEST SUCCEDED "<< '\n';
   return 0;
 }

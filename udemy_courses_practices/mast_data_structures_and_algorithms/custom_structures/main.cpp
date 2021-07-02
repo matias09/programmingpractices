@@ -93,6 +93,26 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not LeftRotateEmptyContainer( Array<int>() )) {
+      std::cout << "-- LeftRotateEmptyContainer \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not LeftRotateContainerFrom_1_to_5( Array<int>() )) {
+      std::cout << "-- LeftRotateContainerFrom_1_to_5 \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not RigthRotateEmptyContainer( Array<int>() )) {
+      std::cout << "-- RigthRotateEmptyContainer \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not RightRotateContainerFrom_1_to_5( Array<int>() )) {
+      std::cout << "-- RightRotateContainerFrom_1_to_5 \t FAIL" << '\n';
+      return -1;
+  }
+
   std::cout << "\t ALL TEST SUCCEDED "<< '\n';
   return 0;
 }

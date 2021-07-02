@@ -100,6 +100,36 @@ public:
     return true;
   }
 
+  bool LeftRotate()
+  {
+    if (length_ == 0) {
+      return false;
+    }
+
+    constexpr uint8_t INDX_NEXT_POS = 1;
+    for (std::size_t i = 0, j = i + INDX_NEXT_POS; j < length_; ++i, ++j) {
+      swap(i, j);
+    }
+    return true;
+  }
+
+  bool RightRotate()
+  {
+    if (length_ == 0) {
+      return false;
+    }
+
+    constexpr uint8_t INDX_PREV_ONE_POS = 1;
+    for (std::size_t j = length_ - INDX_PREV_ONE_POS
+                   , i = j - INDX_PREV_ONE_POS 
+         ; j > 0; --i, --j) 
+    {
+      swap(i, j);
+    }
+
+    return true;
+  }
+
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
 
@@ -387,4 +417,50 @@ bool ReverseContainerFrom_1_to_3(T&& c)
   return (c[0] == 3
       &&  c[1] == 2
       &&  c[2] == 1);
+}
+
+template <typename T>
+bool LeftRotateEmptyContainer(T&& c)
+{
+  return (c.LeftRotate() == false);
+}
+
+template <typename T>
+bool LeftRotateContainerFrom_1_to_5(T&& c)
+{
+  constexpr uint8_t limit = 5;
+  for (std::size_t i = 1; i < limit; ++i) {
+    c.PushBack(i);
+  }
+
+  c.LeftRotate();
+
+  return (c[0] == 2
+      &&  c[1] == 3
+      &&  c[2] == 4
+      &&  c[3] == 1);
+}
+
+template <typename T>
+bool RigthRotateEmptyContainer(T&& c)
+{
+  return (c.RightRotate() == false);
+}
+
+template <typename T>
+bool RightRotateContainerFrom_1_to_5(T&& c)
+{
+  constexpr uint8_t limit = 5;
+  for (std::size_t i = 1; i < limit; ++i) {
+    c.PushBack(i);
+  }
+
+  ShowContainer(c);
+  c.RightRotate();
+  ShowContainer(c);
+
+  return (c[0] == 4
+      &&  c[1] == 1
+      &&  c[2] == 2
+      &&  c[3] == 3);
 }

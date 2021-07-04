@@ -1,5 +1,5 @@
-#ifndef ARRAY_H
-#define ARRAY_H
+#ifndef VECTOR_H
+#define VECTOR_H
 
 #include <initializer_list>
 #include <iostream>
@@ -8,16 +8,16 @@
 #include <stdint.h>
 
 template <typename T, std::size_t SIZE = 10>
-class Array
+class Vector
 {
 public:
-  explicit Array()
+  explicit Vector()
     : size_(SIZE) ,length_(0)
   {
     container = static_cast<T*>( malloc(sizeof(T) * SIZE) );
   }
 
-  explicit Array(std::initializer_list<T> elements)
+  explicit Vector(std::initializer_list<T> elements)
     : size_(SIZE) ,length_(0)
   {
     container = static_cast<T*>( malloc(sizeof(T) * SIZE) );
@@ -25,7 +25,7 @@ public:
     for (auto const & e : elements)
       PushBack(e);
   }
- ~Array() { free(container); }
+ ~Vector() { free(container); }
 
   bool PushBack(T const & e)
   {
@@ -167,7 +167,7 @@ private:
   std::size_t length_;
 };
 
-#endif // ARRAY_H
+#endif // VECTOR_H
 
 // Unit Test
 template <typename T>
@@ -455,9 +455,7 @@ bool RightRotateContainerFrom_1_to_5(T&& c)
     c.PushBack(i);
   }
 
-  ShowContainer(c);
   c.RightRotate();
-  ShowContainer(c);
 
   return (c[0] == 4
       &&  c[1] == 1

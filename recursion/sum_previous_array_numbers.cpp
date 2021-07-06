@@ -3,7 +3,8 @@
 
 void previous_sum_arr(const uint8_t n, uint8_t array[], uint8_t i)
 {
-  if (n < 1 || (i + 1) == n) return; 
+  if (n < 1 || (i + 1) == n) 
+    return; 
 
   ++i;
   array[i] = array[i - 1] + array[i];

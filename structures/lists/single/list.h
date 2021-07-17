@@ -10,6 +10,12 @@
 template <typename T>
 class SingleList
 {
+  struct Node
+  {
+    T     value;
+    Node* next;
+  };
+
 public:
   explicit SingleList()
     : head(nullptr), length_(0) {}
@@ -40,8 +46,7 @@ public:
   bool Insert(T const & e)
   {
     if (length_ == 0) {
-      head = static_cast<Node*>( malloc( sizeof(Node) ) );
-      head->next = nullptr;
+      head = MakeNode();
       head->value = e;
     } else {
       Node* tmp = head;
@@ -49,8 +54,7 @@ public:
       while (tmp->next != nullptr)
         tmp = tmp->next;
 
-      Node* new_node = static_cast<Node*>( malloc( sizeof(Node) ) );
-      new_node->next = nullptr;
+      Node* new_node = MakeNode();
       new_node->value = e;
 
       tmp->next = new_node;
@@ -92,11 +96,14 @@ public:
   std::size_t length() const { return length_; }
 
 private:
-  struct Node
+  Node* MakeNode() const
   {
-    T     value;
-    Node* next;
-  };
+     Node* new_node = static_cast<Node*>( malloc( sizeof(Node) ) );
+     new_node->next = nullptr;
+     new_node->value = 0;
+
+     return new_node;
+  }
 
   Node* head;
   std::size_t length_;

@@ -46,7 +46,24 @@ bool ErrorAfterOnePushAndOnePop(T&& c)
 }
 
 template <typename T>
-bool InsertAtIndex_3(T&& c)
+bool InsertAtIndex_0_AtTheBeggining(T&& c)
+{
+  int const n   = 6;
+  int const idx = 0;
+
+  for (std::size_t i = 0; i < n;) {
+    if (++i == n) {
+      continue;
+    }
+    c.Insert(i);
+  }
+  c.Insert(n, idx);
+
+  return (c.At(idx)->value == n);
+}
+
+template <typename T>
+bool InsertAtIndex_3_InTheMiddle(T&& c)
 {
   int const n   = 6;
   int const idx = 3;
@@ -55,6 +72,23 @@ bool InsertAtIndex_3(T&& c)
     if (++i == n) {
       continue;
     }
+    c.Insert(i);
+  }
+  c.Insert(n, idx);
+
+  return (c.At(idx)->value == n);
+}
+
+template <typename T>
+bool InsertAtIndex_5_AtTheEnd(T&& c)
+{
+  int const n   = 6;
+  int const idx = 5;
+
+  for (std::size_t i = 0; i < n;) {
+    if (++i == n)
+      continue;
+
     c.Insert(i);
   }
   c.Insert(n, idx);

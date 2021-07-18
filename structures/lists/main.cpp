@@ -36,8 +36,18 @@ int main(int argc, char* args[])
       return -1;
   }
 
-  if ( not InsertAtIndex_3( SingleList<int>() )) {
-      std::cout << "\t-- InsertAtIndex_3 \t FAIL" << '\n';
+  if ( not InsertAtIndex_0_AtTheBeggining( SingleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_0_AtTheBeggining \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_3_InTheMiddle( SingleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_3_InTheMiddle \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_5_AtTheEnd( SingleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_5_AtTheEnd \t FAIL" << '\n';
       return -1;
   }
 

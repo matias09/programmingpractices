@@ -36,6 +36,11 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not InsertAtIndex_3( SingleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_3 \t FAIL" << '\n';
+      return -1;
+  }
+
 
   std::cout << "--- Circular Single List Test" << '\n';
   if ( not LengthCeroAtEmptyConstruction( CircularSingleList<int>() ) ) {

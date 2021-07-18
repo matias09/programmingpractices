@@ -45,3 +45,19 @@ bool ErrorAfterOnePushAndOnePop(T&& c)
   return c.length() == false;
 }
 
+template <typename T>
+bool InsertAtIndex_3(T&& c)
+{
+  int const n   = 6;
+  int const idx = 3;
+
+  for (std::size_t i = 0; i < n;) {
+    if (++i == n) {
+      continue;
+    }
+    c.Insert(i);
+  }
+  c.Insert(n, idx);
+
+  return (c.At(idx)->value == n);
+}

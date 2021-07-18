@@ -1,4 +1,3 @@
-// Unit Test
 template <typename T>
 bool LengthCeroAtEmptyConstruction(T && c)
 {

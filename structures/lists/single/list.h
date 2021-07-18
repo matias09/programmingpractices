@@ -49,15 +49,11 @@ public:
       head = MakeNode();
       head->value = e;
     } else {
-      Node* tmp = head;
-
-      while (tmp->next != nullptr)
-        tmp = tmp->next;
-
       Node* new_node = MakeNode();
       new_node->value = e;
+      new_node->next = head;
 
-      tmp->next = new_node;
+      head = new_node;
     }
 
     ++length_;
@@ -70,9 +66,7 @@ public:
       return false;
 
     Node* tmp = head;
-
-    while (tmp->next != nullptr)
-      tmp = tmp->next;
+    head = head->next;
 
     free(tmp);
     tmp = nullptr;
@@ -85,12 +79,8 @@ public:
   {
     Node* tmp = head;
 
-    while (tmp->next != nullptr) {
+    for (size_t i = 0; i < length_; ++i, tmp = tmp->next)
       std::cout << tmp->value << ' ';
-
-      tmp = tmp->next;
-    }
-    std::cout << tmp->value << '\n';
   }
 
   std::size_t length() const { return length_; }
@@ -110,51 +100,3 @@ private:
 };
 
 #endif // SINGLE_LIST_H
-
-// // Unit Test
-// template <typename T>
-// bool LengthCeroAtEmptyConstruction(T && c)
-// {
-//   return c.length() == 0;
-// }
-//
-// template <typename T>
-// bool LengthGreaterThanCeroAtConstructionWithInitializerList(T&& c)
-// {
-//   return c.length() > 0;
-// }
-//
-// template <typename T>
-// bool LengthEqualToOneAfterOnePushBack(T&& c)
-// {
-//   c.Insert(1);
-//   return c.length() == 1;
-// }
-//
-// template <typename T>
-// bool LengthBackToCeroAfterOnePushAndOnePop(T&& c)
-// {
-//   c.Insert(1);
-//   c.Erase();
-//   return c.length() == 0;
-// }
-//
-// template <typename T>
-// bool LengthAfterThreePush(T&& c)
-// {
-//   c.Insert(1);
-//   c.Insert(2);
-//   c.Insert(3);
-//
-//   return c.length() == 3;
-// }
-//
-// template <typename T>
-// bool ErrorAfterOnePushAndOnePop(T&& c)
-// {
-//   c.Insert(1);
-//   c.Erase();
-//   c.Erase();
-//
-//   return c.length() == false;
-// }

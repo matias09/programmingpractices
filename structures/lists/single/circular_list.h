@@ -38,7 +38,7 @@ public:
       head = head->next;
 
       free(tail);
-      tail = nullptr;
+      tail = head;
     }
 
     free(head);
@@ -51,16 +51,11 @@ public:
       head = MakeNode();
       head->value = e;
     } else {
-      Node* tmp = head;
-
-      while (tmp->next != nullptr)
-        tmp = tmp->next;
-
       Node* new_node = MakeNode();
       new_node->value = e;
       new_node->next = head;
 
-      tmp->next = new_node;
+      head = new_node;
     }
 
     ++length_;
@@ -72,18 +67,10 @@ public:
     if (length_ == 0)
       return false;
 
-    Node* tmp  = head;
-    Node* tail = nullptr;
+    Node* tmp = head->next;
 
-    while (tmp->next != nullptr) {
-      tail = tmp;
-      tmp = tmp->next;
-    }
-
-    free(tmp);
-    tmp = nullptr;
-
-    tail->next = head;
+    free(head);
+    head = tmp;
 
     --length_;
     return true;
@@ -93,12 +80,8 @@ public:
   {
     Node* tmp = head;
 
-    while (tmp->next != nullptr) {
+    for (size_t i = 0; i < length_; ++i, tmp = tmp->next)
       std::cout << tmp->value << ' ';
-
-      tmp = tmp->next;
-    }
-    std::cout << tmp->value << '\n';
   }
 
   std::size_t length() const { return length_; }
@@ -118,5 +101,3 @@ private:
 };
 
 #endif // CIRCULAR_SINGLE_LIST_H
-
-// Unit Test

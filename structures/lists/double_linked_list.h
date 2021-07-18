@@ -52,7 +52,9 @@ public:
     } else {
       Node* new_node = MakeNode();
       new_node->value = e;
+
       new_node->next = head;
+      head->prev = new_node;
 
       head = new_node;
     }
@@ -91,6 +93,7 @@ private:
   {
      Node* new_node = static_cast<Node*>( malloc( sizeof(Node) ) );
      new_node->next = nullptr;
+     new_node->prev = nullptr;
      new_node->value = 0;
 
      return new_node;

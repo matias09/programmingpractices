@@ -103,14 +103,42 @@ public:
     return true;
   }
 
+  bool Erase(std::size_t const idx)
+  {
+    if (length_ == 0 || idx < 0 || idx > length_)
+      return false;
+
+    Node* tmp = head;
+
+    if (idx == 0) {
+      head = head->next;
+      free(tmp);
+    } else {
+      Node* tail = head;
+
+      for (size_t i = 0; i < idx; ++i) {
+        tail = tmp;
+        tmp = tmp->next;
+      }
+
+      tail->next = tmp->next;
+
+      free(tmp);
+    }
+    tmp = nullptr;
+
+    --length_;
+    return true;
+  }
+
   Node* At(size_t const idx) const
   {
-    if (idx < 0 || idx > length_)
+    if (idx < 0 || idx >= length_)
       return nullptr;
 
     Node* tmp = head;
 
-    for (size_t i = 0; i != idx; ++i)
+    for (size_t i = 0; i < idx; ++i)
       tmp = tmp->next;
 
     return tmp;

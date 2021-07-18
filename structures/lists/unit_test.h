@@ -95,3 +95,50 @@ bool InsertAtIndex_5_AtTheEnd(T&& c)
 
   return (c.At(idx)->value == n);
 }
+
+template <typename T>
+bool EraseAtIndex_0_WithNoElements(T&& c)
+{
+  int const idx = 0;
+  return (c.Erase(idx) == false);
+}
+
+template <typename T>
+bool EraseAtIndex_0_WithElements(T&& c)
+{
+  constexpr int const n = 1;
+  constexpr int const idx = 0;
+
+  c.Insert(n);
+  c.Erase(idx);
+
+  return (c.length() == (n - 1));
+}
+
+template <typename T>
+bool EraseAtIndex_3_BetweenOriginAndEnd(T&& c)
+{
+  constexpr int const n   = 5;
+  constexpr int const idx = 3;
+
+  for (std::size_t i = 0; i < n; ++i)
+    c.Insert(i + 1);
+
+  c.Erase(idx);
+
+  return (c.At(idx)->value == 1 && c.length() == (n - 1));
+}
+
+template <typename T>
+bool EraseAtIndex_5_AtTheEnd(T&& c)
+{
+  constexpr int const n   = 6;
+  constexpr int const idx = 5;
+
+  for (std::size_t i = 0; i < n; ++i)
+    c.Insert(i + 1);
+
+  c.Erase(idx);
+
+  return (c.At(idx - 1)->value == 2 && c.length() == (n - 1));
+}

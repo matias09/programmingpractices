@@ -51,6 +51,26 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not EraseAtIndex_0_WithNoElements( SingleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_0_WithNoElements \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_0_WithElements( SingleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_0_WithElements \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_3_BetweenOriginAndEnd( SingleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_3_BetweenOriginAndEnd \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_5_AtTheEnd( SingleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_5_AtTheEnd \t FAIL" << '\n';
+      return -1;
+  }
+
 
   std::cout << "--- Circular Single List Test" << '\n';
   if ( not LengthCeroAtEmptyConstruction( CircularSingleList<int>() ) ) {

@@ -62,6 +62,34 @@ public:
     return true;
   }
 
+  bool Insert(T const & e, std::size_t const idx)
+  {
+    if (idx < 0 || idx > length_)
+      return false;
+
+    Node* new_node = MakeNode();
+    new_node->value = e;
+
+    if (idx == 0) {
+      new_node->next = head;
+      head = new_node;
+    } else {
+      Node* tmp = head;
+      Node* tail = head;
+
+      for (size_t i = 0; i < idx; ++i) {
+        tail = tmp;
+        tmp = tmp->next;
+      }
+
+      new_node->next = tmp;
+      tail->next = new_node;
+    }
+
+    ++length_;
+    return true;
+  }
+
   bool Erase()
   {
     if (length_ == 0)
@@ -74,6 +102,19 @@ public:
 
     --length_;
     return true;
+  }
+
+  Node* At(size_t const idx) const
+  {
+    if (idx < 0 || idx >= length_)
+      return nullptr;
+
+    Node* tmp = head;
+
+    for (size_t i = 0; i < idx; ++i)
+      tmp = tmp->next;
+
+    return tmp;
   }
 
   void Print()

@@ -33,16 +33,15 @@ public:
     if (length_ == 0)
       return;
 
-    Node* tail = head;
+    Node* tmp = nullptr;
 
-    while (tail != nullptr && head->next != nullptr) {
+    while (head != nullptr && (length_--) != 0) {
+      tmp = head;
       head = head->next;
 
-      free(tail);
-      tail = head;
+      free(tmp);
+      tmp = nullptr;
     }
-
-    free(head);
     head = nullptr;
   }
 
@@ -51,12 +50,22 @@ public:
     if (length_ == 0) {
       head = MakeNode();
       head->value = e;
+      head->next = head;
+      head->prev = head;
     } else {
       Node* new_node = MakeNode();
       new_node->value = e;
 
+      Node* last = head;
+
+      for (size_t i = 1; last->next != nullptr && i < length_; ++i)
+        last = last->next;
+
       new_node->next = head;
+      new_node->prev = last;
+
       head->prev = new_node;
+      last->next = new_node;
 
       head = new_node;
     }
@@ -105,6 +114,9 @@ public:
     Node* tmp = head;
     head = head->next;
 
+    head->prev = tmp->prev;
+    head->prev->next = head;
+
     free(tmp);
     tmp = nullptr;
 
@@ -130,9 +142,7 @@ public:
       }
 
       tail->next = tmp->next;
-
-      if (tmp->next != nullptr)
-        tmp->next->prev = tail;
+      tmp->next->prev = tail;
     }
 
     free(tmp);
@@ -144,7 +154,7 @@ public:
 
   Node* At(size_t const idx) const
   {
-    if (idx < 0 || idx >= length_)
+    if (idx >= length_)
       return nullptr;
 
     Node* tmp = head;
@@ -159,7 +169,7 @@ public:
   {
     Node* tmp = head;
 
-    for (size_t i = 1; i < length_; ++i, tmp = tmp->next)
+    for (size_t i = 0; i < length_; ++i, tmp = tmp->next)
       std::cout << tmp->value << ' ';
   }
 

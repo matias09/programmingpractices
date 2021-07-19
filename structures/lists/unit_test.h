@@ -85,12 +85,9 @@ bool InsertAtIndex_5_AtTheEnd(T&& c)
   int const n   = 6;
   int const idx = 5;
 
-  for (std::size_t i = 0; i < n;) {
-    if (++i == n)
-      continue;
+  for (std::size_t i = 0; i <= n; ++i)
+    c.Insert(i + 1);
 
-    c.Insert(i);
-  }
   c.Insert(n, idx);
 
   return (c.At(idx)->value == n);

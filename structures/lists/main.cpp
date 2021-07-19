@@ -154,36 +154,61 @@ int main(int argc, char* args[])
   }
 
 
-  // std::cout << "--- Double List Test" << '\n';
-  // if ( not LengthCeroAtEmptyConstruction( DoubleList<int>() ) ) {
-  //     std::cout << "\t-- LengthCeroAtEmptyConstruction \t FAIL" << '\n';
-  //     return -1;
-  // }
-  //
-  // if ( not LengthGreaterThanCeroAtConstructionWithInitializerList( DoubleList<int>({1, 2}) ) ) {
-  //     std::cout << "\t-- LengthGreaterThanCeroAtConstructionWithInitializerList \t FAIL" << '\n';
-  //     return -1;
-  // }
-  //
-  // if ( not LengthEqualToOneAfterOnePushBack( DoubleList<int>() )) {
-  //     std::cout << "\t-- LengthEqualToOneAfterOnePushBack \t FAIL" << '\n';
-  //     return -1;
-  // }
-  //
-  // if ( not LengthBackToCeroAfterOnePushAndOnePop( DoubleList<int>() )) {
-  //     std::cout << "\t-- LengthBackToCeroAfterOnePushAndOnePop \t FAIL" << '\n';
-  //     return -1;
-  // }
-  //
-  // if ( not LengthAfterThreePush( DoubleList<int>() )) {
-  //     std::cout << "\t-- LengthAfterThreePush \t FAIL" << '\n';
-  //     return -1;
-  // }
-  //
-  // if ( not ErrorAfterOnePushAndOnePop( DoubleList<int>() )) {
-  //     std::cout << "\t-- ErrorAfterOnePushAndOnePop \t FAIL" << '\n';
-  //     return -1;
-  // }
+  std::cout << "--- Double List Test" << '\n';
+  if ( not LengthCeroAtEmptyConstruction( DoubleList<int>() ) ) {
+      std::cout << "\t-- LengthCeroAtEmptyConstruction \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not LengthGreaterThanCeroAtConstructionWithInitializerList( DoubleList<int>({1, 2}) ) ) {
+      std::cout << "\t-- LengthGreaterThanCeroAtConstructionWithInitializerList \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not LengthEqualToOneAfterOnePushBack( DoubleList<int>() )) {
+      std::cout << "\t-- LengthEqualToOneAfterOnePushBack \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not LengthBackToCeroAfterOnePushAndOnePop( DoubleList<int>() )) {
+      std::cout << "\t-- LengthBackToCeroAfterOnePushAndOnePop \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not LengthAfterThreePush( DoubleList<int>() )) {
+      std::cout << "\t-- LengthAfterThreePush \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not ErrorAfterOnePushAndOnePop( DoubleList<int>() )) {
+      std::cout << "\t-- ErrorAfterOnePushAndOnePop \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_0_AtTheBeggining( DoubleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_0_AtTheBeggining \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_3_InTheMiddle( DoubleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_3_InTheMiddle \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_5_AtTheEnd( DoubleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_5_AtTheEnd \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_0_AtTheBeggining( DoubleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_0_AtTheBeggining \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not InsertAtIndex_3_InTheMiddle( DoubleList<int>() )) {
+      std::cout << "\t-- InsertAtIndex_3_InTheMiddle \t FAIL" << '\n';
+      return -1;
+  }
 
 
   std::cout << '\n'

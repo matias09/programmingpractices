@@ -210,6 +210,26 @@ int main(int argc, char* args[])
       return -1;
   }
 
+  if ( not EraseAtIndex_0_WithNoElements( DoubleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_0_WithNoElements \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_0_WithElements( DoubleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_0_WithElements \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_3_BetweenOriginAndEnd( DoubleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_3_BetweenOriginAndEnd \t FAIL" << '\n';
+      return -1;
+  }
+
+  if ( not EraseAtIndex_5_AtTheEnd( DoubleList<int>() )) {
+      std::cout << "\t-- EraseAtIndex_5_AtTheEnd \t FAIL" << '\n';
+      return -1;
+  }
+
 
   std::cout << '\n'
             << "\t ----------------------" << '\n'

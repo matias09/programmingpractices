@@ -2,7 +2,6 @@
 #define SINGLE_LIST_H
 
 #include <initializer_list>
-#include <iostream>
 
 #include <stdlib.h>
 #include <stdint.h>
@@ -142,14 +141,6 @@ public:
       tmp = tmp->next;
 
     return tmp;
-  }
-
-  void Print()
-  {
-    Node* tmp = head;
-
-    for (size_t i = 0; i < length_; ++i, tmp = tmp->next)
-      std::cout << tmp->value << ' ';
   }
 
   std::size_t length() const { return length_; }

@@ -3,7 +3,6 @@
 
 #include <initializer_list>
 
-#include <stdlib.h>
 #include <stdint.h>
 
 template <typename T, std::size_t SIZE = 10>
@@ -13,18 +12,19 @@ public:
   explicit Vector()
     : size_(SIZE) ,length_(0)
   {
-    container = static_cast<T*>( malloc(sizeof(T) * SIZE) );
+    container = new T[SIZE];
   }
 
   explicit Vector(std::initializer_list<T> elements)
     : size_(SIZE) ,length_(0)
   {
-    container = static_cast<T*>( malloc(sizeof(T) * SIZE) );
+    container = new T[SIZE];
 
     for (auto const & e : elements)
       PushBack(e);
   }
- ~Vector() { free(container); }
+
+ ~Vector() { delete[] container; }
 
   bool PushBack(T const & e)
   {
@@ -39,9 +39,8 @@ public:
 
   bool PopBack()
   {
-    if (length_ < 1) {
+    if (length_ < 1)
         return false;
-    }
 
     container[--length_] = 0;
     return true;
@@ -49,9 +48,8 @@ public:
 
   bool Insert(std::size_t const indx, T const & e)
   {
-    if (indx >= length_) {
+    if (indx >= length_)
       return false;
-    }
 
     if (length_ == size_) {
       if (not ExpandContainerCapacity())
@@ -59,9 +57,9 @@ public:
     }
 
     constexpr uint8_t INDEX_ON_PREV_POSITION = 1;
-    for (std::size_t i = length_; i != indx; --i) {
+    for (std::size_t i = length_; i != indx; --i)
       container[i] = container[i - INDEX_ON_PREV_POSITION];
-    }
+
     container[indx] = e;
 
     ++length_;
@@ -70,58 +68,52 @@ public:
 
   bool Erase(std::size_t const indx)
   {
-    if (indx >= length_ || length_ == 0) {
+    if (indx >= length_ || length_ == 0)
       return false;
-    }
 
     container[indx] = 0;
     --length_;
 
     constexpr uint8_t INDEX_ON_NEXT_POSITION = 1;
-    for (std::size_t i = indx; i < length_; ++i) {
+    for (std::size_t i = indx; i < length_; ++i)
       container[i] = container[i + INDEX_ON_NEXT_POSITION];
-    }
 
     return true;
   }
 
   bool Reverse()
   {
-    if (length_ == 0) {
+    if (length_ == 0)
       return false;
-    }
 
     constexpr uint8_t INDX_PREV_POS = 1;
-    for (std::size_t i = 0, j = length_ - INDX_PREV_POS; i != j; ++i, --j) {
+    for (std::size_t i = 0, j = length_ - INDX_PREV_POS; i != j; ++i, --j)
       swap(i, j);
-    }
 
     return true;
   }
 
   bool LeftRotate()
   {
-    if (length_ == 0) {
+    if (length_ == 0)
       return false;
-    }
 
     constexpr uint8_t INDX_NEXT_POS = 1;
-    for (std::size_t i = 0, j = i + INDX_NEXT_POS; j < length_; ++i, ++j) {
+    for (std::size_t i = 0, j = i + INDX_NEXT_POS; j < length_; ++i, ++j)
       swap(i, j);
-    }
+
     return true;
   }
 
   bool RightRotate()
   {
-    if (length_ == 0) {
+    if (length_ == 0)
       return false;
-    }
 
     constexpr uint8_t INDX_PREV_ONE_POS = 1;
     for (std::size_t j = length_ - INDX_PREV_ONE_POS
-                   , i = j - INDX_PREV_ONE_POS 
-         ; j > 0; --i, --j) 
+                   , i = j - INDX_PREV_ONE_POS
+         ; j > 0; --i, --j)
     {
       swap(i, j);
     }
@@ -138,16 +130,15 @@ public:
 private:
   bool ExpandContainerCapacity()
   {
-    static std::size_t increment_unit = 1;
+    static std::size_t increment_unit = 0;
 
     const std::size_t NEW_SIZE = (SIZE * (++increment_unit));
-    T* tmp = static_cast<T*>( malloc(sizeof(T) * NEW_SIZE) );
+    T* tmp = new T[NEW_SIZE];
 
-    for (std::size_t i = 0; i < size_; ++i) {
+    for (std::size_t i = 0; i < size_; ++i)
       tmp[i] = container[i];
-    }
 
-    free(container);
+    delete[] container;
     container = tmp;
 
     size_ = NEW_SIZE;

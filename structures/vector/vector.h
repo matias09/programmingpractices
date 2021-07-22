@@ -24,7 +24,24 @@ public:
       PushBack(e);
   }
 
- ~Vector() { delete[] container; }
+  Vector(Vector const & rh)
+  {
+    this->size_ = rh.size();
+    this->length_ = rh.length();
+    this->container = new T[this->size_];
+
+    std::size_t len = rh.length();
+    for (std::size_t i = 0; i < len; ++i)
+      this->container[i] = rh[i];
+  }
+
+ ~Vector() 
+ { 
+   if (container != nullptr)
+     delete[] container; 
+
+   container = nullptr;
+ }
 
   bool PushBack(T const & e)
   {

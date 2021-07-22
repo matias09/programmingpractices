@@ -138,6 +138,13 @@ public:
     return true;
   }
 
+  void swap(std::size_t const i, std::size_t const j)
+  {
+    T tmp = container[i];
+    container[i] = container[j];
+    container[j] = tmp;
+  }
+
   std::size_t size() const { return size_; }
   std::size_t length() const { return length_; }
 
@@ -160,13 +167,6 @@ private:
 
     size_ = NEW_SIZE;
     return true;
-  }
-
-  void swap(std::size_t const i, std::size_t const j)
-  {
-    T tmp = container[i];
-    container[i] = container[j];
-    container[j] = tmp;
   }
 
   T* container;

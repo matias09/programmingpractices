@@ -14,11 +14,30 @@ public:
   explicit MaxPriorityQueue(std::initializer_list<int> elements) 
     : ns_(elements)
   {
-    SetHeapSize( ns_.length() - 1 );
+    heap_size = ns_.length() - 1;
     BuildMaxHeap();
   }
 
   ~MaxPriorityQueue() {}
+
+  void Insert(int const e) { ns_.PushBack(e); }
+  void IncreaseKey(int const k, int const v) {}
+
+  int ExtractMax() 
+  {  
+    if (ns_.length() < 1)
+      return 0;
+
+    int max = ns_[0];
+    ns_[0] = ns_[ ns_.length() - 1 ];
+    ns_.PopBack();
+
+    heap_size = ns_.length() - 1;
+    MaxHeapify(0);
+
+    return max;
+  }
+  int Maximum() const { return ns_[0]; }
 
   void BuildMaxHeap()
   {
@@ -48,8 +67,7 @@ public:
     }
   }
 
-  void SetHeapSize(std::size_t const size) { heap_size = size; }
-
+  int Length() const { return ns_.length(); }
   Vector<int> GetUnderlineContainer() const { return ns_; }
 
 private:

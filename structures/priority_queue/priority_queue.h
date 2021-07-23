@@ -23,7 +23,7 @@ public:
   void BuildMaxHeap()
   {
     std::size_t len = ns_.length() / 2;
-    for (std::size_t i = 0; i < len; ++i)
+    for (int i = len; i > -1 ; --i)
       MaxHeapify(i);
   }
 

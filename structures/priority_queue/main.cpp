@@ -4,8 +4,8 @@
 int main()
 {
   // another example written
-  // PriorityQueue pq{7,2,9,4,1,5,3};
-  PriorityQueue pq{16,4,10,14,7,9,3,2,8,1};
+  // PriorityQueue pq{7,2,9,4,1,5,30};
+  PriorityQueue pq{16,4,10,14,7,9,3,2,8,100};
 
   auto const els = pq.GetUnderlineContainer();
 

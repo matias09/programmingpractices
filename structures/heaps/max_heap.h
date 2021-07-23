@@ -1,5 +1,5 @@
-#ifndef PRIORITY_QUEUE_H
-#define PRIORITY_QUEUE_H
+#ifndef MAX_HEAP
+#define MAX_HEAP
 
 #include "../vector/vector.h"
 
@@ -8,18 +8,18 @@
 
 #include <math.h>
 
-class PriorityQueue
+class MaxHeap
 {
 public:
-  explicit PriorityQueue() = default;
-  explicit PriorityQueue(std::initializer_list<int> elements) 
+  explicit MaxHeap() = default;
+  explicit MaxHeap(std::initializer_list<int> elements) 
     : ns_(elements)
   {
     SetHeapSize( ns_.length() - 1 );
     BuildMaxHeap();
   }
 
-  ~PriorityQueue() {}
+  ~MaxHeap() {}
 
   void BuildMaxHeap()
   {
@@ -72,4 +72,4 @@ private:
   std::size_t heap_size;
 };
 
-#endif // PRIORITY_QUEUE_H
+#endif // MAX_HEAP

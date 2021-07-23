@@ -15,6 +15,7 @@ public:
   explicit PriorityQueue(std::initializer_list<int> elements) 
     : ns_(elements)
   {
+    SetHeapSize( ns_.length() - 1 );
     BuildMaxHeap();
   }
 
@@ -29,7 +30,6 @@ public:
 
   void MaxHeapify(int const i)
   {
-    static std::size_t heap_size = HeapSize() - 1;
     int largest = 0;
 
     int l = Left(i);
@@ -49,7 +49,17 @@ public:
     }
   }
 
-  std::size_t HeapSize() const { return ns_.length(); }
+  void HeapSort()
+  {
+    std::size_t len = ns_.length() - 1;
+    for (int i = len; i > 0; --i) {
+      ns_.swap(0, i);
+      SetHeapSize( heap_size - 1 );
+      MaxHeapify(0);
+    }
+  }
+
+  void SetHeapSize(std::size_t const size) { heap_size = size; }
 
   Vector<int> GetUnderlineContainer() const { return ns_; }
 
@@ -59,6 +69,7 @@ private:
   int Right(int const i) const { return (i == 0) ? 2 : (i * 2) + 2; }
 
   Vector<int> ns_;
+  std::size_t heap_size;
 };
 
 #endif // PRIORITY_QUEUE_H

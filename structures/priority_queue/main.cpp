@@ -1,11 +1,23 @@
-#include "priority_queue.h"
+#include "max_priority_queue.h"
+
 #include <iostream>
 
 int main()
 {
-  // another example written
-  // PriorityQueue pq{7,2,9,4,1,5,30};
-  PriorityQueue pq{16,4,10,14,7,9,3,2,8,1};
+  MaxPriorityQueue pq;
+  pq.Insert(16);
+  pq.Insert(4);
+  pq.Insert(10);
+  pq.Insert(14);
+  pq.Insert(7);
+  pq.Insert(9);
+  pq.Insert(3);
+  pq.Insert(2);
+  pq.Insert(8);
+  pq.Insert(1);
+
+  std::cout <<  pq.ExtractMax() << '\n';
+  pq.Insert(100);
 
   auto const els = pq.GetUnderlineContainer();
 
@@ -13,13 +25,6 @@ int main()
   for (std::size_t i = 0; i < len; ++i)
     std::cout << els[i] << ' ';
 
-  pq.HeapSort();
-  std::cout << '\n' << '\n';
-
-  auto const els2 = pq.GetUnderlineContainer();
-  for (std::size_t i = 0; i < len; ++i)
-    std::cout << els2[i] << ' ';
-
-  std::cout << '\n' << '\n';
+  std::cout << '\n';
   return 0;
 }

@@ -15,11 +15,7 @@ public:
   explicit PriorityQueue(std::initializer_list<int> elements) 
     : ns_(elements)
   {
-    std::size_t heap_size = ns_.length();
-    for (std::size_t i = 0; i < heap_size; ++i)
-      std::cout << ns_[i] << ' ';
-
-    std::cout << '\n' << '\n';
+    BuildMaxHeap();
   }
 
   ~PriorityQueue() {}
@@ -31,16 +27,9 @@ public:
       MaxHeapify(i);
   }
 
-  void MaxHeapify(int const i, int j = 0)
+  void MaxHeapify(int const i)
   {
-    if ( j == 20 ) return;
-
-    std::size_t heap_size = ns_.length();
-    for (std::size_t i = 0; i < heap_size; ++i)
-      std::cout << ns_[i] << ' ';
-
-    std::cout << '\n';
-
+    static std::size_t heap_size = HeapSize() - 1;
     int largest = 0;
 
     int l = Left(i);
@@ -56,16 +45,18 @@ public:
 
     if (largest != i) {
       ns_.swap(i, largest);
-      MaxHeapify(largest, ++j);
+      MaxHeapify(largest);
     }
   }
 
-  Vector<int> getnum() const { return ns_; }
+  std::size_t HeapSize() const { return ns_.length(); }
+
+  Vector<int> GetUnderlineContainer() const { return ns_; }
 
 private:
   int Parent(int const i) const { return std::floor(i / 2); }
-  int Left(int const i) const { return i * 2; }
-  int Right(int const i) const { return (i * 2) + 1; }
+  int Left(int const i) const { return (i == 0) ? 1 : (i * 2) + 1; }
+  int Right(int const i) const { return (i == 0) ? 2 : (i * 2) + 2; }
 
   Vector<int> ns_;
 };

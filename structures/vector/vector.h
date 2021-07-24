@@ -73,7 +73,7 @@ public:
         return false;
     }
 
-    constexpr uint8_t INDEX_ON_PREV_POSITION = 1;
+    constexpr const uint8_t INDEX_ON_PREV_POSITION = 1;
     for (std::size_t i = length_; i != indx; --i)
       container[i] = container[i - INDEX_ON_PREV_POSITION];
 
@@ -91,7 +91,7 @@ public:
     container[indx] = 0;
     --length_;
 
-    constexpr uint8_t INDEX_ON_NEXT_POSITION = 1;
+    constexpr const uint8_t INDEX_ON_NEXT_POSITION = 1;
     for (std::size_t i = indx; i < length_; ++i)
       container[i] = container[i + INDEX_ON_NEXT_POSITION];
 
@@ -103,7 +103,7 @@ public:
     if (length_ == 0)
       return false;
 
-    constexpr uint8_t INDX_PREV_POS = 1;
+    constexpr const uint8_t INDX_PREV_POS = 1;
     for (std::size_t i = 0, j = length_ - INDX_PREV_POS; i != j; ++i, --j)
       swap(i, j);
 
@@ -115,7 +115,7 @@ public:
     if (length_ == 0)
       return false;
 
-    constexpr uint8_t INDX_NEXT_POS = 1;
+    constexpr const uint8_t INDX_NEXT_POS = 1;
     for (std::size_t i = 0, j = i + INDX_NEXT_POS; j < length_; ++i, ++j)
       swap(i, j);
 
@@ -127,7 +127,7 @@ public:
     if (length_ == 0)
       return false;
 
-    constexpr uint8_t INDX_PREV_ONE_POS = 1;
+    constexpr const uint8_t INDX_PREV_ONE_POS = 1;
     for (std::size_t j = length_ - INDX_PREV_ONE_POS
                    , i = j - INDX_PREV_ONE_POS
          ; j > 0; --i, --j)

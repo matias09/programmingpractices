@@ -36,9 +36,8 @@ void QuickSort(std::vector<T> & v, int const p, int const r)
 
 int main(int argc, const char* args[])
 {
-  // TODO: Revise [2,8,70,1,3,5,6,4]
-  // Check with biggest numbers in different places.
-  std::vector<int> v {2,8,7,1,3,5,6,4,9};
+  // Definitely, This Is Not Working
+  std::vector<int> v {8,7,4,1,3,5,6};
 
   std::size_t len = v.size();
   QuickSort(v, 0, len);

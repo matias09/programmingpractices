@@ -40,7 +40,9 @@ int main(int argc, const char* args[])
   // Check with biggest numbers in different places.
   std::vector<int> v {2,8,7,1,3,5,6,4,9};
 
+  std::size_t len = v.size();
   QuickSort(v, 0, len);
+
   for (std::size_t i = 0; i < len; ++i)
     std::cout << v[i] << ' ';
 

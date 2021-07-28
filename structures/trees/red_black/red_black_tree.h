@@ -1,0 +1,111 @@
+#ifndef RED_BLACK_TREE_H
+#define RED_BLACK_TREE_H
+
+#include <iostream>
+#include <initializer_list>
+
+template <typename T>
+class RedBlackTree
+{
+  enum class Color {BLACK = 0, RED};
+
+  struct Node
+  {
+    Node(T const & e) : value(e) 
+                      , parent(nullptr)
+                      , left(nullptr)
+                      , right(nullptr)
+                      , color(Color::BLACK) {}
+    T value;
+    Node* parent;
+    Node* left;
+    Node* right;
+    Color color;
+  }; 
+
+public:
+  RedBlackTree() : root_(nullptr), size_(0) {}
+
+  RedBlackTree(std::initializer_list<T> const elms)
+    : root_(nullptr), size_(0)
+  {
+    for (auto const & e : elms)
+      Insert(e);
+  }
+
+ ~RedBlackTree() 
+  { 
+    if (size_ > 0)
+      ReleaseNodes(root_); 
+  }
+
+  void ListInOrderTraversal(Node* node) const
+  {
+    std::cout << node->value << ' ';
+
+    if (node->left != nullptr)
+      ListInOrderTraversal(node->left);
+
+    if (node->right != nullptr)
+      ListInOrderTraversal(node->right);
+  }
+
+  void ListInPreOrderTraversal(Node* node) const
+  {
+    if (node->left != nullptr)
+      ListInPreOrderTraversal(node->left);
+
+    std::cout << node->value << ' ';
+
+    if (node->right != nullptr)
+      ListInPreOrderTraversal(node->right);
+  }
+
+  void Insert(T const & e)
+  {
+    Node* y = nullptr;
+    Node* x = root_;
+    Node* new_node = new Node(e);
+
+    while (x != nullptr) {
+      y = x;
+
+      if (new_node->value < x->value)
+        x = x->left;
+      else
+        x = x->right;
+    }
+
+    new_node->parent = y;
+
+    if (y == nullptr)
+      root_ = new_node;
+    else if (new_node->value < y->value)
+      y->left = new_node;
+    else
+      y->right = new_node;
+
+    ++size_;
+  }
+
+  Node* GetRoot() const { return root_; }
+  std::size_t Size() const { return size_; }
+
+private:
+  void ReleaseNodes(Node* node)
+  {
+    if (node->left != nullptr)
+      ReleaseNodes(node->left);
+
+    if (node->right != nullptr) 
+      ReleaseNodes(node->right);
+
+    delete node;
+    node = nullptr;
+  }
+
+  Node* root_;
+  std::size_t size_;
+};
+
+#endif // RED_BLACK_TREE_H

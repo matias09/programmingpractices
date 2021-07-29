@@ -11,7 +11,7 @@ class RedBlackTree
 
   struct Node
   {
-    Node(T const & e) : value(e) 
+    Node(T const & e) : value(e)
                       , parent(nullptr)
                       , left(nullptr)
                       , right(nullptr)
@@ -21,7 +21,7 @@ class RedBlackTree
     Node* left;
     Node* right;
     Color color;
-  }; 
+  };
 
 public:
   RedBlackTree() : root_(nullptr), size_(0) {}
@@ -33,10 +33,10 @@ public:
       Insert(e);
   }
 
- ~RedBlackTree() 
-  { 
+ ~RedBlackTree()
+  {
     if (size_ > 0)
-      ReleaseNodes(root_); 
+      ReleaseNodes(root_);
   }
 
   void ListInOrderTraversal(Node* node) const
@@ -88,6 +88,22 @@ public:
     ++size_;
   }
 
+  void Trasplant(Node* n1, Node* n2)
+  {
+    if (n1->parent == nullptr)
+      root_ = n2;
+    else if (n1->value == n1->parent->left->value) {
+      n1->parent->left = n2;
+      n1->parent->right = n1;
+    } else {
+      n1->parent->right = n2;
+      n1->parent->left = n1;
+    }
+
+    if (n2 != nullptr)
+      n2->parent = n1->parent;
+  }
+
   Node* GetRoot() const { return root_; }
   std::size_t Size() const { return size_; }
 
@@ -97,7 +113,7 @@ private:
     if (node->left != nullptr)
       ReleaseNodes(node->left);
 
-    if (node->right != nullptr) 
+    if (node->right != nullptr)
       ReleaseNodes(node->right);
 
     delete node;

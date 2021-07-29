@@ -25,6 +25,11 @@ int main(int argc, char* args[])
     return -1;
   }
 
+  if ( not TransplantRootLeftChildWithRootRightChild( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- TransplantRootLeftChildWithRootRightChild \t FAIL" << '\n';
+    return -1;
+  }
+
   std::cout << '\n'
             << "\t ----------------------" << '\n'
             << "\t    ALL TEST SUCCEDED  " << '\n'

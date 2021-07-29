@@ -18,6 +18,20 @@ bool SizeEqualToOneAfterOneInsert(T&& c)
 }
 
 template <typename T>
+bool TransplantRootLeftChildWithRootRightChild(T&& c)
+{
+  c.Insert(5);
+
+  c.Insert(2);
+  c.Insert(8);
+
+  c.Trasplant(c.GetRoot()->left, c.GetRoot()->right);
+
+  return c.GetRoot()->left->value  == 8
+      && c.GetRoot()->right->value == 2;
+}
+
+template <typename T>
 bool SizeBackToCeroAfterOneInsertAndOneErase(T&& c)
 {
   c.Insert(1);

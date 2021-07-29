@@ -115,13 +115,33 @@ public:
     y->parent = x->parent;
     if (x->parent == nullptr)
       root_ = y;
-    else if (x == x->parent->left)
+    else if (x->value == x->parent->left->value)
       x->parent->left = y;
     else
       x->parent->right = y;
 
     y->left = x;
     x->parent = y;
+  }
+
+  void RightRotate(Node* y)
+  {
+    Node* x = y->left;
+    y->left = x->right;
+
+    if (x->right != nullptr)
+      x->right->parent = y;
+
+    x->parent = y->parent;
+    if (y->parent == nullptr)
+      root_ = x;
+    else if (y->value == y->parent->left->value)
+      y->parent->left = x;
+    else
+      y->parent->right = x;
+
+    x->right = y;
+    y->parent = x;
   }
 
   void Erase(Node* node)

@@ -55,8 +55,8 @@ int main(int argc, char* args[])
   }
 
   // Red Black Tree Especific Test
-  if ( not LeftRotateLevel_2_Right( RedBlackTree<int>() ) ) {
-    std::cout << "\t-- LeftRotateLevel_2_Right \t FAIL" << '\n';
+  if ( not RightRotateLevel_2_Right( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- RightRotateLevel_2_Right \t FAIL" << '\n';
     return -1;
   }
 

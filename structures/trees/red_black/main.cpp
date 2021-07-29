@@ -30,6 +30,11 @@ int main(int argc, char* args[])
     return -1;
   }
 
+  if ( not GetMinimunNodeStartingFromRoot( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- GetMinimunNodeStartingFromRoot \t FAIL" << '\n';
+    return -1;
+  }
+
   std::cout << '\n'
             << "\t ----------------------" << '\n'
             << "\t    ALL TEST SUCCEDED  " << '\n'

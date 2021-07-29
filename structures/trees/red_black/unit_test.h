@@ -32,6 +32,30 @@ bool TransplantRootLeftChildWithRootRightChild(T&& c)
 }
 
 template <typename T>
+bool GetMinimunNodeStartingFromRoot(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(3);
+  c.Insert(7);
+
+  c.Insert(13);
+  c.Insert(17);
+
+  // level 3
+  c.Insert(2);
+  c.Insert(6);
+
+  return c.Minimum( c.GetRoot() )->value == 2;
+}
+
+template <typename T>
 bool SizeBackToCeroAfterOneInsertAndOneErase(T&& c)
 {
   c.Insert(1);

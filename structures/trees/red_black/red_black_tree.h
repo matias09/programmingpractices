@@ -104,6 +104,15 @@ public:
       n2->parent = n1->parent;
   }
 
+  Node* GetMinimum(Node* node)
+  {
+    if (node != nullptr)
+      while (node->left != nullptr)
+        node = node->left;
+
+    return node;
+  }
+
   Node* GetRoot() const { return root_; }
   std::size_t Size() const { return size_; }
 

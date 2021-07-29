@@ -12,7 +12,7 @@ class BinarySearchTree
     Node(T const & e) : value(e)
                       , parent(nullptr)
                       , left(nullptr)
-                      , right(nullptr)
+                      , right(nullptr) {}
     T value;
     Node* parent;
     Node* left;

@@ -82,3 +82,39 @@ bool SizeCeroAfterInsertAndTwoErase(T&& c)
 
   return c.Size() == 0;
 }
+
+template <typename T>
+bool LeftRotateLevel_2_Right(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(3);
+  c.Insert(7);
+
+  c.Insert(13);
+  c.Insert(17);
+
+  // level 3
+  c.Insert(2);
+  c.Insert(4);
+
+  c.Insert(6);
+  c.Insert(8);
+
+  c.Insert(12);
+  c.Insert(14);
+
+  c.Insert(16);
+  c.Insert(50);
+
+  c.LeftRotate( c.GetRoot()->right );
+
+  return  c.GetRoot()->right->value == 17
+       && c.GetRoot()->right->left->value == 15;
+}

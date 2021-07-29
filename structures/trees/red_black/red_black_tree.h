@@ -104,6 +104,26 @@ public:
       n2->parent = n1->parent;
   }
 
+  void LeftRotate(Node* x)
+  {
+    Node* y = x->right;
+    x->right = y->left;
+
+    if (y->left != nullptr)
+      y->left->parent = x;
+
+    y->parent = x->parent;
+    if (x->parent == nullptr)
+      root_ = y;
+    else if (x == x->parent->left)
+      x->parent->left = y;
+    else
+      x->parent->right = y;
+
+    y->left = x;
+    x->parent = y;
+  }
+
   void Erase(Node* node)
   {
     if (node == nullptr)

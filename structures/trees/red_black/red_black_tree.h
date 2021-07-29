@@ -88,7 +88,7 @@ public:
     ++size_;
   }
 
-  void Trasplant(Node* n1, Node* n2)
+  void Transplant(Node* n1, Node* n2)
   {
     if (n1->parent == nullptr)
       root_ = n2;
@@ -102,6 +102,35 @@ public:
 
     if (n2 != nullptr)
       n2->parent = n1->parent;
+  }
+
+  void Erase(Node* node)
+  {
+    if (node == nullptr)
+      return;
+
+    if (node->left == nullptr)
+      Transplant(node, node->right);
+    else if (node->right == nullptr)
+      Transplant(node, node->left);
+    else {
+      Node* node_min = GetMinimum(node->right);
+
+      if (node_min->parent->value != node->value) {
+        Transplant(node_min, node_min->right);
+        node_min->right = node->right;
+        node_min->right->parent = node_min;
+      }
+
+      Transplant(node, node_min);
+      node_min->left = node->left;
+      node_min->left->parent = node_min;
+    }
+
+    delete node;
+    node = nullptr;
+
+    --size_;
   }
 
   Node* GetMinimum(Node* node)

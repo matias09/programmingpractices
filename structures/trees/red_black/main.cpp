@@ -35,6 +35,16 @@ int main(int argc, char* args[])
     return -1;
   }
 
+  if ( not SizeBackToCeroAfterOneInsertAndOneErase( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- SizeBackToCeroAfterOneInsertAndOneErase \t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not SizeCeroAfterInsertAndTwoErase( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- SizeCeroAfterInsertAndTwoErase \t FAIL" << '\n';
+    return -1;
+  }
+
   std::cout << '\n'
             << "\t ----------------------" << '\n'
             << "\t    ALL TEST SUCCEDED  " << '\n'

@@ -1,35 +1,39 @@
-#ifndef BINARY_SEARCH_TREE_H
-#define BINARY_SEARCH_TREE_H
+#ifndef RED_BLACK_TREE_H
+#define RED_BLACK_TREE_H
 
 #include <iostream>
 #include <initializer_list>
 
 template <typename T>
-class BinarySearchTree
+class RedBlackTree
 {
+  enum class Color {BLACK = 0, RED};
+
   struct Node
   {
     Node(T const & e) : value(e)
                       , parent(nullptr)
                       , left(nullptr)
                       , right(nullptr)
+                      , color(Color::BLACK) {}
     T value;
     Node* parent;
     Node* left;
     Node* right;
+    Color color;
   };
 
 public:
-  BinarySearchTree() : root_(nullptr), size_(0) {}
+  RedBlackTree() : root_(nullptr), size_(0) {}
 
-  BinarySearchTree(std::initializer_list<T> const elms)
+  RedBlackTree(std::initializer_list<T> const elms)
     : root_(nullptr), size_(0)
   {
     for (auto const & e : elms)
       Insert(e);
   }
 
- ~BinarySearchTree()
+ ~RedBlackTree()
   {
     if (size_ > 0)
       ReleaseNodes(root_);
@@ -158,4 +162,4 @@ private:
   std::size_t size_;
 };
 
-#endif // BINARY_SEARCH_TREE_H
+#endif // RED_BLACK_TREE_H

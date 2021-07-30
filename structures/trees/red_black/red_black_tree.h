@@ -39,26 +39,24 @@ public:
       ReleaseNodes(root_);
   }
 
-  void ListInOrderTraversal(Node* node) const
+  void PrintInOrderTraversal(Node* node) const
   {
-    std::cout << node->value << ' ';
-
     if (node->left != nullptr)
-      ListInOrderTraversal(node->left);
+      PrintInOrderTraversal(node->left);
 
     if (node->right != nullptr)
-      ListInOrderTraversal(node->right);
+      PrintInOrderTraversal(node->right);
   }
 
-  void ListInPreOrderTraversal(Node* node) const
+  void PrintInPreOrderTraversal(Node* node) const
   {
     if (node->left != nullptr)
-      ListInPreOrderTraversal(node->left);
+      PrintInPreOrderTraversal(node->left);
 
     std::cout << node->value << ' ';
 
     if (node->right != nullptr)
-      ListInPreOrderTraversal(node->right);
+      PrintInPreOrderTraversal(node->right);
   }
 
   void Insert(T const & e)
@@ -66,6 +64,7 @@ public:
     Node* y = nullptr;
     Node* x = root_;
     Node* new_node = new Node(e);
+    new_node->color = Color::RED;
 
     while (x != nullptr) {
       y = x;
@@ -78,14 +77,17 @@ public:
 
     new_node->parent = y;
 
-    if (y == nullptr)
+    if (y == nullptr) {
       root_ = new_node;
-    else if (new_node->value < y->value)
-      y->left = new_node;
-    else
-      y->right = new_node;
+    } else {
+      if (new_node->value < y->value)
+        y->left = new_node;
+      else
+        y->right = new_node;
+    }
 
     ++size_;
+    InsertFixUp(new_node);
   }
 
   void Transplant(Node* n1, Node* n2)
@@ -196,6 +198,49 @@ private:
 
     delete node;
     node = nullptr;
+  }
+
+  void InsertFixUp(Node* z)
+  {
+    Node* y = nullptr;
+
+    while (z->parent != nullptr && z->parent->color == Color::RED) {
+      if (z->parent == z->parent->parent->left) {
+        y = z->parent->parent->right;
+
+        if (y->color == Color::RED) {
+          z->parent->color = Color::BLACK;
+          y->color = Color::BLACK;
+          z->parent->parent->color = Color::RED;
+          z = z->parent->parent;
+        } else if (z->value == z->parent->right->value) {
+          z = z->parent;
+          LeftRotate(z);
+        } else {
+          z->parent->color = Color::BLACK;
+          z->parent->parent->color = Color::RED;
+          RightRotate(z->parent->parent);
+        }
+      } else {
+        y = z->parent->parent->left;
+
+        if (y->color == Color::RED) {
+          z->parent->color = Color::BLACK;
+          y->color = Color::BLACK;
+          z->parent->parent->color = Color::RED;
+          z = z->parent->parent;
+        } else if (z->value == z->parent->left->value) {
+          z = z->parent;
+          LeftRotate(z);
+        } else {
+          z->parent->color = Color::BLACK;
+          z->parent->parent->color = Color::RED;
+          RightRotate(z->parent->parent);
+        }
+      }
+    }
+
+    root_->color = Color::BLACK;
   }
 
   Node* root_;

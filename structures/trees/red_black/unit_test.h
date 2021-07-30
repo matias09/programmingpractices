@@ -154,3 +154,30 @@ bool RightRotateLevel_2_Right(T&& c)
   return  c.GetRoot()->right->value == 13
        && c.GetRoot()->right->right->value == 15;
 }
+
+template <typename T>
+bool InsertAndBalance_4_Levels(T&& c)
+{
+  // level 0
+  c.Insert(11);
+
+  // level 1
+  c.Insert(2);
+  c.Insert(14);
+
+  // // level 2
+  c.Insert(1);
+  c.Insert(7);
+
+  c.Insert(15);
+
+  c.Insert(5);
+  c.Insert(8);
+
+  c.Insert(4);
+
+  c.PrintInOrderTraversal( c.GetRoot() );
+
+  return  c.GetRoot()->value == 7
+       && c.GetRoot()->left->right->value == 5;
+}

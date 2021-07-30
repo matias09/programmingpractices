@@ -60,6 +60,11 @@ int main(int argc, char* args[])
     return -1;
   }
 
+  if ( not InsertAndBalance_4_Levels( RedBlackTree<int>() ) ) {
+    std::cout << "\t-- InsertAndBalance_4_Levels \t FAIL" << '\n';
+    return -1;
+  }
+
   std::cout << '\n'
             << "\t ----------------------" << '\n'
             << "\t    ALL TEST SUCCEDED  " << '\n'

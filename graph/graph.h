@@ -94,6 +94,35 @@ public:
     return end_path_node;
   }
 
+  void RunDepthFirstSearch()
+  {
+    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
+      (*n).color = Color::WHITE;
+      (*n).parent = nullptr;
+    });
+
+    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
+      if ( (*n).color == Color::WHITE )
+        DFSVisit( (*n) );
+    });
+  }
+
+  void DFSVisit(Node & u)
+  {
+    u.color = Color::GRAY;
+
+    auto itB = u.neighbors.begin();
+    auto const & itE = u.neighbors.cend();
+
+    for (; itB != itE; ++itB) {
+      if ( (*itB)->color == Color::WHITE ) {
+        (*itB)->parent = &u;
+        DFSVisit( *(*itB) );
+      }
+    }
+    u.color = Color::BLACK;
+  }
+
 private:
   std::vector<Node*> g_;
 };

@@ -27,8 +27,8 @@ int main ()
   n5->AddNeighbors({n3, n2});
 
   Graph g{ n1, n2, n3, n4, n5 };
-  Graph::Node* end_node_path = g.RunBreathFirstSearch(n4, n2->value);
 
+  Graph::Node* end_node_path = g.RunBreathFirstSearch(n4, n2->value);
   if (end_node_path != nullptr)
     PrintPath( *(end_node_path) );
   else

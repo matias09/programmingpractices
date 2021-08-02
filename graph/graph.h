@@ -17,9 +17,9 @@ public:
   {
     Node(int v = 0) : value(v) {}
 
-    void AddNeighbors(Node* n, std::size_t w = -1)
+    void AddNeighbors(Node* n, int w = -1)
     {
-      neighbors.emplace_back(new Edge(n, w));
+      neighbors.emplace_back(new Edge(this, n, w));
     }
 
     void AddNeighbors(const std::initializer_list<Node*> & list_nodes)
@@ -31,17 +31,18 @@ public:
     std::vector<Edge*> neighbors;
     Node* parent = nullptr;
     Color color = Color::WHITE;
-    std::size_t distance = 0;
+    int distance = 0;
     int value;
   };
 
   struct Edge
   {
-    Edge(Node* n, std::size_t w = -1)
-      : n(n), w(w) {}
+    Edge(Node* u, Node* v, int w = -1)
+      : u(u), v(v), w(w) {}
 
-    Node* n;
-    std::size_t w;
+    Node* u;
+    Node* v;
+    int w;
   };
 
    Graph() = default;
@@ -87,7 +88,7 @@ public:
       auto const & itE = c->neighbors.cend();
 
       for (; itB != itE && node_found == false; ++itB) {
-        Node* cur_node = (*itB)->n;
+        Node* cur_node = (*itB)->v;
 
         if ( cur_node->color == Color::WHITE ) {
           cur_node->parent = c;
@@ -108,6 +109,28 @@ public:
     return end_path_node;
   }
 
+  bool RunBellmanFordSearch(Node* s)
+  {
+    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
+      (*n).distance = -1;
+      (*n).parent = nullptr;
+    });
+
+    s->distance = 0;
+
+    auto itB = edges_.begin();
+    auto const itE = edges_.end();
+
+    for (; itB != itE; ++itB)
+      Relax( (*itB)->u, (*itB)->v, (*itB)->w );
+
+    for (; itB != itE; ++itB)
+      if ( (*itB)->v->distance > ( (*itB)->u->distance + (*itB)->w ) )
+        return false;
+
+    return true;
+  }
+
   void RunDepthFirstSearch()
   {
     std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
@@ -121,6 +144,12 @@ public:
     });
   }
 
+  void AddEdge(Node* u, Node* v, int w = -1)
+  {
+    edges_.emplace_back(new Edge(u, v, w));
+  }
+
+private:
   void DFSVisit(Node & u)
   {
     u.color = Color::GRAY;
@@ -129,7 +158,7 @@ public:
     auto const & itE = u.neighbors.cend();
 
     for (; itB != itE; ++itB) {
-      Node* cur_node = (*itB)->n;
+      Node* cur_node = (*itB)->v;
 
       if ( cur_node->color == Color::WHITE ) {
         cur_node->parent = &u;
@@ -139,8 +168,16 @@ public:
     u.color = Color::BLACK;
   }
 
-private:
+  void Relax(Node* u, Node* v, int w)
+  {
+    if (v->distance > (u->distance + w) ) {
+      v->distance = (u->distance + w);
+      v->parent = u;
+    }
+  }
+
   std::vector<Node*> g_;
+  std::vector<Edge*> edges_;
 };
 
 #endif // GRAPH_H

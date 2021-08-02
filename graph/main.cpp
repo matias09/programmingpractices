@@ -12,7 +12,7 @@ void PrintPath(Graph::Node const & n)
   std::cout <<  n.value << ' ';
 }
 
-int main ()
+void TestGraphWithBreadthFirstSearchAlgorithm()
 {
   Graph::Node* n1 = new Graph::Node(1);
   Graph::Node* n2 = new Graph::Node(2);
@@ -28,7 +28,7 @@ int main ()
 
   Graph g{ n1, n2, n3, n4, n5 };
 
-  Graph::Node* end_node_path = g.RunBreathFirstSearch(n4, n2->value);
+  Graph::Node* end_node_path = g.RunBreadthFirstSearch(n4, n2->value);
   if (end_node_path != nullptr)
     PrintPath( *(end_node_path) );
   else
@@ -41,6 +41,11 @@ int main ()
   delete n3;
   delete n2;
   delete n1;
+}
 
+
+int main ()
+{
+  TestGraphWithBreadthFirstSearchAlgorithm();
   return 0;
 }

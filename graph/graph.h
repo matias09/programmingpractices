@@ -119,12 +119,13 @@ public:
 
     s->distance = 0;
 
-    auto itB = edges_.begin();
     auto const itE = edges_.end();
 
-    for (; itB != itE; ++itB)
-      Relax( (*itB)->u, (*itB)->v, (*itB)->w );
+    for (std::size_t i = 0, len = edges_.size(); i < len; ++i)
+      for (auto itB = edges_.begin(); itB != itE; ++itB)
+        Relax( (*itB)->u, (*itB)->v, (*itB)->w );
 
+    auto itB = edges_.begin();
     for (; itB != itE; ++itB)
       if ( (*itB)->v->distance > ( (*itB)->u->distance + (*itB)->w ) )
         return false;

@@ -29,10 +29,12 @@ void TestGraphWithBreadthFirstSearchAlgorithm()
   Graph g{ n1, n2, n3, n4, n5 };
 
   Graph::Node* end_node_path = g.RunBreadthFirstSearch(n4, n2->value);
+
+  std::cout << "-- Breadth First Search Algorithm \n";
   if (end_node_path != nullptr)
     PrintPath( *(end_node_path) );
   else
-    std::cout << "\t No Path Found ";
+    std::cout << "No Path Found ";
 
   std::cout << '\n';
 
@@ -68,12 +70,19 @@ void TestGraphWithBellmanFordAlgorithm()
   g.AddEdge(y, x, -3);
   g.AddEdge(y, z, 9);
 
+  std::cout << "-- Bellman Ford Algorithm \n";
   if ( g.RunBellmanFordSearch(s) )
-    std::cout << "\t NO, Negative Cicle Path Found ";
+    std::cout << "NO, Negative Cicle Path Found ";
   else
-    std::cout << "\t Negative Cicle Path Found ";
+    std::cout << "Negative Cicle Path Found ";
 
   std::cout << '\n';
+
+  delete z;
+  delete x;
+  delete y;
+  delete t;
+  delete s;
 }
 
 int main ()

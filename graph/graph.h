@@ -17,18 +17,13 @@ public:
   {
     Node(int v = 0) : value(v) {}
 
-    void AddNeighbors(Node* n, int w = -1)
-    {
-      neighbors.emplace_back(new Edge(this, n, w));
-    }
-
     void AddNeighbors(const std::initializer_list<Node*> & list_nodes)
     {
       for (auto const & n : list_nodes)
-        AddNeighbors(n);
+        neighbors.emplace_back(n);
     }
 
-    std::vector<Edge*> neighbors;
+    std::vector<Node*> neighbors;
     Node* parent = nullptr;
     Color color = Color::WHITE;
     int distance = 0;
@@ -53,7 +48,13 @@ public:
        g_.emplace_back(e);
    }
 
-  ~Graph() = default;
+  ~Graph()
+  {
+    std::for_each(edges_.begin(), edges_.end() ,[&] (auto & n) {
+      delete n;
+    });
+  }
+
 
   void Create(const std::initializer_list<Node*> & list_nodes)
   {
@@ -88,7 +89,7 @@ public:
       auto const & itE = c->neighbors.cend();
 
       for (; itB != itE && node_found == false; ++itB) {
-        Node* cur_node = (*itB)->v;
+        Node* cur_node = *itB;
 
         if ( cur_node->color == Color::WHITE ) {
           cur_node->parent = c;
@@ -158,7 +159,7 @@ private:
     auto const & itE = u.neighbors.cend();
 
     for (; itB != itE; ++itB) {
-      Node* cur_node = (*itB)->v;
+      Node* cur_node = *itB;
 
       if ( cur_node->color == Color::WHITE ) {
         cur_node->parent = &u;

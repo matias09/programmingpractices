@@ -71,10 +71,12 @@ void TestGraphWithBellmanFordAlgorithm()
   g.AddEdge(y, z, 9);
 
   std::cout << "-- Bellman Ford Algorithm \n";
-  if ( g.RunBellmanFordSearch(s) )
+  if ( g.RunBellmanFord(s) ) {
     std::cout << "NO, Negative Cicle Path Found ";
-  else
+    PrintPath( *s );
+  } else {
     std::cout << "Negative Cicle Path Found ";
+  }
 
   std::cout << '\n';
 

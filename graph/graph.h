@@ -110,7 +110,7 @@ public:
     return end_path_node;
   }
 
-  bool RunBellmanFordSearch(Node* s)
+  bool RunBellmanFord(Node* s)
   {
     std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
       (*n).distance = -1;

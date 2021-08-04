@@ -2,7 +2,7 @@
 #include <vector>
 
 template <typename T>
-void swap(std::vector<T> & v, int i, int j)
+void Swap(std::vector<T> & v, int i, int j)
 {
   T tmp = v[i];
   v[i] = v[j];
@@ -22,9 +22,9 @@ std::size_t Partition(std::vector<T> & v, int const p, int const r)
 
     if  (j == p || i >= j) break;
 
-    swap(v, i, j);
+    Swap(v, i, j);
   }
-  swap(v, i, r);
+  Swap(v, i, r);
 
   return i;
 }

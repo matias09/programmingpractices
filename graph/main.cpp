@@ -20,11 +20,20 @@ void TestGraphWithBreadthFirstSearchAlgorithm()
   Graph::Node* n4 = new Graph::Node(4);
   Graph::Node* n5 = new Graph::Node(5);
 
-  n1->AddNeighbors({n3, n4});
-  n2->AddNeighbors({n5});
-  n3->AddNeighbors({n3, n4, n5});
-  n4->AddNeighbors({n1, n3});
-  n5->AddNeighbors({n3, n2});
+  n1->AddEdge(n3, 1);
+  n1->AddEdge(n4, 1);
+
+  n2->AddEdge(n5, 1);
+
+  n3->AddEdge(n1, 1);
+  n3->AddEdge(n4, 1);
+  n3->AddEdge(n5, 1);
+
+  n4->AddEdge(n1, 1);
+  n4->AddEdge(n3, 1);
+
+  n5->AddEdge(n3, 1);
+  n5->AddEdge(n2, 1);
 
   Graph g{ n1, n2, n3, n4, n5 };
 
@@ -44,6 +53,49 @@ void TestGraphWithBreadthFirstSearchAlgorithm()
   delete n2;
   delete n1;
 }
+
+void TestGraphWithDijkstraAlgorithm()
+{
+  Graph::Node* s = new Graph::Node(1);
+  Graph::Node* t = new Graph::Node(2);
+  Graph::Node* y = new Graph::Node(3);
+  Graph::Node* x = new Graph::Node(4);
+  Graph::Node* z = new Graph::Node(5);
+
+  Graph g{s, t, y, x, z};
+
+  s->AddEdge(t, 10);
+  s->AddEdge(y, 5);
+
+  t->AddEdge(x, 1);
+  t->AddEdge(y, 2);
+
+  x->AddEdge(z, 4);
+
+  z->AddEdge(s, 7);
+  z->AddEdge(x, 6);
+
+  y->AddEdge(x, 9);
+  y->AddEdge(z, 2);
+  y->AddEdge(t, 3);
+
+  std::vector<Graph::Node*> path; 
+  g.RunDijkstra(s, path, y->value);
+
+  std::cout << "-- Dijkstra Search Algorithm \n";
+  std::for_each(path.begin(), path.end() ,[&] (auto & n) {
+      std::cout << n->value << ' ';
+  });
+
+  std::cout << '\n';
+
+  delete z;
+  delete x;
+  delete y;
+  delete t;
+  delete s;
+}
+
 
 void TestGraphWithBellmanFordAlgorithm()
 {
@@ -89,7 +141,8 @@ void TestGraphWithBellmanFordAlgorithm()
 
 int main ()
 {
-  TestGraphWithBreadthFirstSearchAlgorithm();
-  TestGraphWithBellmanFordAlgorithm();
+  // TestGraphWithBreadthFirstSearchAlgorithm();
+  // TestGraphWithBellmanFordAlgorithm();
+  TestGraphWithDijkstraAlgorithm();
   return 0;
 }

@@ -15,15 +15,68 @@ public:
 
   struct Node
   {
-    Node(int v = 0) : value(v) {}
-
-    void AddNeighbors(const std::initializer_list<Node*> & list_nodes)
+     Node(int v = 0) : value(v) {}
+    ~Node()
     {
-      for (auto const & n : list_nodes)
-        neighbors.emplace_back(n);
+      std::for_each(neighbors.begin(), neighbors.end() ,[&] (auto & n) {
+        delete n;
+      });
     }
 
-    std::vector<Node*> neighbors;
+    void AddEdge(Node* n, int w)
+    {
+      neighbors.emplace_back( new Edge(n, w) );
+    }
+
+    bool operator < (Node const & rh)
+    {
+      if (this->distance <= rh.distance)
+        return true;
+
+      return false;
+    }
+
+    bool operator < (Node * rh)
+    {
+      if (this->distance <= rh->distance)
+        return true;
+
+      return false;
+    }
+
+    bool operator == (int rh_value)
+    {
+      if (this->value == rh_value)
+        return true;
+
+      return false;
+    }
+
+    bool operator == (Node const & rh)
+    {
+      if (  this->value == rh.value
+         && this->distance == rh.distance
+         && this->parent == rh.parent )
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    bool operator == (Node* rh)
+    {
+      if (  this->value == rh->value
+         && this->distance == rh->distance
+         && this->parent == rh->parent )
+      {
+        return true;
+      }
+
+      return false;
+    }
+
+    std::vector<Edge*> neighbors;
     Node* parent = nullptr;
     Color color = Color::WHITE;
     int distance = 0;
@@ -32,7 +85,16 @@ public:
 
   struct Edge
   {
-    Edge(Node* u, Node* v, int w = -1)
+    Edge(Node* v, int w = -1)
+      : v(v), w(w) {}
+
+    Node* v;
+    int w;
+  };
+
+  struct WRONG_EDGE_IMPL
+  {
+    WRONG_EDGE_IMPL(Node* u, Node* v, int w = -1)
       : u(u), v(v), w(w) {}
 
     Node* u;
@@ -89,7 +151,7 @@ public:
       auto const & itE = c->neighbors.cend();
 
       for (; itB != itE && node_found == false; ++itB) {
-        Node* cur_node = *itB;
+        Node* cur_node = (*itB)->v;
 
         if ( cur_node->color == Color::WHITE ) {
           cur_node->parent = c;
@@ -112,12 +174,7 @@ public:
 
   bool RunBellmanFord(Node* s)
   {
-    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
-      (*n).distance = -1;
-      (*n).parent = nullptr;
-    });
-
-    s->distance = 0;
+    InitializeSingleSource(*s);
 
     auto const itE = edges_.end();
 
@@ -131,6 +188,31 @@ public:
         return false;
 
     return true;
+  }
+
+  void RunDijkstra(Node* s, std::vector<Node*> & path, int const needle)
+  {
+    InitializeSingleSource(*s);
+
+    std::priority_queue<Node*, std::vector<Node*>
+                             , std::greater<Node*> > min_weights_nodes;
+
+    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
+      min_weights_nodes.push( n );
+    });
+
+    while (not min_weights_nodes.empty() ) {
+      Node* u = min_weights_nodes.top(); 
+      min_weights_nodes.pop(); 
+
+      path.emplace_back(u);
+
+      auto itB = u->neighbors.begin();
+      auto const & itE = u->neighbors.cend();
+
+      for (; itB != itE; ++itB)
+        Relax(u, (*itB)->v, (*itB)->w);
+    }
   }
 
   void RunDepthFirstSearch()
@@ -148,7 +230,7 @@ public:
 
   void AddEdge(Node* u, Node* v, int w = -1)
   {
-    edges_.emplace_back(new Edge(u, v, w));
+    edges_.emplace_back(new WRONG_EDGE_IMPL(u, v, w));
   }
 
 private:
@@ -160,7 +242,7 @@ private:
     auto const & itE = u.neighbors.cend();
 
     for (; itB != itE; ++itB) {
-      Node* cur_node = *itB;
+      Node* cur_node = (*itB)->v;
 
       if ( cur_node->color == Color::WHITE ) {
         cur_node->parent = &u;
@@ -178,8 +260,20 @@ private:
     }
   }
 
+  void InitializeSingleSource(Node & s)
+  {
+    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
+      (*n).parent = nullptr;
+      (*n).color = Color::WHITE;
+      (*n).distance = 999;
+    });
+
+    s.color = Color::GRAY;
+    s.distance = 0;
+  }
+
   std::vector<Node*> g_;
-  std::vector<Edge*> edges_;
+  std::vector<WRONG_EDGE_IMPL*> edges_;
 };
 
 #endif // GRAPH_H

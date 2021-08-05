@@ -17,7 +17,7 @@ class AvlTree
     Node* parent;
     Node* left;
     Node* right;
-    int height = -1;
+    int height = 0;
   };
 
 public:
@@ -82,9 +82,10 @@ public:
         y->left = new_node;
       else
         y->right = new_node;
-    }
 
-    InsertFixUp(new_node);
+      UpdateHeight(*new_node);
+    }
+    ++size_;
   }
 
   void Transplant(Node* n1, Node* n2)
@@ -168,6 +169,8 @@ public:
 
     delete node;
     node = nullptr;
+
+    --size_;
   }
 
   Node* GetMinimum(Node* node)
@@ -179,22 +182,7 @@ public:
     return node;
   }
 
-  std::size_t GetSize() const
-  {
-    std::size_t size = 0;
-
-    if (root_ != nullptr) {
-      ++size;
-
-      if (root_->left != nullptr)
-        size += root_->left->height;
-
-      if (root_->right != nullptr)
-        size += root_->right->height;
-    }
-
-    return size;
-  }
+  std::size_t GetSize() const { return size_; }
 
   Node* GetRoot() const { return root_; }
 
@@ -211,7 +199,50 @@ private:
     node = nullptr;
   }
 
+  void UpdateHeight(Node& n)
+  {
+    int lh = 0, rh = 0;
+    Node* tmp = n.parent;
+
+    do {
+      if (tmp->left != nullptr)
+        lh = tmp->left->height;
+
+      if (tmp->right != nullptr)
+        rh = tmp->right->height;
+
+      tmp->height = (lh > rh) ? (lh + 1) : (rh + 1);
+
+      // UpdateBalanceCondition( *tmp, lh, rh );
+
+      tmp = tmp->parent;
+    } while (tmp != nullptr);
+  }
+
+  void UpdateBalanceCondition(Node& n, int lh, int rh)
+  {
+    constexpr int unbalanced_height_criteria = 2;
+    int cur_height_diff = (lh - rh);
+
+    if (cur_height_diff == unbalanced_height_criteria) {
+      if (n.left != nullptr) {
+        RightRotate(n);
+      } else {
+        LeftRotate(n.left);
+        RightRotate(n);
+      }
+    } else if (cur_height_diff == (unbalanced_height_criteria * (-1))) {
+      if (n.right->right != nullptr) {
+        LeftRotate(n);
+      } else {
+        RightRotate(n.right);
+        LeftRotate(n);
+      }
+    }
+  }
+
   Node* root_;
+  std::size_t size_ = 0;
 };
 
 #endif // AVL_TREE_H

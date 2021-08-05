@@ -70,9 +70,53 @@ int main(int argc, char* args[])
   }
 
   // AVL Tree Especific Test
-  std::cout << "-- AVL Tree<< '\n';
+  std::cout << "-- AVL Tree" << '\n';
   if ( not SizeCeroAtEmptyConstruction( AvlTree<int>() ) ) {
     std::cout << "\t-- SizeCeroAtEmptyConstruction \t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not SizeGreaterThanCeroAtConstructionWithInitializerList(
+        AvlTree<int>({2,1,3}) ) )
+  {
+    std::cout << "\t-- SizeGreaterThanCeroAtConstructionWithInitializerList"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not SizeAfterThreeInsert(AvlTree<int>() ) ) {
+    std::cout << "\t-- SizeAfterThreeInsert"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not TestHeightWithOneLevel(AvlTree<int>() ) ) {
+    std::cout << "\t-- TestHeightWithOneLevel"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not TestHeightWithTwoLevels(AvlTree<int>() ) ) {
+    std::cout << "\t-- TestHeightWithTwoLevels"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not TestHeightWithThreeLevels(AvlTree<int>() ) ) {
+    std::cout << "\t-- TestHeightWithThreeLevels"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not LeftRotateLevel_1_Left(AvlTree<int>() ) ) {
+    std::cout << "\t-- LeftRotateLevel_1_Left"
+              << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not RightRotateLevel_0_Root(AvlTree<int>() ) ) {
+    std::cout << "\t-- RightRotateLevel_0_Root"
+              << "\t FAIL" << '\n';
     return -1;
   }
 

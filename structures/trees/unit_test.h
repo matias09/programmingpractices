@@ -1,3 +1,4 @@
+// Cross Tests
 template <typename T>
 bool SizeCeroAtEmptyConstruction(T && c)
 {
@@ -84,6 +85,61 @@ bool SizeCeroAfterInsertAndTwoErase(T&& c)
 }
 
 template <typename T>
+bool TestHeightWithOneLevel(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  return  c.GetRoot()->height == 1
+       && c.GetRoot()->left->height == 0
+       && c.GetRoot()->right->height == 0;
+}
+
+template <typename T>
+bool TestHeightWithTwoLevels(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(3);
+
+  return  c.GetRoot()->height == 2
+       && c.GetRoot()->left->height == 1
+       && c.GetRoot()->right->height == 0;
+}
+
+template <typename T>
+bool TestHeightWithThreeLevels(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(3);
+  c.Insert(13);
+
+  // level 3
+  c.Insert(2);
+
+  return  c.GetRoot()->height == 3
+       && c.GetRoot()->left->height == 2
+       && c.GetRoot()->right->height == 1;
+}
+
+template <typename T>
 bool LeftRotateLevel_2_Right(T&& c)
 {
   // level 0
@@ -153,6 +209,44 @@ bool RightRotateLevel_2_Right(T&& c)
 
   return  c.GetRoot()->right->value == 13
        && c.GetRoot()->right->right->value == 15;
+}
+
+template <typename T>
+bool LeftRotateLevel_1_Left(T&& c)
+{
+  // level 0
+  c.Insert(5);
+
+  // level 1
+  c.Insert(2);
+
+  // level 2
+  c.Insert(3);
+
+  c.LeftRotate( c.GetRoot()->left );
+
+  return  c.GetRoot()->value == 5
+       && c.GetRoot()->left->value == 3
+       && c.GetRoot()->left->left->value == 2;
+}
+
+template <typename T>
+bool RightRotateLevel_0_Root(T&& c)
+{
+  // level 0
+  c.Insert(5);
+
+  // level 1
+  c.Insert(3);
+
+  // level 2
+  c.Insert(2);
+
+  c.RightRotate( c.GetRoot() );
+
+  return  c.GetRoot()->value == 3
+       && c.GetRoot()->left->value == 2
+       && c.GetRoot()->right->value == 5;
 }
 
 template <typename T>

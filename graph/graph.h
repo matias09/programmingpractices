@@ -92,16 +92,6 @@ public:
     int w;
   };
 
-  struct WRONG_EDGE_IMPL
-  {
-    WRONG_EDGE_IMPL(Node* u, Node* v, int w = -1)
-      : u(u), v(v), w(w) {}
-
-    Node* u;
-    Node* v;
-    int w;
-  };
-
    Graph() = default;
 
    Graph(const std::initializer_list<Node*> & list_nodes)
@@ -109,14 +99,6 @@ public:
      for (auto const & e : list_nodes)
        g_.emplace_back(e);
    }
-
-  ~Graph()
-  {
-    std::for_each(edges_.begin(), edges_.end() ,[&] (auto & n) {
-      delete n;
-    });
-  }
-
 
   void Create(const std::initializer_list<Node*> & list_nodes)
   {
@@ -176,16 +158,24 @@ public:
   {
     InitializeSingleSource(*s);
 
-    auto const itE = edges_.end();
+    for (std::size_t ii = 0, len = g_.size(); ii < len; ++ii) {
+      for (std::size_t i = 0, len = g_.size(); i < len; ++i) {
+        auto itB = g_[i]->neighbors.begin();
+        auto const & itE = g_[i]->neighbors.cend();
 
-    for (std::size_t i = 0, len = edges_.size(); i < len; ++i)
-      for (auto itB = edges_.begin(); itB != itE; ++itB)
-        Relax( (*itB)->u, (*itB)->v, (*itB)->w );
+        for (; itB != itE; ++itB)
+          Relax( g_[i], (*itB)->v, (*itB)->w );
+      }
+    }
 
-    auto itB = edges_.begin();
-    for (; itB != itE; ++itB)
-      if ( (*itB)->v->distance > ( (*itB)->u->distance + (*itB)->w ) )
-        return false;
+    for (std::size_t i = 0, len = g_.size(); i < len; ++i) {
+      auto itB = g_[i]->neighbors.begin();
+      auto const & itE = g_[i]->neighbors.cend();
+
+      for (; itB != itE; ++itB)
+        if ( (*itB)->v->distance > ( g_[i]->distance + (*itB)->w ) )
+          return false;
+    }
 
     return true;
   }
@@ -228,11 +218,6 @@ public:
     });
   }
 
-  void AddEdge(Node* u, Node* v, int w = -1)
-  {
-    edges_.emplace_back(new WRONG_EDGE_IMPL(u, v, w));
-  }
-
 private:
   void DFSVisit(Node & u)
   {
@@ -265,7 +250,7 @@ private:
     std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
       (*n).parent = nullptr;
       (*n).color = Color::WHITE;
-      (*n).distance = 999;
+      (*n).distance = -1;
     });
 
     s.color = Color::GRAY;
@@ -273,7 +258,6 @@ private:
   }
 
   std::vector<Node*> g_;
-  std::vector<WRONG_EDGE_IMPL*> edges_;
 };
 
 #endif // GRAPH_H

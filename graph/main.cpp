@@ -64,20 +64,20 @@ void TestGraphWithDijkstraAlgorithm()
 
   Graph g{s, t, y, x, z};
 
-  s->AddEdge(t, 10);
-  s->AddEdge(y, 5);
+  s->AddEdge(t, 6);
+  s->AddEdge(y, 7);
 
-  t->AddEdge(x, 1);
-  t->AddEdge(y, 2);
+  t->AddEdge(x, 5);
+  t->AddEdge(z, -4);
+  t->AddEdge(y, 8);
 
-  x->AddEdge(z, 4);
+  x->AddEdge(t, -2);
 
-  z->AddEdge(s, 7);
-  z->AddEdge(x, 6);
+  z->AddEdge(s, 2);
+  z->AddEdge(x, 7);
 
-  y->AddEdge(x, 9);
-  y->AddEdge(z, 2);
-  y->AddEdge(t, 3);
+  y->AddEdge(x, -3);
+  y->AddEdge(z, 9);
 
   std::vector<Graph::Node*> path; 
   g.RunDijkstra(s, path, y->value);
@@ -105,22 +105,22 @@ void TestGraphWithBellmanFordAlgorithm()
   Graph::Node* x = new Graph::Node(4);
   Graph::Node* z = new Graph::Node(5);
 
-  Graph g;
+  Graph g{s, t, y, x, z};
 
-  g.AddEdge(s, t, 6);
-  g.AddEdge(s, y, 7);
+  s->AddEdge(t, 6);
+  s->AddEdge(y, 7);
 
-  g.AddEdge(t, x, 5);
-  g.AddEdge(t, z, -4);
-  g.AddEdge(t, y, 8);
+  t->AddEdge(x, 5);
+  t->AddEdge(z, -4);
+  t->AddEdge(y, 8);
 
-  g.AddEdge(x, t, -2);
+  x->AddEdge(t, -2);
 
-  g.AddEdge(z, s, 2);
-  g.AddEdge(z, x, 7);
+  z->AddEdge(s, 2);
+  z->AddEdge(x, 7);
 
-  g.AddEdge(y, x, -3);
-  g.AddEdge(y, z, 9);
+  y->AddEdge(x, -3);
+  y->AddEdge(z, 9);
 
   std::cout << "-- Bellman Ford Algorithm \n";
   if ( g.RunBellmanFord(s) ) {
@@ -141,8 +141,8 @@ void TestGraphWithBellmanFordAlgorithm()
 
 int main ()
 {
-  // TestGraphWithBreadthFirstSearchAlgorithm();
-  // TestGraphWithBellmanFordAlgorithm();
-  TestGraphWithDijkstraAlgorithm();
+  TestGraphWithBreadthFirstSearchAlgorithm();
+  TestGraphWithBellmanFordAlgorithm();
+  // TestGraphWithDijkstraAlgorithm();
   return 0;
 }

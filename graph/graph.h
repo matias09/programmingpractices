@@ -15,6 +15,14 @@ public:
 
   struct Node
   {
+    struct NodeComparator
+    {
+      bool operator ()(Node* u, Node* v) const
+      {
+        return (u->distance > v->distance);
+      }
+    };
+
      Node(int v = 0) : value(v) {}
     ~Node()
     {
@@ -185,15 +193,15 @@ public:
     InitializeSingleSource(*s);
 
     std::priority_queue<Node*, std::vector<Node*>
-                             , std::greater<Node*> > min_weights_nodes;
+                             , Node::NodeComparator > min_weights_nodes;
 
     std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
       min_weights_nodes.push( n );
     });
 
     while (not min_weights_nodes.empty() ) {
-      Node* u = min_weights_nodes.top(); 
-      min_weights_nodes.pop(); 
+      Node* u = min_weights_nodes.top();
+      min_weights_nodes.pop();
 
       path.emplace_back(u);
 

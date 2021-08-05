@@ -64,22 +64,22 @@ void TestGraphWithDijkstraAlgorithm()
 
   Graph g{s, t, y, x, z};
 
-  s->AddEdge(t, 6);
-  s->AddEdge(y, 7);
+  s->AddEdge(t, 10);
+  s->AddEdge(y, 5);
 
-  t->AddEdge(x, 5);
-  t->AddEdge(z, -4);
-  t->AddEdge(y, 8);
+  t->AddEdge(x, 1);
+  t->AddEdge(y, 2);
 
-  x->AddEdge(t, -2);
+  x->AddEdge(z, 4);
 
-  z->AddEdge(s, 2);
-  z->AddEdge(x, 7);
+  z->AddEdge(s, 7);
+  z->AddEdge(x, 6);
 
-  y->AddEdge(x, -3);
-  y->AddEdge(z, 9);
+  y->AddEdge(t, 3);
+  y->AddEdge(x, 9);
+  y->AddEdge(z, 2);
 
-  std::vector<Graph::Node*> path; 
+  std::vector<Graph::Node*> path;
   g.RunDijkstra(s, path, y->value);
 
   std::cout << "-- Dijkstra Search Algorithm \n";

@@ -1,20 +1,20 @@
 template <typename T>
 bool SizeCeroAtEmptyConstruction(T && c)
 {
-  return c.Size() == 0;
+  return c.GetSize() == 0;
 }
 
 template <typename T>
 bool SizeGreaterThanCeroAtConstructionWithInitializerList(T&& c)
 {
-  return c.Size() > 0;
+  return c.GetSize() > 0;
 }
 
 template <typename T>
 bool SizeEqualToOneAfterOneInsert(T&& c)
 {
   c.Insert(1);
-  return c.Size() == 1;
+  return c.GetSize() == 1;
 }
 
 template <typename T>
@@ -24,7 +24,7 @@ bool SizeAfterThreeInsert(T&& c)
   c.Insert(2);
   c.Insert(3);
 
-  return c.Size() == 3;
+  return c.GetSize() == 3;
 }
 
 template <typename T>
@@ -70,7 +70,7 @@ bool SizeBackToCeroAfterOneInsertAndOneErase(T&& c)
 {
   c.Insert(1);
   c.Erase( c.GetRoot() );
-  return c.Size() == 0;
+  return c.GetSize() == 0;
 }
 
 template <typename T>
@@ -80,7 +80,7 @@ bool SizeCeroAfterInsertAndTwoErase(T&& c)
   c.Erase( c.GetRoot() );
   c.Erase( c.GetRoot() );
 
-  return c.Size() == 0;
+  return c.GetSize() == 0;
 }
 
 template <typename T>

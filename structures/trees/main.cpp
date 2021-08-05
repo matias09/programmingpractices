@@ -1,11 +1,14 @@
 #include "binary_search_tree.h"
 #include "red_black_tree.h"
+#include "avl_tree.h"
 #include "unit_test.h"
 
 #include <iostream>
 
 int main(int argc, char* args[])
 {
+  // Binary Search Tree Especific Test
+  std::cout << "-- Binary Search Tree" << '\n';
   if ( not SizeCeroAtEmptyConstruction( BinarySearchTree<int>() ) ) {
     std::cout << "\t-- SizeCeroAtEmptyConstruction \t FAIL" << '\n';
     return -1;
@@ -55,6 +58,7 @@ int main(int argc, char* args[])
   }
 
   // Red Black Tree Especific Test
+  std::cout << "-- Red Black Tree" << '\n';
   if ( not RightRotateLevel_2_Right( RedBlackTree<int>() ) ) {
     std::cout << "\t-- RightRotateLevel_2_Right \t FAIL" << '\n';
     return -1;
@@ -62,6 +66,13 @@ int main(int argc, char* args[])
 
   if ( not InsertAndBalance_4_Levels( RedBlackTree<int>() ) ) {
     std::cout << "\t-- InsertAndBalance_4_Levels \t FAIL" << '\n';
+    return -1;
+  }
+
+  // AVL Tree Especific Test
+  std::cout << "-- AVL Tree<< '\n';
+  if ( not SizeCeroAtEmptyConstruction( AvlTree<int>() ) ) {
+    std::cout << "\t-- SizeCeroAtEmptyConstruction \t FAIL" << '\n';
     return -1;
   }
 

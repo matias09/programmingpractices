@@ -139,7 +139,7 @@ public:
   }
 
   Node* GetRoot() const { return root_; }
-  std::size_t Size() const { return size_; }
+  std::size_t GetSize() const { return size_; }
 
 private:
   void ReleaseNodes(Node* node)

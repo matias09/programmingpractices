@@ -143,6 +143,6 @@ int main ()
 {
   TestGraphWithBreadthFirstSearchAlgorithm();
   TestGraphWithBellmanFordAlgorithm();
-  // TestGraphWithDijkstraAlgorithm();
+  TestGraphWithDijkstraAlgorithm();
   return 0;
 }

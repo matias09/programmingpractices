@@ -72,19 +72,27 @@ void TestGraphWithDijkstraAlgorithm()
 
   x->AddEdge(z, 4);
 
-  z->AddEdge(s, 7);
-  z->AddEdge(x, 6);
-
   y->AddEdge(t, 3);
   y->AddEdge(x, 9);
   y->AddEdge(z, 2);
+
+  z->AddEdge(s, 7);
+  z->AddEdge(x, 6);
 
   std::vector<Graph::Node*> path;
   g.RunDijkstra(s, path, y->value);
 
   std::cout << "-- Dijkstra Search Algorithm \n";
   std::for_each(path.begin(), path.end() ,[&] (auto & n) {
-      std::cout << n->value << ' ';
+      std::cout << "Current Node " << n->value << '\n'
+                << '\t' << "Parents: ";
+
+      Graph::Node* p = n->parent;
+      while (p != nullptr) {
+        std::cout << p->value << ' ';
+        p = p->parent;
+      }
+      std::cout << '\n';
   });
 
   std::cout << '\n';

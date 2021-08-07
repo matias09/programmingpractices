@@ -5,6 +5,7 @@
 #include <queue>
 #include <algorithm>
 #include <initializer_list>
+#include <limits>
 
 class Graph
 {
@@ -116,15 +117,7 @@ public:
 
   Node* RunBreadthFirstSearch(Node* s, int const needle)
   {
-    std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
-      (*n).color = Color::WHITE;
-      (*n).distance = 0;
-      (*n).parent = nullptr;
-    });
-
-    s->distance = 0;
-    s->color = Color::GRAY;
-    s->parent = nullptr;
+    InitializeSingleSource(*s, 0);
 
     std::queue<Node*> q;
     q.push(s);
@@ -164,7 +157,7 @@ public:
 
   bool RunBellmanFord(Node* s)
   {
-    InitializeSingleSource(*s);
+    InitializeSingleSource(*s, -1);
 
     for (std::size_t ii = 0, len = g_.size(); ii < len; ++ii) {
       for (std::size_t i = 0, len = g_.size(); i < len; ++i) {
@@ -190,7 +183,7 @@ public:
 
   void RunDijkstra(Node* s, std::vector<Node*> & path, int const needle)
   {
-    InitializeSingleSource(*s);
+    InitializeSingleSource(*s, std::numeric_limits<int>::max());
 
     std::priority_queue<Node*, std::vector<Node*>
                              , Node::NodeComparator > min_weights_nodes;
@@ -253,16 +246,17 @@ private:
     }
   }
 
-  void InitializeSingleSource(Node & s)
+  void InitializeSingleSource(Node & s, int const init_general_distance)
   {
     std::for_each(g_.begin(), g_.end() ,[&] (auto & n) {
       (*n).parent = nullptr;
       (*n).color = Color::WHITE;
-      (*n).distance = -1;
+      (*n).distance = init_general_distance;
     });
 
-    s.color = Color::GRAY;
     s.distance = 0;
+    s.color = Color::GRAY;
+    s.parent = nullptr;
   }
 
   std::vector<Node*> g_;

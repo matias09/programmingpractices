@@ -108,15 +108,18 @@ int main(int argc, char* args[])
     return -1;
   }
 
-  if ( not LeftRotateLevel_1_Left(AvlTree<int>() ) ) {
-    std::cout << "\t-- LeftRotateLevel_1_Left"
-              << "\t FAIL" << '\n';
+  if ( not LeftRotate(AvlTree<int>() ) ) {
+    std::cout << "\t-- LeftRotate" << "\t FAIL" << '\n';
     return -1;
   }
 
-  if ( not RightRotateLevel_0_Root(AvlTree<int>() ) ) {
-    std::cout << "\t-- RightRotateLevel_0_Root"
-              << "\t FAIL" << '\n';
+  if ( not RightRotate(AvlTree<int>() ) ) {
+    std::cout << "\t-- RightRotate" << "\t FAIL" << '\n';
+    return -1;
+  }
+
+  if ( not BalanceRootLeftSecondLevel(AvlTree<int>() ) ) {
+    std::cout << "\t-- BalanceRootLeftSecondLevel" << "\t FAIL" << '\n';
     return -1;
   }
 

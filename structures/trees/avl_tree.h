@@ -83,7 +83,7 @@ public:
       else
         y->right = new_node;
 
-      UpdateHeight(*new_node);
+      PreserveAvlHeightCondition(*new_node);
     }
     ++size_;
   }
@@ -183,7 +183,6 @@ public:
   }
 
   std::size_t GetSize() const { return size_; }
-
   Node* GetRoot() const { return root_; }
 
 private:
@@ -199,46 +198,66 @@ private:
     node = nullptr;
   }
 
-  void UpdateHeight(Node& n)
+  void PreserveAvlHeightCondition(Node& n)
   {
-    int lh = 0, rh = 0;
     Node* tmp = n.parent;
 
     do {
-      if (tmp->left != nullptr)
-        lh = tmp->left->height;
-
-      if (tmp->right != nullptr)
-        rh = tmp->right->height;
-
-      tmp->height = (lh > rh) ? (lh + 1) : (rh + 1);
-
-      // UpdateBalanceCondition( *tmp, lh, rh );
-
+      UpdateBalanceCondition( *tmp );
       tmp = tmp->parent;
     } while (tmp != nullptr);
   }
 
-  void UpdateBalanceCondition(Node& n, int lh, int rh)
+  void UpdateBalanceCondition(Node& n)
   {
     constexpr int unbalanced_height_criteria = 2;
-    int cur_height_diff = (lh - rh);
 
-    if (cur_height_diff == unbalanced_height_criteria) {
-      if (n.left != nullptr) {
-        RightRotate(n);
+    int lh = 0, rh = 0;
+    UpdateHeight(n, lh, rh);
+
+    int diff = (n.height - rh);
+    if (   diff == unbalanced_height_criteria
+      || ( diff * -1 ) == unbalanced_height_criteria)
+    {
+      lh = 0, rh = 0;
+
+      if (n.left->left != nullptr) {
+        RightRotate(&n);
       } else {
         LeftRotate(n.left);
-        RightRotate(n);
+        RightRotate(&n);
       }
-    } else if (cur_height_diff == (unbalanced_height_criteria * (-1))) {
-      if (n.right->right != nullptr) {
-        LeftRotate(n);
-      } else {
-        RightRotate(n.right);
-        LeftRotate(n);
+
+      UpdateHeight(n, lh, rh);
+    } else {
+      diff = (n.height - lh);
+
+      if (   diff == unbalanced_height_criteria
+        || ( diff * -1 ) == unbalanced_height_criteria)
+      {
+        lh = 0, rh = 0;
+
+        if (n.right->right != nullptr) {
+          LeftRotate(&n);
+        } else {
+          RightRotate(n.right);
+          LeftRotate(&n);
+        }
+
+        UpdateHeight(n, lh, rh);
       }
     }
+  }
+
+  void UpdateHeight(Node& n, int & lh, int & rh)
+  {
+    if (n.left != nullptr)
+      lh = n.left->height + 1;
+
+    if (n.right != nullptr)
+      rh = n.right->height + 1;
+
+    n.height = (lh > rh) ? lh : rh;
   }
 
   Node* root_;

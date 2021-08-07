@@ -134,9 +134,55 @@ bool TestHeightWithThreeLevels(T&& c)
   // level 3
   c.Insert(2);
 
-  return  c.GetRoot()->height == 3
-       && c.GetRoot()->left->height == 2
+  return  c.GetRoot()->height == 2
+       && c.GetRoot()->left->height == 1
        && c.GetRoot()->right->height == 1;
+}
+
+template <typename T>
+bool LeftRotate(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(13);
+  c.Insert(17);
+
+  c.LeftRotate( c.GetRoot() );
+
+  return  c.GetRoot()->value == 15
+       && c.GetRoot()->left->value == 10
+       && c.GetRoot()->right->value == 17
+       && c.GetRoot()->left->left->value == 5
+       && c.GetRoot()->left->right->value == 13;
+}
+
+template <typename T>
+bool RightRotate(T&& c)
+{
+  // level 0
+  c.Insert(10);
+
+  // level 1
+  c.Insert(5);
+  c.Insert(15);
+
+  // level 2
+  c.Insert(3);
+  c.Insert(7);
+
+  c.RightRotate( c.GetRoot() );
+
+  return  c.GetRoot()->value == 5
+       && c.GetRoot()->right->value == 10
+       && c.GetRoot()->left->value == 3
+       && c.GetRoot()->right->left->value == 7
+       && c.GetRoot()->right->right->value == 15;
 }
 
 template <typename T>
@@ -243,6 +289,23 @@ bool RightRotateLevel_0_Root(T&& c)
   c.Insert(2);
 
   c.RightRotate( c.GetRoot() );
+
+  return  c.GetRoot()->value == 3
+       && c.GetRoot()->left->value == 2
+       && c.GetRoot()->right->value == 5;
+}
+
+template <typename T>
+bool BalanceRootLeftSecondLevel(T&& c)
+{
+  // level 0
+  c.Insert(5);
+
+  // // level 1
+  c.Insert(3);
+
+  // level 2
+  c.Insert(2);
 
   return  c.GetRoot()->value == 3
        && c.GetRoot()->left->value == 2

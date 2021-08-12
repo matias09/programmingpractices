@@ -10,11 +10,12 @@ void Merge(std::vector<T> & v, int const p, int const q, int const r)
   std::size_t n = q - p + 1;
   for (std::size_t i = 0; i < n; ++i)
     a.emplace_back( v[p + i] );
-  a.emplace_back(std::numeric_limits<int>::max());
 
   n = q - p + 1;
   for (std::size_t i = 0; i < n; ++i)
     b.emplace_back(v[q + i + 1]);
+
+  a.emplace_back(std::numeric_limits<int>::max());
   b.emplace_back(std::numeric_limits<int>::max());
 
   for (std::size_t i = 0, j = 0, k = p; k < r + 1; ++k) {
